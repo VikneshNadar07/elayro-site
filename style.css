@@ -113,6 +113,43 @@ p {
   opacity: 0.6;
 }
 
+/* Logo cinematic */
+.logo-wrap {
+  margin-bottom: 24px;
+  transform: translateY(20px) scale(0.9);
+  opacity: 0;
+}
+
+.logo {
+  width: 95px;
+  opacity: 0.95;
+  animation: logoBreath 6s ease-in-out infinite;
+}
+
+.logo-wrap.reveal.show {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  transition: all 1.8s cubic-bezier(0.19, 1, 0.22, 1);
+}
+
+@keyframes logoBreath {
+  0%,100% {
+    transform: scale(1);
+    filter: drop-shadow(0 0 15px rgba(255,255,255,0.06));
+  }
+  50% {
+    transform: scale(1.02);
+    filter: drop-shadow(0 0 25px rgba(255,255,255,0.12));
+  }
+}
+
+.brand-text {
+  font-size: 20px;
+  letter-spacing: 3px;
+  opacity: 0.6;
+  margin-bottom: 12px;
+}
+
 /* Spacing system */
 .hero h1 { margin-bottom: 14px; }
 .hero .tagline { margin-bottom: 18px; }
