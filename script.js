@@ -1,59 +1,43 @@
-const sections = document.querySelectorAll(".section");
-const hero = document.getElementById("hero");
-
-/* SCROLL ENGINE */
-window.addEventListener("scroll", () => {
-
-  const scrollY = window.scrollY;
-
-  /* HERO SHRINK */
-  if (scrollY > 80) {
-    hero.classList.add("shrink");
-  } else {
-    hero.classList.remove("shrink");
-  }
-
-  sections.forEach((section, i) => {
-
-    const rect = section.getBoundingClientRect();
-
-    /* ENTER VIEW */
-    if (rect.top < window.innerHeight - 100) {
-      section.classList.add("visible");
-
-      const tilt = (i % 2 === 0 ? 1 : -1) * 0.5;
-
-      section.style.transform =
-        `translateY(0px) scale(1) rotate(${tilt}deg)`;
-    }
-
-    /* ACTIVE CENTER SHRINK */
-    if (
-      rect.top < window.innerHeight / 2 &&
-      rect.bottom > window.innerHeight / 2
-    ) {
-      section.classList.add("active");
-    } else {
-      section.classList.remove("active");
-    }
-
-  });
-
-});
-
-/* GLOW FOLLOW */
-const glow = document.querySelector(".glow");
+// Cursor
+const cursor = document.querySelector(".cursor");
 
 document.addEventListener("mousemove", (e) => {
-  glow.style.left = e.clientX + "px";
-  glow.style.top = e.clientY + "px";
+  cursor.style.top = e.clientY + "px";
+  cursor.style.left = e.clientX + "px";
+  cursor.style.transform = "translate(-50%, -50%) scale(1)";
 });
 
-/* BLOCK COPY */
-document.addEventListener("contextmenu", e => e.preventDefault());
-
-document.addEventListener("keydown", e => {
-  if (e.ctrlKey && (e.key === "c" || e.key === "u")) {
-    e.preventDefault();
-  }
+document.addEventListener("mousedown", () => {
+  cursor.style.transform = "translate(-50%, -50%) scale(0.8)";
 });
+
+document.addEventListener("mouseup", () => {
+  cursor.style.transform = "translate(-50%, -50%) scale(1)";
+});
+
+// Reveal
+const reveals = document.querySelectorAll(".reveal");
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("show");
+    }
+  });
+}, { threshold: 0.3 });
+
+reveals.forEach(el => observer.observe(el));
+
+// Lenis Smooth Scroll
+const lenis = new Lenis({
+  duration: 1.4,
+  smooth: true,
+  easing: (t) => 1 - Math.pow(1 - t, 3),
+});
+
+function raf(time) {
+  lenis.raf(time);
+  requestAnimationFrame(raf);
+}
+
+requestAnimationFrame(raf);
