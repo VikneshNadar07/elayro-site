@@ -1,9 +1,44 @@
 *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
 
 body{
-background:#020617;
+background: radial-gradient(circle at top,#020617,#000);
 color:white;
 overflow-x:hidden;
+}
+
+/* NAVBAR */
+.navbar{
+position:fixed;
+top:20px;
+left:50%;
+transform:translateX(-50%);
+width:90%;
+max-width:1100px;
+padding:12px 20px;
+display:flex;
+justify-content:space-between;
+align-items:center;
+
+background:rgba(255,255,255,0.05);
+backdrop-filter:blur(20px);
+border:1px solid rgba(255,255,255,0.1);
+border-radius:50px;
+
+z-index:10;
+}
+
+.logo{
+font-weight:800;
+letter-spacing:2px;
+}
+
+.nav-btn{
+padding:8px 18px;
+border-radius:999px;
+background:linear-gradient(90deg,#38bdf8,#6366f1);
+color:white;
+text-decoration:none;
+font-size:0.9rem;
 }
 
 /* BACKGROUND */
@@ -27,18 +62,22 @@ transform:translate(-50%,-50%);
 .container{
 max-width:1200px;
 margin:auto;
-padding:60px 20px;
+padding:120px 20px 60px;
 }
 
 /* HERO */
 .hero{
+min-height:100vh;
+display:flex;
+flex-direction:column;
+justify-content:center;
 text-align:center;
-padding:120px 0;
 }
 
 .tagline{
-font-size:3.8rem;
+font-size:4.5rem;
 font-weight:800;
+line-height:1.1;
 background:linear-gradient(90deg,#38bdf8,#6366f1);
 -webkit-background-clip:text;
 -webkit-text-fill-color:transparent;
@@ -54,7 +93,6 @@ color:#cbd5f5;
 color:#94a3b8;
 max-width:650px;
 margin:20px auto;
-line-height:1.6;
 }
 
 .cta{
@@ -65,18 +103,25 @@ border-radius:999px;
 background:linear-gradient(90deg,#38bdf8,#6366f1);
 text-decoration:none;
 color:white;
-font-weight:600;
 transition:0.3s;
 }
 
 .cta:hover{
 transform:scale(1.05);
-box-shadow:0 0 30px rgba(99,102,241,0.5);
 }
 
-/* SECTIONS */
+/* DIVIDER */
+.divider{
+width:100%;
+height:1px;
+margin:60px 0;
+background:linear-gradient(to right,transparent,#6366f1,transparent);
+opacity:0.3;
+}
+
+/* SECTION */
 .section{
-margin-top:120px;
+margin-top:80px;
 text-align:center;
 }
 
@@ -104,11 +149,6 @@ transition:0.3s;
 transform:translateY(-10px);
 }
 
-.card p{
-color:#94a3b8;
-margin-top:10px;
-}
-
 /* DEMO */
 .demo{
 display:flex;
@@ -125,7 +165,7 @@ width:340px;
 .user{color:#94a3b8;}
 .ai{color:#38bdf8;margin-top:10px;}
 
-/* VISION */
+/* TEXT */
 .big-text{
 max-width:700px;
 margin:auto;
@@ -141,7 +181,7 @@ text-align:center;
 color:#64748b;
 }
 
-/* ANIMATION */
+/* REVEAL */
 .reveal{
 opacity:0;
 transform:translateY(40px);
