@@ -7,100 +7,87 @@
 <title>Elayro — Executions, Perfected.</title>
 
 <link rel="stylesheet" href="style.css">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 </head>
 
 <body>
 
-<canvas id="particles"></canvas>
-
-<div class="cursor-glow"></div>
-
 <!-- NAVBAR -->
 
 <header class="navbar">
-  <div class="logo">ELAYRO</div>
-  <a href="#" class="nav-btn">Coming Soon</a>
-</header>
+  <div class="nav-container">
+    <div class="logo">ELAYRO</div>
 
-<div class="container">
+```
+<div class="product">
+  <span class="product-name">ReplyFast</span>
+  <span class="launch-tag">Launching Soon</span>
+</div>
+```
+
+  </div>
+</header>
 
 <!-- HERO -->
 
 <section class="hero">
-  <h1 class="tagline">
-    <span id="typed"></span><span class="cursor">|</span>
-  </h1>
-
-  <p class="subtext">What to say. Instantly.</p>
-
+  <h1>Executions, Perfected.</h1>
+  <p class="sub">Introducing ReplyFast</p>
   <p class="desc">
-    Elayro builds intelligent systems that remove hesitation and transform thought into execution — instantly.
+    Instantly generate the right reply — for clients, work, or real conversations.
   </p>
-
-<a href="#" class="cta">Launching Soon</a>
-
 </section>
 
-<div class="divider"></div>
+<!-- PRODUCT -->
 
-<!-- FEATURES -->
+<section class="section">
 
-<section class="section reveal">
-  <h2>Designed for Execution</h2>
+  <h2>Try ReplyFast</h2>
 
-  <div class="grid">
-    <div class="card">
-      <h3>⚡ Zero Overthinking</h3>
-      <p>Turn thoughts into actions instantly without hesitation.</p>
-    </div>
+  <div class="chat-box">
 
 ```
-<div class="card">
-  <h3>🧠 Instant Clarity</h3>
-  <p>Always know exactly what to say or do in any situation.</p>
+<!-- SCENARIOS -->
+<div class="scenarios">
+  <button data-text="Client asked for pricing details">Client</button>
+  <button data-text="My boss asked for an update">Boss</button>
+  <button data-text="Friend invited me somewhere">Friend</button>
+  <button data-text="Need to schedule a meeting">Meeting</button>
 </div>
 
-<div class="card">
-  <h3>🚀 Built for Speed</h3>
-  <p>Optimized to give you answers faster than thinking.</p>
+<div class="chat-body" id="chatBody">
+  <div class="msg ai">Tell me what you need to reply to.</div>
+</div>
+
+<div class="controls">
+  <select id="tone">
+    <option value="formal">Formal</option>
+    <option value="casual">Casual</option>
+    <option value="confident">Confident</option>
+  </select>
+  <button id="regen">↻</button>
+</div>
+
+<div class="chat-input-area">
+  <input id="userInput" placeholder="Type your situation..." />
 </div>
 ```
 
   </div>
+
 </section>
 
-<!-- DEMO -->
+<!-- WAITLIST -->
 
-<section class="section reveal">
-  <h2>See It In Action</h2>
+<section class="section">
+  <h2>Get Early Access</h2>
 
-  <div class="demo">
-    <div class="chat">
-      <p class="user">What should I reply?</p>
-      <p class="ai">"Sounds great, let’s move forward. When works for you?"</p>
-    </div>
-  </div>
+  <form id="waitlist-form">
+    <input type="email" id="email" placeholder="Enter your email" required />
+    <button type="submit">Join Waitlist</button>
+  </form>
+
+  <p id="success-msg"></p>
 </section>
-
-<!-- VISION -->
-
-<section class="section reveal">
-  <h2>Why Elayro Exists</h2>
-
-  <p class="big-text">
-    Most people don’t fail because they lack ideas —  
-    they fail because they hesitate.  
-    <br><br>
-    Elayro eliminates hesitation.
-  </p>
-</section>
-
-<footer>
-  © 2026 Elayro.
-</footer>
-
-</div>
 
 <script src="script.js"></script>
 
