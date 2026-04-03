@@ -1,4 +1,3 @@
-// Cursor
 const cursor = document.querySelector(".cursor");
 
 document.addEventListener("mousemove", (e) => {
@@ -15,7 +14,6 @@ document.addEventListener("mouseup", () => {
   cursor.style.transform = "translate(-50%, -50%) scale(1)";
 });
 
-// Reveal
 const reveals = document.querySelectorAll(".reveal");
 
 const observer = new IntersectionObserver((entries) => {
@@ -28,7 +26,6 @@ const observer = new IntersectionObserver((entries) => {
 
 reveals.forEach(el => observer.observe(el));
 
-// Lenis Smooth Scroll
 const lenis = new Lenis({
   duration: 1.4,
   smooth: true,
