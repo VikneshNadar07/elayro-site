@@ -1,59 +1,66 @@
-const sections = document.querySelectorAll(".section");
-const hero = document.getElementById("hero");
+/* TAGLINE TYPING */
+const text="Executions, Perfected.";
+let i=0;
 
-/* SCROLL ENGINE */
-window.addEventListener("scroll", () => {
+function typing(){
+if(i<text.length){
+document.getElementById("typed").innerHTML+=text.charAt(i);
+i++;
+setTimeout(typing,60);
+}
+}
+typing();
 
-  const scrollY = window.scrollY;
+/* PARTICLES */
+const canvas=document.getElementById("particles");
+const ctx=canvas.getContext("2d");
 
-  /* HERO SHRINK */
-  if (scrollY > 80) {
-    hero.classList.add("shrink");
-  } else {
-    hero.classList.remove("shrink");
-  }
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
 
-  sections.forEach((section, i) => {
+let particles=[];
+for(let i=0;i<80;i++){
+particles.push({
+x:Math.random()*canvas.width,
+y:Math.random()*canvas.height,
+r:Math.random()*2,
+dx:Math.random()-0.5,
+dy:Math.random()-0.5
+});
+}
 
-    const rect = section.getBoundingClientRect();
+function animate(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+particles.forEach(p=>{
+ctx.beginPath();
+ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+ctx.fillStyle="#6366f1";
+ctx.fill();
 
-    /* ENTER VIEW */
-    if (rect.top < window.innerHeight - 100) {
-      section.classList.add("visible");
-
-      const tilt = (i % 2 === 0 ? 1 : -1) * 0.5;
-
-      section.style.transform =
-        `translateY(0px) scale(1) rotate(${tilt}deg)`;
-    }
-
-    /* ACTIVE CENTER SHRINK */
-    if (
-      rect.top < window.innerHeight / 2 &&
-      rect.bottom > window.innerHeight / 2
-    ) {
-      section.classList.add("active");
-    } else {
-      section.classList.remove("active");
-    }
-
-  });
+```
+p.x+=p.dx;
+p.y+=p.dy;
+```
 
 });
+requestAnimationFrame(animate);
+}
+animate();
 
-/* GLOW FOLLOW */
-const glow = document.querySelector(".glow");
-
-document.addEventListener("mousemove", (e) => {
-  glow.style.left = e.clientX + "px";
-  glow.style.top = e.clientY + "px";
+/* CURSOR GLOW */
+const glow=document.querySelector(".cursor-glow");
+document.addEventListener("mousemove",(e)=>{
+glow.style.left=e.clientX+"px";
+glow.style.top=e.clientY+"px";
 });
 
-/* BLOCK COPY */
-document.addEventListener("contextmenu", e => e.preventDefault());
+/* SCROLL REVEAL */
+const reveals=document.querySelectorAll(".reveal");
 
-document.addEventListener("keydown", e => {
-  if (e.ctrlKey && (e.key === "c" || e.key === "u")) {
-    e.preventDefault();
-  }
+window.addEventListener("scroll",()=>{
+reveals.forEach(el=>{
+if(el.getBoundingClientRect().top<window.innerHeight-100){
+el.classList.add("active");
+}
+});
 });
