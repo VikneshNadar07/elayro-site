@@ -1,75 +1,59 @@
-const input = document.getElementById("userInput");
-const chatBody = document.getElementById("chatBody");
-const toneSelect = document.getElementById("tone");
-const regenBtn = document.getElementById("regen");
+const sections = document.querySelectorAll(".section");
+const hero = document.getElementById("hero");
 
-let lastUserText = "";
+/* SCROLL ENGINE */
+window.addEventListener("scroll", () => {
 
-/* BASE REPLY */
-function getBaseReply(text){
-text = text.toLowerCase();
+  const scrollY = window.scrollY;
 
-if(text.includes("client")) return "Thanks for reaching out.";
-if(text.includes("boss")) return "I'll update you shortly.";
-if(text.includes("meeting")) return "What time works for you?";
-if(text.includes("friend")) return "Sounds good!";
+  /* HERO SHRINK */
+  if (scrollY > 80) {
+    hero.classList.add("shrink");
+  } else {
+    hero.classList.remove("shrink");
+  }
 
-return "Let’s move forward.";
-}
+  sections.forEach((section, i) => {
 
-/* APPLY TONE */
-function applyTone(base, tone){
-if(tone==="formal") return base+" Please confirm.";
-if(tone==="casual") return base+" 👍";
-if(tone==="confident") return base+" Let’s do it.";
-return base;
-}
+    const rect = section.getBoundingClientRect();
 
-/* GENERATE */
-function generateReply(text){
-const base = getBaseReply(text);
-const tone = toneSelect.value;
+    /* ENTER VIEW */
+    if (rect.top < window.innerHeight - 100) {
+      section.classList.add("visible");
 
-const reply = applyTone(base, tone);
+      const tilt = (i % 2 === 0 ? 1 : -1) * 0.5;
 
-const msg = document.createElement("div");
-msg.className = "msg ai";
-msg.innerText = reply;
+      section.style.transform =
+        `translateY(0px) scale(1) rotate(${tilt}deg)`;
+    }
 
-chatBody.appendChild(msg);
-}
+    /* ACTIVE CENTER SHRINK */
+    if (
+      rect.top < window.innerHeight / 2 &&
+      rect.bottom > window.innerHeight / 2
+    ) {
+      section.classList.add("active");
+    } else {
+      section.classList.remove("active");
+    }
 
-/* ENTER */
-input.addEventListener("keypress", e=>{
-if(e.key==="Enter" && input.value){
-lastUserText = input.value;
+  });
 
-```
-const userMsg = document.createElement("div");
-userMsg.className="msg user";
-userMsg.innerText=input.value;
-
-chatBody.appendChild(userMsg);
-
-generateReply(input.value);
-
-input.value="";
-```
-
-}
 });
 
-/* SCENARIOS */
-document.querySelectorAll(".scenarios button").forEach(btn=>{
-btn.onclick=()=>{
-const text=btn.dataset.text;
-input.value=text;
-input.dispatchEvent(new KeyboardEvent("keypress",{key:"Enter"}));
-};
+/* GLOW FOLLOW */
+const glow = document.querySelector(".glow");
+
+document.addEventListener("mousemove", (e) => {
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
 });
 
-/* WAITLIST */
-document.getElementById("waitlist-form").addEventListener("submit", e=>{
-e.preventDefault();
-document.getElementById("success-msg").innerText="You're on the list 🚀";
+/* BLOCK COPY */
+document.addEventListener("contextmenu", e => e.preventDefault());
+
+document.addEventListener("keydown", e => {
+  if (e.ctrlKey && (e.key === "c" || e.key === "u")) {
+    e.preventDefault();
+  }
 });

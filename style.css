@@ -1,130 +1,166 @@
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif;}
-
-body{
-background:#020617;
-color:white;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
 }
 
-/* NAVBAR */
-.navbar{
-position:fixed;
-top:0;
-width:100%;
-background:rgba(0,0,0,0.6);
-backdrop-filter:blur(10px);
-padding:15px;
-}
+/* Disable text selection */
+body {
+  background: #000;
+  color: #fff;
+  overflow-x: hidden;
 
-.nav-container{
-max-width:1100px;
-margin:auto;
-display:flex;
-justify-content:space-between;
-}
-
-.logo{font-weight:bold;}
-
-.product{display:flex;gap:8px;}
-
-.launch-tag{
-background:#1e293b;
-padding:3px 8px;
-border-radius:999px;
-font-size:0.7rem;
+  user-select: none;
 }
 
 /* HERO */
-.hero{
-min-height:80vh;
-display:flex;
-flex-direction:column;
-justify-content:center;
-align-items:center;
-text-align:center;
+.hero {
+  height: 95vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 24px;
+  transition: all 0.7s ease;
 }
 
-.hero h1{font-size:3rem;}
-.sub{color:#94a3b8;margin-top:10px;}
-.desc{color:#94a3b8;margin-top:10px;}
-
-/* SECTION */
-.section{
-max-width:900px;
-margin:80px auto;
-text-align:center;
+.hero.shrink {
+  height: 70vh;
 }
 
-/* CHAT */
-.chat-box{
-margin-top:20px;
-background:#020617;
-border:1px solid #1e293b;
-border-radius:10px;
+/* LOGO */
+.logo {
+  width: clamp(160px, 20vw, 280px);
+  transition: all 0.7s ease;
+  filter: drop-shadow(0 0 25px rgba(255,255,255,0.15));
 }
 
-.chat-body{
-padding:15px;
-min-height:150px;
+.hero.shrink .logo {
+  width: 120px;
 }
 
-.msg{
-margin:5px 0;
-padding:8px;
-border-radius:8px;
+/* TAGLINE */
+.tagline {
+  font-size: clamp(26px, 3vw, 36px);
+  color: #aaa;
 }
 
-.msg.user{background:#1e293b;}
-.msg.ai{background:#0f172a;}
-
-/* SCENARIOS */
-.scenarios{
-display:flex;
-gap:8px;
-flex-wrap:wrap;
-padding:10px;
+/* PURPOSE */
+.purpose {
+  text-align: center;
+  color: #666;
+  padding: 40px 20px;
+  max-width: 600px;
+  margin: auto;
 }
 
-.scenarios button{
-background:#1e293b;
-border:none;
-padding:5px 10px;
-border-radius:999px;
-color:white;
+/* BLOCK */
+.block {
+  max-width: 520px;
 }
 
-/* CONTROLS */
-.controls{
-display:flex;
-gap:10px;
-padding:10px;
+/* HEADLINE */
+.headline {
+  font-size: clamp(32px, 4vw, 42px);
+  margin-bottom: 10px;
 }
 
-/* INPUT */
-.chat-input-area input{
-width:100%;
-padding:10px;
-border:none;
-background:#020617;
-color:white;
+/* SUBTEXT */
+.sub {
+  color: #777;
+  font-size: 15px;
 }
 
-/* WAITLIST */
-#waitlist-form{
-display:flex;
-justify-content:center;
-gap:10px;
-margin-top:20px;
+/* SECTIONS */
+.section {
+  min-height: 65vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  opacity: 0;
+  transform: translateY(120px) scale(0.9);
+  filter: blur(8px);
+
+  transition: 
+    transform 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 1s ease,
+    filter 1s ease;
 }
 
-#waitlist-form input{
-padding:10px;
+/* VISIBLE */
+.section.visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 
-#waitlist-form button{
-padding:10px;
-background:#6366f1;
-color:white;
-border:none;
+/* ACTIVE SHRINK */
+.section.active {
+  transform: scale(0.96);
 }
 
-#success-msg{margin-top:10px;color:#38bdf8;}
+/* PRODUCT */
+.product-card {
+  padding: 28px 36px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.08);
+  backdrop-filter: blur(12px);
+  transition: 0.4s ease;
+  text-align: center;
+}
+
+.product-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  background: rgba(255,255,255,0.07);
+}
+
+/* PRODUCT NAME */
+.product-header {
+  font-size: 22px;
+  font-weight: 600;
+  margin-bottom: 6px;
+  letter-spacing: -0.3px;
+}
+
+/* DESCRIPTION */
+.product-desc {
+  font-size: 15px;
+  color: #aaa;
+  margin-bottom: 14px;
+}
+
+/* STATUS BADGE */
+.product-badge {
+  display: inline-block;
+  font-size: 12px;
+  color: #999;
+  padding: 6px 12px;
+  border-radius: 20px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* FOOTER */
+footer {
+  text-align: center;
+  padding: 20px;
+  color: #444;
+  font-size: 12px;
+}
+
+/* GLOW */
+.glow {
+  position: fixed;
+  width: 700px;
+  height: 700px;
+  background: radial-gradient(circle, rgba(255,255,255,0.05), transparent);
+  filter: blur(140px);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: -1;
+}
