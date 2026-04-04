@@ -123,6 +123,12 @@ p {
     text-shadow: 0 0 8px rgba(255,255,255,0.3);
 }
 
+.anchor-line {
+    font-size: 16px;
+    color: #a8a8a8;
+    margin-top: 5px;
+}
+
 /* COPY MESSAGE */
 #copy-msg {
     display: block;
