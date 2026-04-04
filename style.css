@@ -133,6 +133,12 @@ p {
     transition: opacity 0.3s ease;
 }
 
+.human-line {
+    font-size: 16px;
+    color: #a8a8a8;
+    margin-top: 10px;
+}
+
 /* ANIMATION */
 .fade {
     opacity: 0;
