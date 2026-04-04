@@ -17,12 +17,32 @@ body {
     margin: auto;
 }
 
+/* BRAND (ELAYRO) */
 h1 {
-    font-size: 48px;
-    letter-spacing: 2px;
+    font-size: 64px;
+    letter-spacing: 4px;
     margin-bottom: 20px;
+    font-weight: 600;
+
+    background: linear-gradient(90deg, #ffffff, #9aa4ff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+
+    animation: glow 4s ease-in-out infinite alternate;
 }
 
+@keyframes glow {
+    from { opacity: 0.9; }
+    to { opacity: 1; }
+}
+
+/* PRODUCTS */
+.product {
+    font-size: 28px;
+    letter-spacing: 2px;
+}
+
+/* GENERAL TEXT */
 h2 {
     font-size: 32px;
     margin-bottom: 20px;
@@ -56,6 +76,7 @@ p {
     height: 80px;
 }
 
+/* ANIMATION */
 .fade {
     opacity: 0;
     transform: translateY(30px);
