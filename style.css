@@ -53,6 +53,25 @@ h1 {
     font-weight: 500;
 }
 
+/* STATEMENT */
+.statement {
+    padding: 160px 20px;
+}
+
+.statement-text {
+    font-size: 40px;
+    font-weight: 600;
+    letter-spacing: 1px;
+
+    background: linear-gradient(90deg, #ffffff, #e0e0e0);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.statement-text:hover {
+    text-shadow: 0 0 12px rgba(255,255,255,0.15);
+}
+
 /* TEXT */
 h2 {
     font-size: 32px;
