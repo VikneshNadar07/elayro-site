@@ -1,5 +1,5 @@
 *{margin:0;padding:0;box-sizing:border-box;}
-body{background:#050507;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;-webkit-font-smoothing:antialiased;text-align:center;}
+body{background:#050507;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;text-align:center;}
 .container{max-width:900px;margin:auto;padding:0 20px;}
 .narrow{max-width:600px;}
 .section{padding:100px 0;}
@@ -13,18 +13,18 @@ h2{font-size:26px;margin-bottom:10px;}
 p{color:#aaa;line-height:1.6;}
 .statement{font-size:30px;}
 .spacer{height:40px;}
-.cta{display:inline-block;padding:14px 28px;border:1px solid #fff;text-decoration:none;color:#fff;transition:0.25s;}
-.cta:hover{background:#fff;color:#000;}
+.cta{display:inline-block;padding:14px 28px;border:1px solid #fff;color:#fff;text-decoration:none;}
 .options{display:flex;justify-content:center;gap:16px;flex-wrap:wrap;margin:20px 0;}
-.options button{padding:12px 18px;border:1px solid #2a2a2a;background:transparent;color:#ccc;cursor:pointer;transition:0.2s;}
-.options button.active{border-color:#fff;color:#fff;background:rgba(255,255,255,0.1);}
-.options button:active{transform:scale(0.95);}
+.options button{padding:12px;border:1px solid #2a2a2a;background:transparent;color:#ccc;cursor:pointer;}
+.options button.active{border-color:#fff;color:#fff;}
+.options button:disabled{opacity:0.4;}
+.retry-btn{margin-top:15px;padding:10px;border:1px solid #444;color:#aaa;}
 .ai-output{margin-top:20px;display:flex;flex-direction:column;gap:10px;}
-.reply-card{padding:14px;border:1px solid #2a2a2a;cursor:pointer;transition:0.2s;}
-.reply-card:hover{border-color:#fff;}
-.waitlist{display:flex;justify-content:center;gap:10px;flex-wrap:wrap;margin-top:20px;}
-.waitlist input{padding:12px;background:transparent;border-bottom:1px solid #333;color:#fff;}
-.waitlist button{padding:12px 18px;border:1px solid #333;background:transparent;color:#ccc;}
-.waitlist button:disabled{opacity:0.4;}
-.back{display:block;margin-bottom:20px;color:#aaa;text-decoration:none;}
-@media(max-width:600px){.brand{font-size:48px;}h1{font-size:28px;}}
+.reply-card{padding:14px;border:1px solid #2a2a2a;cursor:pointer;}
+.reveal{opacity:0;transform:translateY(20px);transition:0.6s;}
+.reveal.active{opacity:1;transform:translateY(0);}
+.elira-block{margin-top:120px;border-top:1px solid rgba(255,255,255,0.05);}
+.elira-label{font-size:12px;color:#666;}
+.elira-headline{font-size:28px;}
+.elira-link{color:#aaa;text-decoration:none;}
+@media(max-width:600px){.brand{font-size:48px;}}

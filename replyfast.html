@@ -15,6 +15,7 @@
 
 <h1>ReplyFast</h1>
 <p class="sub">Tap. Copy. Send.</p>
+<p class="small">Live demo — instant replies for chat scenarios</p>
 
 <p id="progressText" class="small">0/3 selected</p>
 
@@ -38,23 +39,9 @@
 <button onclick="selectOption('tone','casual',event)">Casual</button>
 </div>
 
-<div id="aiOutput" class="ai-output">
+<div id="aiOutput" class="ai-output reveal">
 <span class="small">Select all 3 options to generate replies</span>
 </div>
-
-<div class="spacer"></div>
-
-<div class="waitlist">
-<input type="email" id="emailInput" placeholder="Early access email">
-<input type="text" id="honeypot" style="display:none">
-<button id="accessBtn" onclick="joinWaitlist()" disabled>Get Access</button>
-</div>
-
-<label class="small">
-<input type="checkbox" id="humanCheck"> I’m not a bot
-</label>
-
-<p id="waitlistMsg" class="small"></p>
 
 </div>
 </section>
