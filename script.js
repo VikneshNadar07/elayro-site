@@ -1,114 +1,102 @@
 let state={who:null,situation:null,tone:null};
-let timeout;
 let submitting=false;
-let startTime=Date.now();
+
+const checkbox=document.getElementById("humanCheck");
+const accessBtn=document.getElementById("accessBtn");
+
+if(checkbox && accessBtn){
+checkbox.addEventListener("change",()=>{
+accessBtn.disabled=!checkbox.checked;
+});
+}
 
 function selectOption(type,value,e){
 state[type]=value;
+
 const parent=document.getElementById(type);
 Array.from(parent.children).forEach(btn=>btn.classList.remove("active"));
 e.target.classList.add("active");
+
+updateProgress();
 generateReply();
 }
 
+function updateProgress(){
+const count=[state.who,state.situation,state.tone].filter(Boolean).length;
+const el=document.getElementById("progressText");
+
+if(el){
+el.innerText=count+"/3 selected";
+if(count===3) el.innerText="Ready ✓";
+}
+}
+
 function generateReply(){
-if(!state.who||!state.situation||!state.tone)return;
-
-clearTimeout(timeout);
-
 const output=document.getElementById("aiOutput");
-output.innerHTML="<span class='small'>Creating replies...</span>";
 
-timeout=setTimeout(()=>{
-const replies=getReplies(state.situation,state.tone);
+if(!state.who||!state.situation||!state.tone){
+output.innerHTML="<span class='small'>Select all options</span>";
+return;
+}
+
+output.innerHTML="<div class='loading'>Generating...</div>";
+
+setTimeout(()=>{
+const replies=getReplies();
+
 output.innerHTML="";
 
-replies.forEach(text=>{
+replies.forEach((text,i)=>{
 const div=document.createElement("div");
 div.className="reply-card";
 div.innerText=text;
 
+if(i===0) copyText(text);
+
 div.onclick=()=>{
-navigator.clipboard.writeText(text);
+copyText(text);
 div.innerText="Copied ✓";
-setTimeout(()=>{div.innerText=text},1000);
+setTimeout(()=>div.innerText=text,800);
 };
 
 output.appendChild(div);
 });
-},300);
+},220);
 }
 
-function getReplies(s,t){
-if(s==="update") return t==="formal"
-?["We’re on track and will update shortly.","Progress is steady — update soon.","Everything is moving as planned."]
-:["Going well — will update soon!","All on track, will share soon.","Going good — will keep you posted!"];
+function getReplies(){
+return [
+"Running slightly late — will update shortly.",
+"Everything is on track — update soon.",
+"That timing works for me."
+];
+}
 
-if(s==="delay") return t==="formal"
-?["Apologies for the delay. Update shortly.","Sorry for the delay — appreciate patience.","Apologies — will share soon."]
-:["Sorry for the delay — will update soon!","My bad — will reply shortly.","Thanks for waiting — will update!"];
-
-if(s==="meeting") return t==="formal"
-?["That timing works for me.","Schedule works — confirmed.","That time works well."]
-:["Works for me!","Sounds good.","Perfect — let’s do it!"];
-
-return["Got it."];
+function copyText(text){
+if(navigator.clipboard){
+navigator.clipboard.writeText(text);
+}
 }
 
 function joinWaitlist(){
 if(submitting) return;
 
-const input=document.getElementById("emailInput");
+const email=document.getElementById("emailInput").value;
+const honeypot=document.getElementById("honeypot").value;
 const msg=document.getElementById("waitlistMsg");
-const checkbox=document.getElementById("humanCheck");
 
-const email=input.value.trim().toLowerCase();
+if(honeypot) return;
 
-if(Date.now()-startTime < 2000){
-msg.innerText="Please wait a second";
-msg.style.opacity="1";
+if(!email.includes("@")){
+msg.innerText="Enter valid email";
 return;
 }
 
-if(!checkbox.checked){
-msg.innerText="Please confirm you're not a bot";
-msg.style.opacity="1";
-return;
-}
-
-const valid=/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-if(!valid){
-msg.innerText="Enter a valid email";
-msg.style.opacity="1";
-return;
-}
-
+msg.innerText="You're in. Early access reserved.";
 submitting=true;
-msg.innerText="Joining...";
-msg.style.opacity="1";
 
-fetch("YOUR_GOOGLE_SCRIPT_URL",{
-method:"POST",
-body:JSON.stringify({email:email,key:"elayro_secure_key"}),
-headers:{"Content-Type":"application/json"}
-})
-.then(res=>res.text())
-.then(res=>{
-if(res==="Success"){
-msg.innerText="You’re in.";
-input.value="";
-checkbox.checked=false;
-}
-else if(res==="Exists"){
-msg.innerText="Already joined.";
-}
-else{
-msg.innerText="Try again.";
-}
+setTimeout(()=>{
+msg.innerText="";
 submitting=false;
-})
-.catch(()=>{
-msg.innerText="Connection error";
-submitting=false;
-});
+},2000);
 }

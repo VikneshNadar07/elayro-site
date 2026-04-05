@@ -1,109 +1,49 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Reply Generator — ReplyFast</title>
-<meta name="description" content="Reply generator for messages. Create instant replies for chats, emails, and conversations.">
-
-<link rel="canonical" href="https://elayro.com/replyfast">
-<meta name="robots" content="index, follow">
-
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self'; connect-src 'self' https://script.google.com;">
-<meta http-equiv="X-Content-Type-Options" content="nosniff">
-<meta http-equiv="X-Frame-Options" content="DENY">
-<meta http-equiv="Referrer-Policy" content="no-referrer">
-
-<meta property="og:title" content="Reply Generator — ReplyFast">
-<meta property="og:description" content="Generate instant replies for messages.">
-<meta property="og:image" content="https://elayro.com/logo.png">
-<meta property="og:url" content="https://elayro.com/replyfast">
-<meta property="og:type" content="website">
-
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Reply Generator — ReplyFast">
-<meta name="twitter:description" content="Generate instant replies instantly.">
-<meta name="twitter:image" content="https://elayro.com/logo.png">
-
-<link rel="icon" href="logo.png">
-<link rel="stylesheet" href="style.css">
-</head>
-
-<body>
-
-<section class="section">
+<section class="section reveal">
 
 <a href="index.html" class="cta-link">← Elayro</a>
 
-<h1>Reply Generator</h1>
-<p class="tagline">Reply instantly. No thinking needed.</p>
+<h1>ReplyFast</h1>
+<p class="tagline">Reply instantly.</p>
 
-<p class="small">Choose options. Get replies.</p>
-<p class="small">A fast reply generator for everyday messages.</p>
+<div class="instant-box">
+<div class="reply-card demo-reply">Running a bit late — will update shortly.</div>
+</div>
 
-<div class="spacer"></div>
+<p id="progressText" class="small">0/3 selected</p>
 
-<p class="small">Who are you replying to?</p>
 <div class="options" id="who">
-<button onclick="selectOption('who','work',event)">Work</button>
-<button onclick="selectOption('who','friend',event)">Friend</button>
-<button onclick="selectOption('who','client',event)">Client</button>
+<button class="magnetic" onclick="selectOption('who','work',event)">Work</button>
+<button class="magnetic" onclick="selectOption('who','friend',event)">Friend</button>
+<button class="magnetic" onclick="selectOption('who','client',event)">Client</button>
 </div>
 
-<div class="spacer"></div>
-
-<p class="small">What’s the situation?</p>
 <div class="options" id="situation">
-<button onclick="selectOption('situation','update',event)">Update</button>
-<button onclick="selectOption('situation','delay',event)">Delay</button>
-<button onclick="selectOption('situation','meeting',event)">Meeting</button>
+<button class="magnetic" onclick="selectOption('situation','update',event)">Update</button>
+<button class="magnetic" onclick="selectOption('situation','delay',event)">Delay</button>
+<button class="magnetic" onclick="selectOption('situation','meeting',event)">Meeting</button>
 </div>
 
-<div class="spacer"></div>
-
-<p class="small">Tone</p>
 <div class="options" id="tone">
-<button onclick="selectOption('tone','formal',event)">Formal</button>
-<button onclick="selectOption('tone','casual',event)">Casual</button>
+<button class="magnetic" onclick="selectOption('tone','formal',event)">Formal</button>
+<button class="magnetic" onclick="selectOption('tone','casual',event)">Casual</button>
 </div>
 
-<div class="spacer"></div>
-
-<div id="aiOutput" class="ai-output"></div>
-
-<div class="spacer"></div>
-
-<p class="small">Click a reply to copy instantly.</p>
-<p class="small">Paste and send.</p>
-<p class="small">Always review before sending.</p>
-
-<div class="spacer"></div>
-
-<p class="small">ReplyFast is launching soon as a mobile app on Google Play.</p>
-<p class="small">Get early access.</p>
-<p class="small">Takes 2 seconds.</p>
-
-<div class="spacer"></div>
+<div id="aiOutput" class="ai-output">
+<span class="small">Select options to generate replies</span>
+</div>
 
 <div class="waitlist">
-<input type="email" id="emailInput" placeholder="Get early access to the app" />
-<button onclick="joinWaitlist()">Get Access</button>
+<input type="email" id="emailInput" placeholder="Early access email">
+<input type="text" id="honeypot" style="display:none">
+<button id="accessBtn" onclick="joinWaitlist()" disabled>Get Access</button>
 </div>
 
 <label class="small">
 <input type="checkbox" id="humanCheck"> I’m not a bot
 </label>
 
-<p class="small">No spam. Only updates.</p>
-<p id="waitlistMsg" class="small waitlist-msg"></p>
-
-<div class="spacer"></div>
-
-<a href="elira.html" class="cta-link">Explore ELIRA X →</a>
+<p id="waitlistMsg" class="small"></p>
 
 </section>
 
 <script src="script.js"></script>
-</body>
-</html>
