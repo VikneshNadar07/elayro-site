@@ -1,36 +1,48 @@
-<section class="section reveal">
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ReplyFast</title>
+<link rel="stylesheet" href="/style.css">
+</head>
+<body>
 
-<a href="index.html" class="cta-link">← Elayro</a>
+<section class="section">
+<div class="container narrow">
+
+<a href="/index.html" class="back">← Elayro</a>
 
 <h1>ReplyFast</h1>
-<p class="tagline">Reply instantly.</p>
-
-<div class="instant-box">
-<div class="reply-card demo-reply">Running a bit late — will update shortly.</div>
-</div>
+<p class="sub">Tap. Copy. Send.</p>
 
 <p id="progressText" class="small">0/3 selected</p>
 
+<p class="small">Who is this for?</p>
 <div class="options" id="who">
-<button class="magnetic" onclick="selectOption('who','work',event)">Work</button>
-<button class="magnetic" onclick="selectOption('who','friend',event)">Friend</button>
-<button class="magnetic" onclick="selectOption('who','client',event)">Client</button>
+<button onclick="selectOption('who','work',event)">Work</button>
+<button onclick="selectOption('who','friend',event)">Friend</button>
+<button onclick="selectOption('who','client',event)">Client</button>
 </div>
 
+<p class="small">What happened?</p>
 <div class="options" id="situation">
-<button class="magnetic" onclick="selectOption('situation','update',event)">Update</button>
-<button class="magnetic" onclick="selectOption('situation','delay',event)">Delay</button>
-<button class="magnetic" onclick="selectOption('situation','meeting',event)">Meeting</button>
+<button onclick="selectOption('situation','update',event)">Update</button>
+<button onclick="selectOption('situation','delay',event)">Delay</button>
+<button onclick="selectOption('situation','meeting',event)">Meeting</button>
 </div>
 
+<p class="small">Tone</p>
 <div class="options" id="tone">
-<button class="magnetic" onclick="selectOption('tone','formal',event)">Formal</button>
-<button class="magnetic" onclick="selectOption('tone','casual',event)">Casual</button>
+<button onclick="selectOption('tone','formal',event)">Formal</button>
+<button onclick="selectOption('tone','casual',event)">Casual</button>
 </div>
 
 <div id="aiOutput" class="ai-output">
-<span class="small">Select options to generate replies</span>
+<span class="small">Select all 3 options to generate replies</span>
 </div>
+
+<div class="spacer"></div>
 
 <div class="waitlist">
 <input type="email" id="emailInput" placeholder="Early access email">
@@ -44,6 +56,9 @@
 
 <p id="waitlistMsg" class="small"></p>
 
+</div>
 </section>
 
-<script src="script.js"></script>
+<script src="/script.js"></script>
+</body>
+</html>
