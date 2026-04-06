@@ -1,1 +1,24 @@
-body{background:#000;color:#fff;font-family:Arial;} .center{text-align:center;} button{margin:5px;padding:10px;}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:#000;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto;}
+.app{min-height:100vh;display:flex;justify-content:center;}
+.wrapper{width:100%;max-width:1100px;padding:40px 20px;}
+.hero{text-align:center;margin-bottom:60px;}
+.brand{font-size:clamp(42px,6vw,64px);font-weight:700;}
+.headline{opacity:.6;margin-top:10px;}
+.grid{display:grid;gap:20px;}
+.grid-2{grid-template-columns:repeat(auto-fit,minmax(280px,1fr));}
+.card{padding:24px;border-radius:16px;border:1px solid rgba(255,255,255,0.1);transition:.2s;}
+.card:hover{transform:translateY(-4px) scale(1.01);border-color:rgba(255,255,255,0.3);}
+button{padding:10px 16px;border-radius:999px;border:none;cursor:pointer;transition:.2s;}
+button:hover{transform:scale(1.05);opacity:.9;}
+.primary{background:#fff;color:#000;}
+.secondary{background:transparent;color:#fff;border:1px solid rgba(255,255,255,0.2);}
+.stack{display:flex;flex-wrap:wrap;gap:10px;}
+.reply{padding:14px;border-radius:10px;border:1px solid rgba(255,255,255,0.1);cursor:pointer;margin-bottom:10px;}
+.reply:hover{background:rgba(255,255,255,0.05);}
+input{padding:12px;border-radius:8px;border:none;width:260px;margin-top:20px;}
+.big{font-size:22px;margin-bottom:10px;}
+.footer{margin-top:80px;text-align:center;opacity:.5;line-height:1.8;}
+.curve{margin-top:40px;height:60px;border-bottom:1px solid rgba(255,255,255,0.08);border-radius:50%;opacity:0.2;}
+.fade{opacity:0;transform:translateY(20px);transition:.8s;}
+.fade.show{opacity:1;transform:translateY(0);}
