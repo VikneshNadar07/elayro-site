@@ -3,10 +3,12 @@
 <head>
 <title>ReplyFast</title>
 <link rel="stylesheet" href="style.css">
-<script src="script.js" defer></script>
+<script src="script.js?v=5" defer></script>
 </head>
 <body>
-<div class="app"><div class="wrapper">
+
+<div class="app">
+<div class="wrapper">
 
 <section class="hero">
 <h1 class="brand">ReplyFast</h1>
@@ -20,15 +22,23 @@
 <div id="situations" class="stack"></div>
 <div id="replies"></div>
 
-<button id="tryAnotherBtn" onclick="resetFlow()" style="display:none;">Try another →</button>
+<button id="tryAnotherBtn" onclick="resetFlow()" style="display:none; margin-top:20px;">
+Try another →
+</button>
 
-<p id="copiedMsg" style="display:none;">Copied ✓ Message ready to send</p>
+<p id="copiedMsg" style="display:none; margin-top:10px;">
+Copied ✓ Message ready to send
+</p>
 
 <hr>
 
 <p>Get notified when this launches</p>
+
 <input id="email" placeholder="email">
-<label><input type="checkbox" id="notbot"> Not a bot</label>
+
+<label>
+<input type="checkbox" id="notbot"> Not a bot
+</label>
 
 <br><br>
 
@@ -46,6 +56,8 @@
 ReplyFast by Elayro • Built for speed • © 2026
 </footer>
 
-</div></div>
+</div>
+</div>
+
 </body>
 </html>
