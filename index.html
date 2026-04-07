@@ -1,37 +1,171 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ELAYRO</title>
-<meta name="description" content="Execution systems">
+
 <style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{background:#000;color:#fff;text-align:center}
-.nav{position:fixed;top:0;width:100%;display:flex;justify-content:space-between;padding:20px 40px}
-.nav a{color:#aaa;text-decoration:none;margin-left:20px}
-.nav a:hover{color:#fff}
-section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px}
-button{margin:5px;padding:10px 20px;border:1px solid #fff;background:none;color:#fff;cursor:pointer}
-.box{border:1px solid #555;margin:10px;padding:10px;cursor:pointer;max-width:400px}
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: sans-serif;
+}
+
+body {
+  background: #000;
+  color: #fff;
+}
+
+/* NAVBAR */
+.nav {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  padding: 20px 40px;
+  z-index: 1000;
+}
+
+.nav a {
+  color: #aaa;
+  margin-left: 20px;
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: #fff;
+}
+
+/* SECTION = FULL SCREEN */
+section {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 40px;
+}
+
+/* TYPOGRAPHY */
+h1 {
+  font-size: 64px;
+  margin-bottom: 20px;
+}
+
+h2 {
+  font-size: 32px;
+  margin-bottom: 15px;
+}
+
+p {
+  color: #aaa;
+  margin-bottom: 10px;
+  font-size: 18px;
+  max-width: 700px;
+}
+
+/* BUTTON */
+.btn {
+  margin-top: 20px;
+  padding: 12px 28px;
+  border: 1px solid #444;
+  text-decoration: none;
+  color: #fff;
+}
+
+.btn:hover {
+  background: #fff;
+  color: #000;
+}
+
+/* BOXES */
+.grid {
+  display: flex;
+  gap: 40px;
+  margin-top: 30px;
+}
+
+.box {
+  border: 1px solid #444;
+  padding: 20px 40px;
+}
 </style>
 </head>
+
 <body>
 
+<!-- NAVBAR -->
 <nav class="nav">
-<div><a href="index.html">ELAYRO</a></div>
-<div>
-<a href="replyfast.html">ReplyFast</a>
-<a href="elira.html">ELIRA X</a>
-<a href="execution.html">Execution</a>
-</div>
+  <div>ELAYRO</div>
+  <div>
+    <a href="replyfast.html">ReplyFast</a>
+    <a href="elira.html">ELIRA X</a>
+    <a href="execution.html">Execution</a>
+  </div>
 </nav>
 
+<!-- SECTION 1 -->
 <section>
-<h1>ELAYRO</h1>
-<p>Execution, perfected</p>
-<a href="replyfast.html">Try ReplyFast →</a>
-<a href="elira.html">Explore ELIRA X →</a>
-<a href="execution.html">Execution →</a>
+  <p>Execute.</p>
+  <h1>ELAYRO</h1>
+  <p>Execution, perfected.</p>
+  <p>Decision → Action. Instantly.</p>
 </section>
+
+<!-- SECTION 2 -->
+<section>
+  <h2>ReplyFast</h2>
+  <p>Say it right. Instantly.</p>
+  <p>Tap. Copy. Send. No typing. No delay.</p>
+  <a href="replyfast.html" class="btn">Try ReplyFast →</a>
+</section>
+
+<!-- SECTION 3 -->
+<section>
+  <h2>ELIRA X</h2>
+  <p>Execution, engineered.</p>
+  <p>A system that enforces action.</p>
+  <p>Makes execution inevitable.</p>
+  <a href="elira.html" class="btn">Explore ELIRA X →</a>
+</section>
+
+<!-- SECTION 4 -->
+<section>
+  <p>Execution is where ideas die.</p>
+  <p>Not from lack of quality —</p>
+  <p>but at the moment of action.</p>
+  <p>Elayro removes that moment.</p>
+
+  <div class="grid">
+    <div class="box">
+      <p><strong>Action</strong></p>
+      <p>ReplyFast</p>
+    </div>
+
+    <div class="box">
+      <p><strong>Direction</strong></p>
+      <p>ELIRA X</p>
+    </div>
+  </div>
+
+  <a href="execution.html" class="btn">Execution →</a>
+</section>
+
+<!-- SECTION 5 -->
+<section>
+  <h2>Execution becomes default.</h2>
+</section>
+
+<!-- SECTION 6 (FOOTER) -->
+<section>
+  <h2>ELAYRO</h2>
+  <p>contact@elayro.com</p>
+  <p>2026 All rights reserved</p>
+</section>
+
 </body>
 </html>
