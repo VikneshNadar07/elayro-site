@@ -1,30 +1,12 @@
-<!DOCTYPE html>
-<html><head><title>ReplyFast</title>
-<link rel="stylesheet" href="style.css">
-<script src="script.js?v=7" defer></script></head>
-<body><div class="app"><div class="wrapper">
-<section class="hero">
-<h1 class="brand">ReplyFast</h1>
-<p>Reply instantly</p>
-<p>No typing. No thinking</p>
-<p class="big">Tap. Copy. Send</p>
-<p>What do you need to say right now?</p>
-</section>
-<div id="categories" class="stack"></div>
-<div id="situations" class="stack"></div>
-<div id="replies"></div>
-<button id="tryAnotherBtn" onclick="resetFlow()" style="display:none;">Try another →</button>
-<p id="copiedMsg" style="display:none;">Copied ✓ Message ready to send</p>
-<hr>
-<p>Get notified when this launches</p>
-<input id="email" placeholder="email">
-<label><input type="checkbox" id="notbot"> Not a bot</label>
-<br><br>
-<button onclick="saveEmail()">Notify me</button>
-<p id="notifyMsg" style="display:none;"></p>
-<hr>
-<p>Fast replies</p>
-<p>Real conversations</p>
-<p>No friction</p>
-<footer class="footer">ReplyFast by Elayro • Built for speed • © 2026</footer>
-</div></div></body></html>
+<!DOCTYPE html><html><head><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=style.css><title>ReplyFast</title></head><body>
+<div class=container>
+<h1>ReplyFast</h1>
+<p>Say it right. Instantly</p>
+<div class=rf-grid>
+<div id=categories></div>
+<div id=situations></div>
+<div><div id=replies></div><button id=reset onclick=resetFlow() style="display:none">Try another →</button></div>
+</div>
+</div>
+<footer class=footer><div class=footer-inner><div>ReplyFast by Elayro</div><a href="mailto:contact@gmail.com" class=footer-email>contact@gmail.com</a><div>2026 All rights reserved</div></div></footer>
+<script src=app.js></script></body></html>
