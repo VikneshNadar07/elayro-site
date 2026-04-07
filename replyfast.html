@@ -1,12 +1,101 @@
-<!DOCTYPE html><html><head><meta name=viewport content="width=device-width,initial-scale=1"><link rel=stylesheet href=style.css><title>ReplyFast</title></head><body>
-<div class=container>
+
+<!DOCTYPE html>
+<html>
+<head>
+<title>ReplyFast</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
+body{background:#000;color:#fff;text-align:center}
+.nav{position:fixed;top:0;width:100%;display:flex;justify-content:space-between;padding:20px 40px}
+.nav a{color:#aaa;text-decoration:none;margin-left:20px}
+.nav a:hover{color:#fff}
+section{min-height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px}
+button{margin:5px;padding:10px 20px;border:1px solid #fff;background:none;color:#fff;cursor:pointer}
+.box{border:1px solid #555;margin:10px;padding:10px;cursor:pointer;max-width:400px}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+<div><a href="index.html">ELAYRO</a></div>
+<div>
+<a href="replyfast.html">ReplyFast</a>
+<a href="elira.html">ELIRA X</a>
+<a href="execution.html">Execution</a>
+</div>
+</nav>
+
+<section>
+
 <h1>ReplyFast</h1>
-<p>Say it right. Instantly</p>
-<div class=rf-grid>
-<div id=categories></div>
-<div id=situations></div>
-<div><div id=replies></div><button id=reset onclick=resetFlow() style="display:none">Try another →</button></div>
-</div>
-</div>
-<footer class=footer><div class=footer-inner><div>ReplyFast by Elayro</div><a href="mailto:contact@gmail.com" class=footer-email>contact@gmail.com</a><div>2026 All rights reserved</div></div></footer>
-<script src=app.js></script></body></html>
+
+<h3>Tone</h3>
+<button onclick="setCat('work')">Work</button>
+<button onclick="setCat('friend')">Friend</button>
+<button onclick="setCat('client')">Client</button>
+
+<h3>Intent</h3>
+<button onclick="setSit('assign')">Assign</button>
+<button onclick="setSit('plan')">Plan</button>
+<button onclick="setSit('update')">Update</button>
+<button onclick="setSit('invite')">Invite</button>
+<button onclick="setSit('delay')">Late</button>
+<button onclick="setSit('decline')">Decline</button>
+<button onclick="setSit('followup')">Follow up</button>
+<button onclick="setSit('reminder')">Reminder</button>
+<button onclick="setSit('confirm')">Confirm</button>
+
+<div id="out"></div>
+<p id="copy"></p>
+<button onclick="reset()">Try another →</button>
+
+</section>
+
+<script>
+let c=null,s=null;
+
+const data={
+work:{assign:["Handle this","Start this","Take this up","Proceed","Own this","Complete this"],
+plan:["Plan this","Outline","Define steps","Create plan","Structure","Plan ahead"],
+update:["Update me","Status?","Progress?","Share update","Where","Quick update"]},
+friend:{assign:["Do this","Help me","Handle this","Take care","Manage","Try this"],
+plan:["Let’s plan","Figure plan","Organize","Think","Sort","Plan"],
+update:["Any update","What’s up","Status","Tell me","Update","Progress"]},
+client:{assign:["We’ll handle","Assign team","Proceed","Taking this","Managing","Working"],
+plan:["Sharing plan","Preparing","Approach","Plan soon","Outline","Steps"],
+update:["Update soon","Progress","On track","Status","Sharing","Ongoing"]}
+};
+
+function setCat(x){ if(c) return; c=x; gen(); }
+function setSit(x){ if(s) return; s=x; gen(); }
+
+function gen(){
+if(c&&s){
+let arr=data[c][s]||[];
+arr=arr.sort(()=>0.5-Math.random()).slice(0,3);
+let out=document.getElementById("out");
+out.innerHTML="";
+arr.forEach(t=>{
+let d=document.createElement("div");
+d.className="box";
+d.innerText=t;
+d.onclick=()=>copy(t);
+out.appendChild(d);
+});
+}
+}
+
+function copy(t){
+navigator.clipboard.writeText(t);
+document.getElementById("copy").innerText="✓ Copied";
+setTimeout(()=>document.getElementById("copy").innerText="",1500);
+}
+
+function reset(){
+c=null;s=null;
+document.getElementById("out").innerHTML="";
+}
+</script>
+
+</body>
+</html>
