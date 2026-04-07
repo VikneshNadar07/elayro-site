@@ -18,34 +18,14 @@ body {
   color: #fff;
 }
 
-/* NAVBAR */
-.nav {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  padding: 20px 40px;
-  z-index: 1000;
-}
-
-.nav a {
-  color: #aaa;
-  margin-left: 20px;
-  text-decoration: none;
-}
-
-.nav a:hover {
-  color: #fff;
-}
-
-/* SECTION = FULL SCREEN */
+/* SECTION */
 section {
   height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  gap: 12px;
   text-align: center;
   padding: 40px;
 }
@@ -53,17 +33,14 @@ section {
 /* TYPOGRAPHY */
 h1 {
   font-size: 64px;
-  margin-bottom: 20px;
 }
 
 h2 {
   font-size: 32px;
-  margin-bottom: 15px;
 }
 
 p {
   color: #aaa;
-  margin-bottom: 10px;
   font-size: 18px;
   max-width: 700px;
 }
@@ -75,6 +52,7 @@ p {
   border: 1px solid #444;
   text-decoration: none;
   color: #fff;
+  transition: 0.3s;
 }
 
 .btn:hover {
@@ -93,20 +71,31 @@ p {
   border: 1px solid #444;
   padding: 20px 40px;
 }
+
+/* FINAL SECTION */
+.final {
+  position: relative;
+}
+
+/* CENTER TEXT */
+.center {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  text-align: center;
+}
+
+/* FOOTER */
+.footer {
+  position: absolute;
+  bottom: 40px;
+  text-align: center;
+  color: #666;
+}
 </style>
 </head>
 
 <body>
-
-<!-- NAVBAR -->
-<nav class="nav">
-  <div>ELAYRO</div>
-  <div>
-    <a href="replyfast.html">ReplyFast</a>
-    <a href="elira.html">ELIRA X</a>
-    <a href="execution.html">Execution</a>
-  </div>
-</nav>
 
 <!-- SECTION 1 -->
 <section>
@@ -155,16 +144,21 @@ p {
   <a href="execution.html" class="btn">Execution →</a>
 </section>
 
-<!-- SECTION 5 -->
-<section>
-  <h2>Execution becomes default.</h2>
-</section>
+<!-- FINAL MERGED SECTION -->
+<section class="final">
 
-<!-- SECTION 6 (FOOTER) -->
-<section>
-  <h2>ELAYRO</h2>
-  <p>contact@elayro.com</p>
-  <p>2026 All rights reserved</p>
+  <!-- CENTER MESSAGE -->
+  <div class="center">
+    <h2>Execution becomes default.</h2>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer">
+    <p>ELAYRO</p>
+    <p>contact@elayro.com</p>
+    <p>2026 All rights reserved</p>
+  </div>
+
 </section>
 
 </body>
