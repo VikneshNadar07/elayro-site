@@ -18,33 +18,41 @@
 
 <div class="divider"></div>
 
-<section>
-  <h2>Audience</h2>
-  <button class="btn audience-btn" data-value="Work">Work</button>
-  <button class="btn audience-btn" data-value="Friend">Friend</button>
-  <button class="btn audience-btn" data-value="Client">Client</button>
-</section>
+<main class="content">
+  <section>
+    <h2>Interaction</h2>
 
-<section>
-  <h2>Situation</h2>
-  <div id="situations"></div>
-</section>
+    <div class="audience">
+      <h3>Audience</h3>
+      <button class="btn audience-btn" data-value="Work">Work</button>
+      <button class="btn audience-btn" data-value="Friend">Friend</button>
+      <button class="btn audience-btn" data-value="Client">Client</button>
+    </div>
 
-<section>
-  <h2>Replies</h2>
-  <div id="replies"></div>
-  <button class="btn" id="reset" style="display:none;">Try Another →</button>
-</section>
+    <div class="situation">
+      <h3>Situation</h3>
+      <div id="situations"></div>
+    </div>
 
-<div class="divider"></div>
+    <div class="replies">
+      <h3>Replies</h3>
+      <div id="replies"></div>
+      <button class="btn" id="reset" style="display:none;">Try Another →</button>
+    </div>
+  </section>
 
-<section class="email-box">
-  <input type="email" id="email" class="email-input" placeholder="Enter your email">
-  <div>
-    <input type="checkbox" id="botcheck"> <label for="botcheck" class="checkbox">I am not a bot</label>
-  </div>
-  <button class="btn notify-btn" id="notify" disabled>Notify Me</button>
-</section>
+  <div class="divider"></div>
+
+  <section class="email-box">
+    <h2>Stay Updated</h2>
+    <input type="email" id="email" class="email-input" placeholder="Enter your email">
+    <div>
+      <input type="checkbox" id="botcheck"> 
+      <label for="botcheck" class="checkbox">I am not a bot</label>
+    </div>
+    <button class="btn notify-btn" id="notify" disabled>Notify Me</button>
+  </section>
+</main>
 
 <div class="divider"></div>
 
