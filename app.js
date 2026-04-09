@@ -125,22 +125,4 @@ checkbox?.addEventListener("change", () => {
   notifyBtn.disabled = !checkbox.checked;
 });
 
-notifyBtn?.addEventListener("click", () => {
-  const email = emailInput.value.trim();
-  if (!email) {
-    showNotification("Email required");
-    return;
-  }
-  const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
-  if (!emailRegex.test(email)) {
-    showNotification("Enter a valid email");
-    return;
-  }
-  if (registeredEmails.includes(email)) {
-    showNotification("Email already registered");
-    return;
-  }
-  registeredEmails.push(email);
-  showNotification("Email registered successfully");
-  notifyBtn.disabled = true;
-});
+notifyBtn?.addEventListener("click", ()

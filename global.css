@@ -1,19 +1,12 @@
 /* Reset and base styles */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
   font-family: 'Inter', sans-serif;
   background: #ffffff;
-  color: #111111;
+  color: #111;
   line-height: 1.6;
-  -webkit-user-select: none; /* prevent text selection */
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
+  user-select: none; /* prevent text selection */
 }
 
 body {
@@ -38,31 +31,12 @@ h2 {
 }
 
 /* Hero text */
-.punch {
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #333;
-  margin-bottom: 10px;
-}
-
-.intro {
-  font-size: 1rem;
-  color: #555;
-  margin-bottom: 10px;
-}
-
-.hook {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #000;
-  margin-bottom: 20px;
-}
+.punch { font-size: 1.3rem; font-weight: 600; margin-bottom: 10px; }
+.intro { font-size: 1rem; color: #555; margin-bottom: 10px; }
+.hook { font-size: 1.1rem; font-weight: 500; margin-bottom: 20px; }
 
 /* Divider */
-.divider {
-  border-top: 1px solid #ddd;
-  margin: 30px 0;
-}
+.divider { border-top: 1px solid #ddd; margin: 30px 0; }
 
 /* Buttons */
 .btn {
@@ -78,14 +52,8 @@ h2 {
   transition: background 0.3s ease;
 }
 
-.btn:hover {
-  background: #333;
-}
-
-.btn.selected {
-  background: #666;
-  cursor: default;
-}
+.btn:hover { background: #333; }
+.btn.selected { background: #666; cursor: default; }
 
 /* Reply buttons */
 .reply-box {
@@ -99,9 +67,7 @@ h2 {
   transition: background 0.2s ease;
 }
 
-.reply-box:hover {
-  background: #e0e0e0;
-}
+.reply-box:hover { background: #e0e0e0; }
 
 /* Notification */
 .copy-notification {
@@ -117,9 +83,7 @@ h2 {
   z-index: 9999;
 }
 
-.copy-notification.show {
-  opacity: 1;
-}
+.copy-notification.show { opacity: 1; }
 
 /* Footer */
 .footer-global {
@@ -131,20 +95,11 @@ h2 {
   color: #555;
 }
 
-.footer-link {
-  color: #111;
-  text-decoration: none;
-}
-
-.footer-link:hover {
-  text-decoration: underline;
-}
+.footer-link { color: #111; text-decoration: none; }
+.footer-link:hover { text-decoration: underline; }
 
 /* Email box */
-.email-box {
-  margin-top: 20px;
-}
-
+.email-box { margin-top: 20px; }
 .email-input {
   width: 100%;
   padding: 10px;
@@ -152,12 +107,5 @@ h2 {
   border: 1px solid #ccc;
   border-radius: 4px;
 }
-
-.checkbox {
-  font-size: 0.9rem;
-  margin-left: 5px;
-}
-
-.notify-btn {
-  margin-top: 10px;
-}
+.checkbox { font-size: 0.9rem; margin-left: 5px; }
+.notify-btn { margin-top: 10px; }
