@@ -23,29 +23,48 @@ body {
   flex-direction: column;
 }
 
-/* Center content vertically and horizontally */
-.content {
-  flex: 1;
+/* Hero / Page Title Centering */
+header {
   display: flex;
   flex-direction: column;
   justify-content: center;   /* vertical center */
   align-items: center;       /* horizontal center */
+  text-align: center;
+  min-height: 80vh;          /* fills most of viewport */
+  background-attachment: fixed;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
+header h1 {
+  font-size: 3.2rem;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #fff;
+  animation: slideDown 1s ease;
+}
+
+header p {
+  font-size: 1.2rem;
+  color: #ccc;
+  margin-bottom: 25px;
+  max-width: 700px;
+  line-height: 1.9;
+}
+
+/* Content wrapper */
+.content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   text-align: center;
   padding: 60px 20px;
   animation: fadeIn 1.2s ease-in-out;
 }
 
 /* Headings */
-h1 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 3.2rem;
-  font-weight: 600;
-  letter-spacing: -0.5px;
-  margin-bottom: 25px;
-  color: #fff;
-  animation: slideDown 1s ease;
-}
-
 h2 {
   font-family: 'Montserrat', sans-serif;
   font-size: 2rem;
@@ -67,7 +86,7 @@ p {
   text-align: center;
 }
 
-/* Hero text */
+/* Hero text variations */
 .punch { font-size: 1.4rem; font-weight: 600; color: #eee; margin-bottom: 20px; }
 .intro { font-size: 1.2rem; color: #bbb; margin-bottom: 20px; }
 .hook { font-size: 1.25rem; font-weight: 500; color: #fff; margin-bottom: 30px; }
@@ -173,14 +192,6 @@ section {
 }
 .checkbox { font-size: 0.95rem; margin-left: 5px; color: #ccc; }
 .notify-btn { margin-top: 12px; }
-
-/* Parallax effect for hero background */
-header {
-  background-attachment: fixed;
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-}
 
 /* Animations */
 @keyframes fadeIn {
