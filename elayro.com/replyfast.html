@@ -1,19 +1,61 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-<link rel="stylesheet" href="../global.css">
-<script src="../app.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ReplyFast | Elayro</title>
+  <link rel="stylesheet" href="../global.css">
+  <script src="../app.js" defer></script>
 </head>
 <body>
 
-<h1>ReplyFast</h1>
+<header>
+  <h1>ReplyFast</h1>
+  <p class="punch">Say It Right. Instantly.</p>
+  <p class="intro">ReplyFast delivers context‑aware replies in one click.</p>
+  <p class="hook">One click. Infinite speed.</p>
+</header>
 
-<button class="btn audience-btn" data-value="Work">Work</button>
-<button class="btn audience-btn" data-value="Friend">Friend</button>
+<div class="divider"></div>
 
-<div id="situations"></div>
-<div id="replies"></div>
+<section>
+  <h2>Audience</h2>
+  <button class="btn audience-btn" data-value="Work">Work</button>
+  <button class="btn audience-btn" data-value="Friend">Friend</button>
+  <button class="btn audience-btn" data-value="Client">Client</button>
+</section>
+
+<section>
+  <h2>Situation</h2>
+  <div id="situations"></div>
+</section>
+
+<section>
+  <h2>Replies</h2>
+  <div id="replies"></div>
+  <button class="btn" id="reset" style="display:none;">Try Another →</button>
+</section>
+
+<div class="divider"></div>
+
+<section class="email-box">
+  <input type="email" id="email" class="email-input" placeholder="Enter your email">
+  <div>
+    <input type="checkbox" id="botcheck"> <label for="botcheck" class="checkbox">I am not a bot</label>
+  </div>
+  <button class="btn notify-btn" id="notify" disabled>Notify Me</button>
+</section>
+
+<div class="divider"></div>
+
+<footer class="footer-global">
+  <div class="footer-content">
+    <h3>ReplyFast by Elayro</h3>
+    <p>Execution-speed communication.</p>
+    <p><a href="mailto:contact@elayro.com" class="footer-link">contact@elayro.com</a></p>
+    <p>2026 All rights reserved</p>
+  </div>
+</footer>
 
 </body>
 </html>
