@@ -1,90 +1,125 @@
+/* Reset and base styles */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
   font-family: 'Inter', sans-serif;
-  background: #0f1115;   /* dark background */
-  color: #ffffff;        /* white text */
-  line-height: 1.6;
+  background: #0f1115;   /* deep charcoal background */
+  color: #ffffff;        /* pure white text */
+  line-height: 1.8;      /* generous line spacing */
 }
 
-body { max-width: 900px; margin: 0 auto; padding: 20px; }
+body {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 40px;         /* more breathing room */
+}
 
 /* Headings */
-h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; color: #fff; }
-h2 { font-size: 1.6rem; font-weight: 600; margin: 25px 0 10px; color: #ddd; }
+h1 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 3rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+  margin-bottom: 20px;
+  color: #fff;
+}
+
+h2 {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 500;
+  margin: 40px 0 20px;
+  color: #ddd;
+}
 
 /* Hero text */
-.punch { font-size: 1.3rem; font-weight: 600; color: #eee; margin-bottom: 10px; }
-.intro { font-size: 1rem; color: #bbb; margin-bottom: 10px; }
-.hook { font-size: 1.1rem; font-weight: 500; color: #fff; margin-bottom: 20px; }
+.punch { font-size: 1.4rem; font-weight: 600; color: #eee; margin-bottom: 15px; }
+.intro { font-size: 1.05rem; color: #bbb; margin-bottom: 15px; }
+.hook { font-size: 1.2rem; font-weight: 500; color: #fff; margin-bottom: 25px; }
 
 /* Divider */
-.divider { border-top: 1px solid #333; margin: 30px 0; }
+.divider { border-top: 1px solid #333; margin: 50px 0; }
 
-/* Buttons */
+/* Buttons (Apple-like pill style) */
 .btn {
   background: #222;
   color: #fff;
-  padding: 10px 18px;
-  margin: 5px;
+  padding: 12px 24px;
+  margin: 8px;
   border: none;
-  border-radius: 6px;
+  border-radius: 30px; /* pill shape */
+  font-size: 1rem;
+  font-weight: 500;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
-.btn:hover { background: #444; }
+.btn:hover {
+  background: #333;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
 .btn.selected { background: #666; cursor: default; }
 
-/* Reply buttons */
+/* Reply boxes */
 .reply-box {
   background: #1a1d24;
-  border: 1px solid #2a2f3a;
-  border-radius: 6px;
-  padding: 8px 12px;
-  margin: 5px;
-  cursor: pointer;
-  transition: background 0.2s ease;
+  border: none;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin: 8px;
   color: #fff;
+  cursor: pointer;
+  transition: all 0.25s ease;
 }
-.reply-box:hover { background: #2a2f3a; }
+.reply-box:hover {
+  background: #2a2f3a;
+  box-shadow: 0 4px 12px rgba(255,255,255,0.05);
+  transform: translateY(-1px);
+}
 
 /* Notification */
 .copy-notification {
   position: fixed;
-  bottom: 20px;
-  right: 20px;
+  bottom: 30px;
+  right: 30px;
   background: #333;
   color: #fff;
-  padding: 10px 15px;
-  border-radius: 6px;
+  padding: 12px 20px;
+  border-radius: 30px;
   opacity: 0;
-  transition: opacity 0.3s ease;
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  transform: translateY(10px);
   z-index: 9999;
 }
-.copy-notification.show { opacity: 1; }
+.copy-notification.show {
+  opacity: 1;
+  transform: translateY(0);
+}
 
 /* Footer */
 .footer-global {
-  margin-top: 40px;
-  padding-top: 20px;
-  border-top: 1px solid #333;
+  margin-top: 60px;
+  padding-top: 30px;
+  border-top: 1px solid #222;
   text-align: center;
-  font-size: 0.9rem;
-  color: #aaa;
+  font-size: 0.95rem;
+  color: #888;
 }
 .footer-link { color: #fff; text-decoration: none; }
 .footer-link:hover { text-decoration: underline; }
 
 /* Email box */
-.email-box { margin-top: 20px; }
+.email-box { margin-top: 30px; }
 .email-input {
   width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
+  padding: 12px;
+  margin-bottom: 12px;
   border: 1px solid #444;
-  border-radius: 6px;
+  border-radius: 12px;
   background: #1a1d24;
   color: #fff;
+  font-size: 1rem;
 }
-.checkbox { font-size: 0.9rem; margin-left: 5px; color: #ccc; }
-.notify-btn { margin-top: 10px; }
+.checkbox { font-size: 0.95rem; margin-left: 5px; color: #ccc; }
+.notify-btn { margin-top: 12px; }
