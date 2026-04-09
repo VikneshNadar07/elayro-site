@@ -1,9 +1,115 @@
-document.addEventListener("contextmenu",e=>e.preventDefault());
-const data={Work:{"Running late":["Running late — joining soon","Delayed slightly, will be there ASAP","Running behind, will update shortly","On the way, slight delay","Joining in a few minutes","Apologies, running a bit late"],"Need more time":["Need more time, will update soon","Still working on it","Will get back with update","Extending timeline slightly","In progress","Will need more time"],"Can’t attend":["Won’t be able to make it","Unable to attend","Can’t join","Will skip this","Not able to attend","Will catch up later"]},Friend:{"Running late":["Running late bro","On the way","Late but coming","Reaching soon","Almost there","Stuck, coming"],"Can’t come":["Can’t make it","Not coming","Let’s plan later","Skipping today","Won’t join","Another day"],"Call later":["Call you later?","Busy now","Will call soon","Call after some time","Talk later?","Will ring later"]},Client:{"Running late":["Apologies, running slightly late","Running behind","Joining shortly","Slight delay","Thank you for waiting","Connecting soon"],"Need more time":["Need more time","Will update shortly","In progress","Extending timeline","Sharing soon","Working on it"],"Reschedule":["Can we reschedule?","Move to another slot","Shift this","Move meeting","Later time","Better slot"]}};
-let currentCategory=null,selectedSituation=null;
-function init(){const c=document.getElementById("categories");if(!c)return;c.innerHTML=Object.keys(data).map(cat=>`<button onclick="selectCategory('${cat}',this)">${cat}</button>`).join('');}
-function selectCategory(cat,el){if(currentCategory)return;currentCategory=cat;document.querySelectorAll("#categories button").forEach(b=>b.classList.remove("active"));el.classList.add("active");document.getElementById("situations").innerHTML=Object.keys(data[cat]).map(x=>`<button onclick="selectSituation('${x}',this)">${x}</button>`).join('');}
-function selectSituation(s,el){if(selectedSituation)return;selectedSituation=s;document.querySelectorAll("#situations button").forEach(b=>b.classList.remove("active"));el.classList.add("active");let arr=[...data[currentCategory][s]].sort(()=>0.5-Math.random());let selected=arr.slice(0,3);document.getElementById("replies").innerHTML=selected.map(r=>`<div class="reply" onclick="copyText('${r}')">${r}</div>`).join('');document.getElementById("reset").style.display="block";}
-function copyText(t){navigator.clipboard.writeText(t);alert("Copied");}
-function resetFlow(){currentCategory=null;selectedSituation=null;document.getElementById("situations").innerHTML="";document.getElementById("replies").innerHTML="";document.getElementById("reset").style.display="none";document.querySelectorAll("button").forEach(b=>b.classList.remove("active"));init();}
-init();
+document.addEventListener("DOMContentLoaded", () => {
+  const audienceButtons = document.querySelectorAll(".audience-btn");
+  const repliesDiv = document.getElementById("replies");
+  const resetBtn = document.getElementById("reset");
+  const notifyBtn = document.getElementById("notify");
+  const emailInput = document.getElementById("email");
+  const botCheck = document.getElementById("botCheck");
+  const message = document.getElementById("message");
+
+  let selectedAudience = null;
+  let selectedSituation = null;
+  let replyIndex = {};
+
+  // Situation map per audience
+  const situationMap = {
+    Work: ["Assign", "Report", "Meeting"],
+    Friend: ["Help", "Plan", "Hangout"],
+    Client: ["Proposal", "Feedback", "Update"]
+  };
+
+  // Replies dataset (6 per situation)
+  const repliesData = {
+    Work: {
+      Assign: ["Please take this up now","I assigned this yesterday","You'll handle this tomorrow","This task is yours today","You managed this last week","You'll be responsible next time"],
+      Report: ["Submit the report today","You submitted last quarter","You'll submit next week","Send the file now","You shared it earlier","You'll deliver it soon"],
+      Meeting: ["Join the meeting now","You attended yesterday","You'll attend tomorrow","Be present today","You joined last time","You'll connect next session"]
+    },
+    Friend: {
+      Help: ["Can you help me now?","You helped me last time","You'll help me tomorrow","Support me today","You backed me before","You'll assist later"],
+      Plan: ["Let's plan it now","We planned yesterday","We'll plan tomorrow","Sort details today","We arranged earlier","We'll figure it out soon"],
+      Hangout: ["Let's hang out today","We hung out last week","We'll hang out next time","Meet me now","We met before","We'll meet later"]
+    },
+    Client: {
+      Proposal: ["Share the proposal now","You shared last quarter","You'll share next week","Present it today","You presented earlier","You'll present soon"],
+      Feedback: ["Provide feedback today","You gave feedback before","You'll give feedback tomorrow","Respond now","You responded last time","You'll respond later"],
+      Update: ["Provide the update now","You reported last week","You'll report tomorrow","Share progress today","You informed me earlier","You'll keep me informed later"]
+    }
+  };
+
+  // Audience selection
+  audienceButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      if (selectedAudience) return;
+      selectedAudience = btn.dataset.value;
+      audienceButtons.forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      renderSituations();
+    });
+  });
+
+  // Render situations dynamically
+  function renderSituations() {
+    const container = document.getElementById("situations");
+    const situations = situationMap[selectedAudience];
+    container.innerHTML = situations
+      .map(s => `<button class="situation-btn" data-value="${s}">${s}</button>`)
+      .join("");
+    document.querySelectorAll(".situation-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        if (selectedSituation) return;
+        selectedSituation = btn.dataset.value;
+        document.querySelectorAll(".situation-btn").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        showReplies();
+      });
+    });
+  }
+
+  // Show replies (3 at a time, rotate on reset)
+  function showReplies() {
+    if (!selectedAudience || !selectedSituation) return;
+    const key = `${selectedAudience}-${selectedSituation}`;
+    if (!replyIndex[key]) replyIndex[key] = 0;
+    const replies = repliesData[selectedAudience][selectedSituation];
+    const start = replyIndex[key] * 3;
+    const selected = replies.slice(start, start + 3);
+    repliesDiv.innerHTML = selected
+      .map(r => `<div class="reply" onclick="navigator.clipboard.writeText('${r}')">${r}</div>`)
+      .join("");
+  }
+
+  // Reset everything and rotate replies
+  resetBtn.addEventListener("click", () => {
+    if (!selectedAudience || !selectedSituation) return;
+    const key = `${selectedAudience}-${selectedSituation}`;
+    replyIndex[key] = (replyIndex[key] + 1) % 2;
+    selectedAudience = null;
+    selectedSituation = null;
+    audienceButtons.forEach(b => b.classList.remove("active"));
+    document.getElementById("situations").innerHTML = "";
+    repliesDiv.innerHTML = "";
+  });
+
+  // Email capture
+  botCheck.addEventListener("change", () => {
+    notifyBtn.disabled = !botCheck.checked;
+  });
+  notifyBtn.addEventListener("click", () => {
+    const email = emailInput.value.trim();
+    if (!email.includes("@")) {
+      message.textContent = "Enter a valid email.";
+      return;
+    }
+    message.textContent = "We will notify you.";
+    emailInput.value = "";
+    botCheck.checked = false;
+    notifyBtn.disabled = true;
+  });
+
+  // Parallax background effect
+  window.addEventListener("scroll", () => {
+    const scrollY = window.scrollY;
+    document.body.style.backgroundPosition = `center ${scrollY * 0.3}px`;
+  });
+});
