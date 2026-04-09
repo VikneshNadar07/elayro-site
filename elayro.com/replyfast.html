@@ -3,269 +3,69 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ReplyFast</title>
 
-<style>
-*{margin:0;padding:0;box-sizing:border-box;font-family:sans-serif}
-body{background:#000;color:#fff}
+<title>ReplyFast | Elayro</title>
 
-/* SECTION */
-section{
-  height:100vh;
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  gap:20px;
-  padding:40px;
-}
+<meta name="description" content="Generate the perfect reply in 2 seconds. ReplyFast by Elayro helps you respond instantly with smart, execution-speed communication.">
+<meta property="og:title" content="ReplyFast | Elayro">
+<meta property="og:description" content="Say it right. Instantly. Generate the perfect reply in 2 seconds.">
 
-/* TEXT */
-h1{font-size:64px}
-h2{font-size:28px}
-p{color:#aaa}
-
-/* BUTTONS */
-.group{display:flex;gap:15px;flex-wrap:wrap;justify-content:center}
-button{
-  padding:10px 20px;
-  border:1px solid #444;
-  background:none;
-  color:#fff;
-  cursor:pointer;
-}
-button.active{background:#fff;color:#000}
-button:disabled{opacity:0.4;cursor:not-allowed}
-
-/* RESPONSES */
-.box{
-  border:1px solid #444;
-  padding:15px;
-  width:320px;
-  cursor:pointer;
-}
-.box:hover{background:#111}
-
-/* HIDDEN */
-.hidden{display:none}
-
-/* FINAL SECTION */
-.final{position:relative}
-.center{
-  position:absolute;
-  top:50%;
-  transform:translateY(-50%);
-}
-.footer{
-  position:absolute;
-  bottom:40px;
-  color:#666;
-}
-</style>
+<link rel="stylesheet" href="global.css">
+<script src="app.js" defer></script>
 </head>
 
 <body>
 
-<!-- SECTION 1 -->
-<section>
+<header>
   <h1>ReplyFast</h1>
   <p>Say it right. Instantly.</p>
-  <p>Tap. Copy. Send.</p>
+  <p class="hero-desc">
+    Generate the perfect reply in 2 seconds. 
+    Select your audience and situation — get instant responses you can copy and use.
+  </p>
+</header>
+
+<!-- Audience -->
+<section>
+  <h2>Audience</h2>
+  <button class="audience-btn" data-value="Work">Work</button>
+  <button class="audience-btn" data-value="Friend">Friend</button>
+  <button class="audience-btn" data-value="Client">Client</button>
 </section>
 
-<!-- SECTION 2 (CORE PRODUCT) -->
+<!-- Situations (DYNAMICALLY RENDERED) -->
 <section>
-
-  <!-- TONE -->
-  <h2>Tone</h2>
-  <div class="group" id="tones">
-    <button onclick="selectTone('work', this)">Work</button>
-    <button onclick="selectTone('friend', this)">Friend</button>
-    <button onclick="selectTone('client', this)">Client</button>
-  </div>
-
-  <!-- INTENT -->
-  <h2>Intent</h2>
-  <div class="group" id="intents"></div>
-
-  <!-- RESPONSES -->
-  <div id="responses"></div>
-
-  <p id="copied" class="hidden">✓ Copied</p>
-
-  <button id="resetBtn" class="hidden" onclick="resetAll()">Try another →</button>
-
+  <h2>Situation</h2>
+  <div id="situations"></div>
 </section>
 
-<!-- SECTION 3 -->
+<!-- Replies -->
 <section>
+  <h2>Replies</h2>
+  <div id="replies"></div>
+  <button id="reset">Try Another →</button>
+</section>
 
-  <h2>What is ReplyFast</h2>
-  <p>Removes friction between thinking and replying</p>
-  <p>Ready-to-use responses for real situations</p>
-
-  <h2>What’s next</h2>
-  <p>More categories and situations</p>
-  <p>Hinglish and more languages</p>
-
-  <!-- EMAIL -->
-  <input id="email" placeholder="Enter email">
+<!-- Email Capture -->
+<section>
+  <h2>Stay Updated</h2>
+  <input type="email" id="email" placeholder="Enter your email">
+  
   <label>
-    <input type="checkbox" id="human"> I'm human
+    <input type="checkbox" id="botCheck"> Not a bot
   </label>
-  <button onclick="submitEmail()">Notify me</button>
-  <p id="status"></p>
-
+  
+  <button id="notify" disabled>Notify Me</button>
+  <p id="message"></p>
 </section>
 
-<!-- SECTION 4 -->
-<section class="final">
-  <div class="center">
-    <h2>Execution becomes default.</h2>
-  </div>
-  <div class="footer">
-    <p>ReplyFast by ELAYRO</p>
-    <p>contact@elayro.com</p>
-    <p>2026 All rights reserved</p>
-  </div>
-</section>
-
-<script>
-let selectedTone=null;
-let selectedIntent=null;
-
-/* DATA */
-const intents={
-  work:["assign","plan","follow"],
-  friend:["help","plan","check"],
-  client:["handle","update","schedule"]
-};
-
-const data={
-work:{
-assign:["Please take this up and share an update once done.","Assigning this to you—please proceed.","Can you handle this and keep me posted?","Start this and update me.","Own this and close it.","Handle and confirm completion."],
-plan:["Let’s outline a plan.","Draft a plan for this.","Share your approach.","Plan and align.","Define next steps.","Create a plan and execute."],
-follow:["Following up on this.","Any update here?","Checking back.","Need update.","Circling back.","Please respond."]
-},
-friend:{
-help:["Can you help me with this?","Need your help here.","Can you take this?","Help me out on this.","Can you manage this?","I need your help."],
-plan:["Let’s plan this.","How do we do this?","Figure a plan.","Plan properly.","Think and tell.","Organize this."],
-check:["Any update?","What’s happening?","Checking in.","Tell me status.","What’s the update?","Ping me."]
-},
-client:{
-handle:["We will take this forward.","Assigning to our team.","We’ll handle this.","Proceeding with this.","Team will manage.","Taking this up."],
-update:["We will update shortly.","Here’s progress.","On track.","Ongoing.","We’ll keep you posted.","Update soon."],
-schedule:["Let’s schedule this.","Setting up a meeting.","We can align on this.","Scheduling shortly.","Let’s connect.","Fixing a time."]
-}
-};
-
-/* TONE */
-function selectTone(tone,el){
-  if(selectedIntent) return;
-
-  selectedTone=tone;
-
-  document.querySelectorAll('#tones button').forEach(b=>{
-    b.classList.remove('active');
-  });
-  el.classList.add('active');
-
-  renderIntents();
-}
-
-/* INTENT */
-function renderIntents(){
-  const container=document.getElementById("intents");
-  container.innerHTML="";
-
-  intents[selectedTone].forEach(i=>{
-    const btn=document.createElement("button");
-    btn.innerText=i;
-    btn.onclick=()=>selectIntent(i,btn);
-    container.appendChild(btn);
-  });
-}
-
-function selectIntent(intent,el){
-  if(selectedIntent) return;
-
-  selectedIntent=intent;
-
-  document.querySelectorAll('#intents button').forEach(b=>{
-    b.disabled=true;
-  });
-  document.querySelectorAll('#tones button').forEach(b=>{
-    b.disabled=true;
-  });
-
-  el.classList.add('active');
-
-  generateResponses();
-}
-
-/* RESPONSES */
-function generateResponses(){
-  const all=data[selectedTone][selectedIntent];
-  const shuffled=[...all].sort(()=>0.5-Math.random()).slice(0,3);
-
-  const container=document.getElementById("responses");
-  container.innerHTML="";
-
-  shuffled.forEach(text=>{
-    const div=document.createElement("div");
-    div.className="box";
-    div.innerText=text;
-    div.onclick=()=>copy(text);
-    container.appendChild(div);
-  });
-
-  document.getElementById("resetBtn").classList.remove("hidden");
-}
-
-/* COPY */
-function copy(text){
-  navigator.clipboard.writeText(text);
-  const c=document.getElementById("copied");
-  c.classList.remove("hidden");
-  setTimeout(()=>c.classList.add("hidden"),1200);
-}
-
-/* RESET */
-function resetAll(){
-  selectedTone=null;
-  selectedIntent=null;
-
-  document.querySelectorAll('button').forEach(b=>{
-    b.disabled=false;
-    b.classList.remove('active');
-  });
-
-  document.getElementById("responses").innerHTML="";
-  document.getElementById("intents").innerHTML="";
-  document.getElementById("resetBtn").classList.add("hidden");
-}
-
-/* EMAIL */
-function submitEmail(){
-  const email=document.getElementById("email").value.trim();
-  const human=document.getElementById("human").checked;
-  const status=document.getElementById("status");
-
-  if(!email.includes("@")){
-    status.innerText="Enter valid email";
-    return;
-  }
-
-  if(!human){
-    status.innerText="Confirm you're human";
-    return;
-  }
-
-  localStorage.setItem("email",email);
-  status.innerText="✓ You're in";
-}
-</script>
+<!-- Footer -->
+<footer class="footer-global">
+  <h3>ReplyFast by Elayro</h3>
+  <p>Execution-speed communication.</p>
+  <p>contact@elayro.com</p>
+  <p>2026 All rights reserved</p>
+</footer>
 
 </body>
 </html>
