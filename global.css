@@ -1,35 +1,17 @@
-/* Reset and base styles */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
   font-family: 'Inter', sans-serif;
-  background: #0f1115;   /* dark grey/black background */
+  background: #0f1115;   /* dark background */
   color: #ffffff;        /* white text */
   line-height: 1.6;
 }
 
-body {
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 20px;
-}
+body { max-width: 900px; margin: 0 auto; padding: 20px; }
 
 /* Headings */
-h1 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  margin-bottom: 10px;
-  color: #fff;
-}
-
-h2 {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1.6rem;
-  font-weight: 600;
-  margin: 25px 0 10px;
-  color: #ddd;
-}
+h1 { font-size: 2.5rem; font-weight: 700; margin-bottom: 10px; color: #fff; }
+h2 { font-size: 1.6rem; font-weight: 600; margin: 25px 0 10px; color: #ddd; }
 
 /* Hero text */
 .punch { font-size: 1.3rem; font-weight: 600; color: #eee; margin-bottom: 10px; }
@@ -41,24 +23,20 @@ h2 {
 
 /* Buttons */
 .btn {
-  display: inline-block;
   background: #222;
   color: #fff;
   padding: 10px 18px;
   margin: 5px;
   border: none;
   border-radius: 6px;
-  font-size: 0.95rem;
   cursor: pointer;
   transition: background 0.3s ease;
 }
-
 .btn:hover { background: #444; }
 .btn.selected { background: #666; cursor: default; }
 
 /* Reply buttons */
 .reply-box {
-  display: inline-block;
   background: #1a1d24;
   border: 1px solid #2a2f3a;
   border-radius: 6px;
@@ -68,7 +46,6 @@ h2 {
   transition: background 0.2s ease;
   color: #fff;
 }
-
 .reply-box:hover { background: #2a2f3a; }
 
 /* Notification */
@@ -84,7 +61,6 @@ h2 {
   transition: opacity 0.3s ease;
   z-index: 9999;
 }
-
 .copy-notification.show { opacity: 1; }
 
 /* Footer */
@@ -96,7 +72,6 @@ h2 {
   font-size: 0.9rem;
   color: #aaa;
 }
-
 .footer-link { color: #fff; text-decoration: none; }
 .footer-link:hover { text-decoration: underline; }
 
