@@ -1,12 +1,11 @@
 /* ===============================
-   ELAYRO FINAL UI SYSTEM (ULTIMATE LOCK)
+   ELAYRO FINAL UI SYSTEM
    =============================== */
 
 html, body {
   height: 100%;
 }
 
-/* ===== BODY ===== */
 body {
   margin: 0;
   font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -34,8 +33,6 @@ header {
   flex-direction: column;
   align-items: center;
   text-align: center;
-
-  will-change: transform;
 }
 
 header h1 {
@@ -47,23 +44,18 @@ header h1 {
 
 .punch {
   font-size: clamp(16px, 1.6vw, 20px);
-  font-weight: 500;
-  opacity: 0.95;
   margin-bottom: 8px;
 }
 
 .hook {
   font-size: clamp(17px, 1.8vw, 22px);
   opacity: 0.85;
-  line-height: 1.6;
   max-width: 75%;
-  min-height: 24px;
 }
 
 /* HERO DIVIDER */
 header::after {
   content: "";
-  display: block;
   width: 80px;
   height: 1px;
   margin: 18px auto 0;
@@ -74,8 +66,6 @@ header::after {
     rgba(255,255,255,0.8),
     transparent
   );
-
-  opacity: 0.9;
 }
 
 /* ===============================
@@ -86,143 +76,21 @@ header::after {
   width: 100%;
   max-width: 680px;
   padding: 0 20px;
-
   display: flex;
   flex-direction: column;
   align-items: center;
-
   flex: 1;
 }
 
 section {
   width: 100%;
-  margin: clamp(60px, 10vh, 110px) 0;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  margin: clamp(60px, 10vh, 100px) 0;
   text-align: center;
-
-  will-change: transform;
 }
 
 /* ===============================
-   TYPOGRAPHY
+   DEMO FULLSCREEN
    =============================== */
-
-h2 {
-  font-size: clamp(18px, 2vw, 22px);
-  font-weight: 500;
-  margin-bottom: 12px;
-  opacity: 0.85;
-}
-
-p {
-  font-size: clamp(14px, 1.2vw, 16px);
-  max-width: 620px;
-  line-height: 1.75;
-  opacity: 0.8;
-}
-
-/* ===============================
-   FEATURE LIST (NO BULLETS)
-   =============================== */
-
-.feature-list {
-  width: 100%;
-  max-width: 520px;
-  margin-top: 20px;
-  text-align: left;
-}
-
-.feature-item {
-  display: flex;
-  align-items: baseline;
-  gap: 10px;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-
-.feature-item:last-child {
-  border-bottom: none;
-}
-
-.feature-title {
-  font-weight: 600;
-  min-width: 110px;
-}
-
-.feature-desc {
-  opacity: 0.7;
-}
-
-/* ===============================
-   SECTION CTA BUTTON (PRIMARY)
-   =============================== */
-
-.section-nav {
-  margin-top: 22px;
-}
-
-.section-nav a {
-  font-size: 14px;
-  padding: 12px 22px;
-
-  border-radius: 999px;
-  text-decoration: none;
-
-  color: #ffffff;
-
-  background: linear-gradient(
-    180deg,
-    rgba(255,255,255,0.16),
-    rgba(255,255,255,0.05)
-  );
-
-  border: 1px solid rgba(255,255,255,0.12);
-
-  backdrop-filter: blur(14px);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.25),
-    inset 0 -1px 0 rgba(255,255,255,0.08),
-    0 10px 30px rgba(0,0,0,0.45);
-
-  transition: all 0.28s ease;
-}
-
-/* Hover */
-.section-nav a:hover {
-  transform: translateY(-3px);
-
-  background: linear-gradient(
-    180deg,
-    rgba(255,255,255,0.22),
-    rgba(255,255,255,0.08)
-  );
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.35),
-    inset 0 -1px 0 rgba(255,255,255,0.12),
-    0 16px 45px rgba(0,0,0,0.6),
-    0 0 20px rgba(255,255,255,0.06);
-}
-
-/* PRESS EFFECT */
-.section-nav a:active {
-  transform: translateY(1px) scale(0.96);
-
-  background: linear-gradient(
-    180deg,
-    rgba(255,255,255,0.10),
-    rgba(255,255,255,0.04)
-  );
-
-  box-shadow:
-    inset 0 3px 8px rgba(0,0,0,0.6);
-}
-
-/* DEMO FULLSCREEN */
 
 .demo-fullscreen {
   min-height: 100vh;
@@ -234,20 +102,70 @@ p {
 .demo-inner {
   display: flex;
   flex-direction: column;
-  gap: 20px;
   align-items: center;
+  gap: 28px;
+  width: 100%;
 }
 
-/* LIGHT PREMIUM BUTTONS */
+/* ===============================
+   AUDIENCE ROW
+   =============================== */
 
-.btn, .reply-btn {
+.audience-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.demo-guide {
+  font-size: 13px;
+  opacity: 0.6;
+  white-space: nowrap;
+}
+
+.audience-buttons {
+  display: flex;
+  gap: 14px;
+}
+
+/* ===============================
+   SITUATIONS & REPLIES
+   =============================== */
+
+#situations,
+#replies {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  justify-content: center;
+}
+
+.situation {
+  margin-top: 40px;
+}
+
+.replies {
+  margin-top: 40px;
+}
+
+/* ===============================
+   BUTTON SYSTEM (LIGHT PREMIUM)
+   =============================== */
+
+.btn,
+.reply-btn {
+  font-size: 14px;
   padding: 10px 16px;
+
   border-radius: 12px;
   border: none;
   cursor: pointer;
 
-  background: linear-gradient(180deg, #ffffff, #e5e5e9);
   color: #111;
+
+  background: linear-gradient(180deg, #ffffff, #e5e5e9);
 
   box-shadow:
     inset 0 1px 0 rgba(255,255,255,1),
@@ -256,20 +174,44 @@ p {
   transition: all 0.25s ease;
 }
 
-.btn:hover, .reply-btn:hover {
+/* Hover */
+.btn:hover,
+.reply-btn:hover {
   transform: translateY(-2px);
 }
 
-.btn:active, .reply-btn:active {
+/* Press */
+.btn:active,
+.reply-btn:active {
   transform: scale(0.96);
 }
 
-/* ACTION BUTTONS */
+/* Active state */
+.audience-btn.active,
+.situation-btn.active {
+  outline: 2px solid rgba(255,255,255,0.5);
+}
+
+/* Copy feedback */
+.reply-btn.copied {
+  background: linear-gradient(180deg, #d4ffd9, #b8f5c2);
+  color: #0a3d1a;
+}
+
+/* ===============================
+   ACTION BUTTONS
+   =============================== */
 
 .action-buttons {
-  margin-top: 25px;
+  margin-top: 40px;
   display: flex;
-  gap: 12px;
+  gap: 14px;
+  justify-content: center;
+}
+
+.change-btn {
+  background: linear-gradient(180deg, #ffffff, #e5e5e9);
+  color: #111;
 }
 
 .reset-btn {
@@ -284,7 +226,7 @@ p {
 
 .faq-section {
   position: relative;
-  padding: 100px 0;
+  padding: 80px 0;
 }
 
 .faq-section::before,
@@ -303,8 +245,6 @@ p {
     rgba(255,255,255,0.8),
     transparent
   );
-
-  opacity: 0.9;
 }
 
 .faq-section::before {
@@ -316,69 +256,34 @@ p {
 }
 
 /* ===============================
-   NAV (RICH BUTTON SYSTEM)
+   NAV (RICH BUTTONS)
    =============================== */
 
 .nav-minimal {
   margin-top: 70px;
-
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
   gap: 14px;
-
-  border-top: 1px solid rgba(255,255,255,0.06);
-  padding-top: 36px;
+  justify-content: center;
+  flex-wrap: wrap;
 }
 
 .nav-minimal a {
-  font-size: 14px;
-  padding: 11px 22px;
-
+  padding: 10px 20px;
   border-radius: 999px;
-  text-decoration: none;
 
+  text-decoration: none;
   color: #f5f5f7;
 
-  background: linear-gradient(
-    180deg,
-    rgba(255,255,255,0.09),
-    rgba(255,255,255,0.02)
-  );
-
+  background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.08);
 
-  backdrop-filter: blur(12px);
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.18),
-    inset 0 -1px 0 rgba(255,255,255,0.05),
-    0 8px 24px rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
 
   transition: all 0.3s ease;
 }
 
 .nav-minimal a:hover {
-  transform: translateY(-3px);
-
-  background: linear-gradient(
-    180deg,
-    rgba(255,255,255,0.16),
-    rgba(255,255,255,0.04)
-  );
-
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,0.3),
-    inset 0 -1px 0 rgba(255,255,255,0.08),
-    0 14px 40px rgba(0,0,0,0.55),
-    0 0 18px rgba(255,255,255,0.05);
-}
-
-.nav-minimal a:active {
-  transform: translateY(0) scale(0.95);
-
-  box-shadow:
-    inset 0 2px 6px rgba(0,0,0,0.5);
+  transform: translateY(-2px);
 }
 
 /* ===============================
@@ -396,11 +301,6 @@ p {
 .footer-global a {
   color: inherit;
   text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
-.footer-global a:hover {
-  opacity: 0.7;
 }
 
 /* ===============================
@@ -409,16 +309,12 @@ p {
 
 @media (max-width: 480px) {
 
-  header {
-    margin-top: 60px;
-  }
-
-  .feature-item {
+  .audience-row {
     flex-direction: column;
-    gap: 4px;
+    gap: 10px;
   }
 
-  .feature-title {
-    min-width: unset;
+  .demo-guide {
+    order: -1;
   }
 }

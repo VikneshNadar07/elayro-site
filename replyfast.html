@@ -5,32 +5,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>ReplyFast | Instant AI Reply Generator | Elayro</title>
+  <title>ReplyFast | Instant Reply Generator | Elayro</title>
 
-  <meta name="description" content="ReplyFast helps you generate instant, context-aware replies for work, clients, and conversations.">
-  <meta name="keywords" content="reply generator, instant replies, communication tool, ReplyFast, Elayro">
+  <meta name="description" content="Generate instant replies with clarity and speed using ReplyFast.">
+  <meta name="keywords" content="reply generator, instant replies, communication tool">
   <meta name="robots" content="index, follow">
 
   <link rel="canonical" href="https://elayro.com/replyfast.html">
   <link rel="stylesheet" href="/global.css">
   <script src="/app.js" defer></script>
-
-  <script type="application/ld+json">
-  {
-   "@context": "https://schema.org",
-   "@type": "FAQPage",
-   "mainEntity": [
-     {
-       "@type": "Question",
-       "name": "What is ReplyFast?",
-       "acceptedAnswer": {
-         "@type": "Answer",
-         "text": "ReplyFast generates instant replies for messages and conversations."
-       }
-     }
-   ]
-  }
-  </script>
 </head>
 
 <body>
@@ -43,43 +26,44 @@
 
 <main class="content">
 
-<section>
-  <h2>What is ReplyFast</h2>
-  <p>Generate instant replies without overthinking.</p>
-</section>
-
 <section class="demo-fullscreen">
-
   <div class="demo-inner">
 
     <h2>Try ReplyFast</h2>
 
-    <div class="audience">
-      <button class="btn audience-btn" data-value="Work">Work</button>
-      <button class="btn audience-btn" data-value="Friend">Friend</button>
-      <button class="btn audience-btn" data-value="Client">Client</button>
+    <!-- AUDIENCE -->
+    <div class="audience-row">
+      <p class="demo-guide" id="demoGuide">Select Audience Type →</p>
+
+      <div class="audience-buttons">
+        <button class="btn audience-btn" data-value="Work">Work</button>
+        <button class="btn audience-btn" data-value="Friend">Friend</button>
+        <button class="btn audience-btn" data-value="Client">Client</button>
+      </div>
     </div>
 
+    <!-- SITUATION -->
     <div class="situation">
       <div id="situations"></div>
     </div>
 
+    <!-- REPLIES -->
     <div class="replies">
       <div id="replies"></div>
     </div>
 
-    <div class="action-buttons" id="actions" style="display:none;">
+    <!-- ACTIONS -->
+    <div class="action-buttons">
       <button class="btn change-btn" id="change">Change Replies</button>
       <button class="btn reset-btn" id="reset">Reset</button>
     </div>
 
   </div>
-
 </section>
 
 <section class="faq-section">
   <h2>FAQ</h2>
-  <p>ReplyFast generates instant replies.</p>
+  <p>ReplyFast helps you generate instant replies.</p>
 </section>
 
 <nav class="nav-minimal">
