@@ -22,85 +22,92 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* ===== BACKGROUND GLOW ===== */
+/* ===============================
+   APPLE LINE GLOW
+   =============================== */
+
 body::before {
   content: "";
   position: fixed;
-  top: -150px;
+  top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 700px;
-  height: 400px;
-  background: radial-gradient(circle, rgba(255,255,255,0.05), transparent 70%);
+
+  width: 0.8px;
+  height: 160px;
+
+  background: linear-gradient(
+    to bottom,
+    rgba(255,255,255,0.35),
+    rgba(255,255,255,0.12),
+    transparent
+  );
+
+  opacity: 0.6;
   pointer-events: none;
 }
 
 /* ===============================
-   HERO (FINAL)
+   HERO (FINAL DOMINANCE)
    =============================== */
 
 header {
   width: 100%;
   max-width: 680px;
 
-  margin: clamp(80px, 14vh, 140px) auto 50px auto;
+  margin: clamp(80px, 14vh, 140px) auto clamp(50px, 8vh, 90px);
 
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  transform: translateY(-6px);
 }
 
 /* Title */
 header h1 {
   font-size: clamp(30px, 4vw, 46px);
   font-weight: 600;
-  letter-spacing: -0.6px;
+  letter-spacing: -0.7px;
   line-height: 1.2;
 
   max-width: 90%;
   margin-bottom: 16px;
 }
 
-/* Punch */
+/* Punch (stronger) */
 .punch {
-  font-size: clamp(14px, 1.2vw, 16px);
+  font-size: clamp(16px, 1.6vw, 20px);
   font-weight: 500;
   letter-spacing: 0.4px;
 
-  opacity: 0.85;
+  opacity: 0.95;
   margin-bottom: 10px;
 
   position: relative;
 }
 
-/* Punch divider */
+/* Divider line */
 .punch::after {
   content: "";
   display: block;
   width: 30px;
   height: 1px;
   margin: 10px auto 0;
-  background: rgba(255,255,255,0.2);
+  background: rgba(255,255,255,0.25);
 }
 
-/* Hook */
+/* Hook (main communicator) */
 .hook {
-  font-size: clamp(15px, 1.3vw, 18px);
-  opacity: 0.65;
+  font-size: clamp(17px, 1.8vw, 22px);
+  font-weight: 400;
+
+  opacity: 0.85;
   line-height: 1.6;
 
   max-width: 75%;
   min-height: 24px;
-}
-
-/* Subtle hero glow */
-header::after {
-  content: "";
-  width: 140px;
-  height: 50px;
-  margin-top: 25px;
-  background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
 }
 
 /* ===============================
@@ -122,12 +129,14 @@ header::after {
 /* Sections */
 section {
   width: 100%;
-  margin: clamp(40px, 6vh, 80px) 0;
+  margin: clamp(50px, 7vh, 90px) 0;
 
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
+
+  opacity: 0.9;
 }
 
 /* ===============================
@@ -135,9 +144,10 @@ section {
    =============================== */
 
 h2 {
-  font-size: clamp(18px, 2vw, 24px);
+  font-size: clamp(16px, 1.6vw, 20px);
   font-weight: 500;
   margin-bottom: 12px;
+  opacity: 0.75;
 }
 
 h3 {
@@ -148,8 +158,9 @@ h3 {
 p {
   font-size: clamp(14px, 1.2vw, 16px);
   max-width: 620px;
-  line-height: 1.7;
-  opacity: 0.85;
+  line-height: 1.75;
+  letter-spacing: 0.2px;
+  opacity: 0.8;
 }
 
 /* ===============================
@@ -158,7 +169,7 @@ p {
 
 ul {
   max-width: 520px;
-  margin: 10px auto;
+  margin: 12px auto;
   padding-left: 18px;
   text-align: left;
 }
@@ -193,6 +204,7 @@ a:hover {
   gap: 10px;
   justify-content: center;
   flex-wrap: wrap;
+  opacity: 0.6;
 }
 
 .nav-minimal a {
@@ -223,7 +235,7 @@ a:hover {
   margin-top: auto;
   padding: 30px 0;
   text-align: center;
-  opacity: 0.5;
+  opacity: 0.4;
   font-size: 13px;
 }
 
