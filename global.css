@@ -1,5 +1,5 @@
 /* ===============================
-   ELAYRO FINAL LOCKED UI SYSTEM
+   ELAYRO FINAL UI SYSTEM (LOCKED)
    =============================== */
 
 html, body {
@@ -28,7 +28,6 @@ body {
 header {
   width: 100%;
   max-width: 680px;
-
   margin: clamp(70px, 12vh, 120px) auto clamp(60px, 10vh, 100px);
 
   display: flex;
@@ -37,56 +36,46 @@ header {
   text-align: center;
 }
 
-/* Title */
 header h1 {
   font-size: clamp(30px, 4vw, 46px);
   font-weight: 600;
   letter-spacing: -0.7px;
-  line-height: 1.2;
-
   margin-bottom: 14px;
 }
 
-/* Punch (brand tagline) */
 .punch {
   font-size: clamp(16px, 1.6vw, 20px);
   font-weight: 500;
-  letter-spacing: 0.4px;
-
   opacity: 0.95;
   margin-bottom: 8px;
 }
 
-/* Hook (dynamic) */
 .hook {
   font-size: clamp(17px, 1.8vw, 22px);
-  font-weight: 400;
-
   opacity: 0.85;
   line-height: 1.6;
-
   max-width: 75%;
   min-height: 24px;
 }
 
-/* Hero line */
+/* HERO DIVIDER */
 header::after {
   content: "";
   display: block;
 
-  width: 70px;
+  width: 80px;
   height: 1px;
 
-  margin: 16px auto 0;
+  margin: 18px auto 0;
 
   background: linear-gradient(
     to right,
     transparent,
-    rgba(255,255,255,0.7),
+    rgba(255,255,255,0.8),
     transparent
   );
 
-  opacity: 0.7;
+  opacity: 0.9;
 }
 
 /* ===============================
@@ -105,7 +94,6 @@ header::after {
   flex: 1;
 }
 
-/* Sections */
 section {
   width: 100%;
   margin: clamp(60px, 10vh, 110px) 0;
@@ -135,52 +123,13 @@ p {
 }
 
 /* ===============================
-   SECTION NAV (SMART CTA LINKS)
-   =============================== */
-
-.section-nav {
-  margin-top: 18px;
-}
-
-.section-nav a {
-  font-size: 14px;
-  color: #9ab8ff;
-  text-decoration: none;
-  position: relative;
-  transition: opacity 0.25s ease;
-  letter-spacing: 0.2px;
-}
-
-/* underline animation */
-.section-nav a::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -3px;
-
-  width: 0%;
-  height: 1px;
-  background: #9ab8ff;
-
-  transition: width 0.25s ease;
-}
-
-.section-nav a:hover::after {
-  width: 100%;
-}
-
-.section-nav a:hover {
-  opacity: 0.8;
-}
-
-/* ===============================
    FEATURE LIST (NO BULLETS)
    =============================== */
 
 .feature-list {
   width: 100%;
   max-width: 520px;
-  margin: 24px auto 0;
+  margin-top: 20px;
   text-align: left;
 }
 
@@ -188,7 +137,6 @@ p {
   display: flex;
   align-items: baseline;
   gap: 10px;
-
   padding: 12px 0;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
@@ -200,16 +148,14 @@ p {
 .feature-title {
   font-weight: 600;
   min-width: 110px;
-  color: #ffffff;
 }
 
 .feature-desc {
   opacity: 0.7;
-  line-height: 1.6;
 }
 
 /* ===============================
-   FAQ DIVIDER
+   FAQ DIVIDER (FIXED)
    =============================== */
 
 .faq-section {
@@ -224,25 +170,65 @@ p {
   left: 50%;
   transform: translateX(-50%);
 
-  width: 120px;
+  width: 100px;
   height: 1px;
 
   background: linear-gradient(
     to right,
     transparent,
-    rgba(255,255,255,0.6),
+    rgba(255,255,255,0.8),
     transparent
   );
+
+  opacity: 0.9;
 }
 
-/* top line */
 .faq-section::before {
-  top: 25px;
+  top: 0;
 }
 
-/* bottom line */
 .faq-section::after {
-  bottom: 25px;
+  bottom: 0;
+}
+
+/* ===============================
+   NAV (BUTTON STYLE FINAL)
+   =============================== */
+
+.nav-minimal {
+  margin-top: 60px;
+
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 30px;
+}
+
+.nav-minimal a {
+  font-size: 14px;
+  padding: 10px 18px;
+
+  border-radius: 999px;
+  text-decoration: none;
+
+  color: #e5e5e7;
+  background: rgba(255, 255, 255, 0.06);
+
+  backdrop-filter: blur(6px);
+
+  transition: all 0.25s ease;
+}
+
+.nav-minimal a:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-1px);
+}
+
+.nav-minimal a:active {
+  transform: scale(0.96);
 }
 
 /* ===============================
@@ -253,8 +239,18 @@ p {
   margin-top: auto;
   padding: 40px 0;
   text-align: center;
-  opacity: 0.35;
+  opacity: 0.6;
   font-size: 13px;
+}
+
+.footer-global a {
+  color: inherit;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.footer-global a:hover {
+  opacity: 0.7;
 }
 
 /* ===============================
@@ -262,6 +258,7 @@ p {
    =============================== */
 
 @media (max-width: 480px) {
+
   header {
     margin-top: 60px;
   }
