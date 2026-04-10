@@ -1,9 +1,13 @@
 /* ===============================
-   BASE
+   RESET + BASE
    =============================== */
 
 * {
   box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
@@ -20,16 +24,48 @@ body {
 }
 
 /* ===============================
+   PARALLAX BACKGROUND
+   =============================== */
+
+body::before {
+  content: "";
+  position: fixed;
+  top: -20%;
+  left: -20%;
+  width: 140%;
+  height: 140%;
+
+  background: radial-gradient(
+    circle at 30% 30%,
+    rgba(255,255,255,0.05),
+    transparent 60%
+  );
+
+  z-index: -1;
+  pointer-events: none;
+
+  animation: moveBg 20s linear infinite;
+}
+
+@keyframes moveBg {
+  0% { transform: translate(0,0); }
+  50% { transform: translate(20px,20px); }
+  100% { transform: translate(0,0); }
+}
+
+/* ===============================
    HERO
    =============================== */
 
 header {
   text-align: center;
-  margin-top: 100px;
+  margin-top: clamp(70px, 10vh, 120px);
 }
 
 header h1 {
-  font-size: 42px;
+  font-size: clamp(32px, 4vw, 48px);
+  font-weight: 600;
+  letter-spacing: -0.7px;
   margin-bottom: 10px;
 }
 
@@ -42,9 +78,10 @@ header h1 {
 .hook {
   font-size: 18px;
   opacity: 0.7;
+  max-width: 70%;
+  margin: 0 auto;
 }
 
-/* Divider under hero */
 header::after {
   content: "";
   display: block;
@@ -60,8 +97,43 @@ header::after {
 
 .content {
   width: 100%;
-  max-width: 700px;
+  max-width: 720px;
+  margin: 0 auto;
   padding: 0 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ===============================
+   SECTIONS
+   =============================== */
+
+section {
+  width: 100%;
+  margin: clamp(70px, 10vh, 120px) 0;
+  text-align: center;
+}
+
+section h2 {
+  font-size: clamp(22px, 2.5vw, 28px);
+  font-weight: 600;
+  margin-bottom: 14px;
+}
+
+section p {
+  font-size: clamp(15px, 1.4vw, 17px);
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 10px auto;
+  opacity: 0.85;
+}
+
+/* subtle section divider */
+section:not(:first-child) {
+  border-top: 1px solid rgba(255,255,255,0.05);
+  padding-top: 40px;
 }
 
 /* ===============================
@@ -79,6 +151,8 @@ header::after {
   display: flex;
   flex-direction: column;
   align-items: center;
+  gap: 28px;
+  width: 100%;
 }
 
 /* ===============================
@@ -108,7 +182,8 @@ header::after {
    =============================== */
 
 .btn,
-.reply-btn {
+.reply-btn,
+#notifyBtn {
   padding: 10px 16px;
   border-radius: 12px;
   border: none;
@@ -121,22 +196,30 @@ header::after {
     inset 0 1px 0 rgba(255,255,255,1),
     0 6px 18px rgba(0,0,0,0.25);
 
-  transition: all 0.25s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 /* Hover */
 .btn:hover,
-.reply-btn:hover {
-  transform: translateY(-2px);
+.reply-btn:hover,
+#notifyBtn:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 10px 25px rgba(0,0,0,0.35),
+    0 0 10px rgba(255,255,255,0.08);
 }
 
-/* Click */
+/* Press */
 .btn:active,
-.reply-btn:active {
-  transform: scale(0.95);
+.reply-btn:active,
+#notifyBtn:active {
+  transform: translateY(1px) scale(0.96);
+  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
 }
 
-/* Active */
+/* Active state */
 .audience-btn.active,
 .situation-btn.active {
   outline: 2px solid rgba(255,255,255,0.6);
@@ -155,6 +238,12 @@ header::after {
   margin-top: 30px;
 }
 
+/* Copy feedback */
+.reply-btn.copied {
+  background: linear-gradient(#d4ffd9, #b8f5c2);
+  color: #0a3d1a;
+}
+
 /* ===============================
    ACTION BUTTONS
    =============================== */
@@ -166,7 +255,6 @@ header::after {
   justify-content: center;
 }
 
-/* Reset style */
 .reset-btn {
   background: rgba(255,255,255,0.08);
   color: #ddd;
@@ -179,7 +267,6 @@ header::after {
 
 .subscribe-section {
   text-align: center;
-  margin-top: 80px;
 }
 
 .subscribe-box {
@@ -194,13 +281,10 @@ header::after {
 #emailInput {
   width: 260px;
   padding: 12px;
-
   border-radius: 12px;
   border: 1px solid rgba(255,255,255,0.15);
-
   background: rgba(255,255,255,0.06);
   color: #fff;
-
   outline: none;
 }
 
@@ -231,27 +315,13 @@ header::after {
   opacity: 0.7;
 }
 
-/* Notify button */
+/* Notify */
 #notifyBtn {
-  padding: 12px 22px;
-  border-radius: 999px;
-
-  background: linear-gradient(180deg, #ffffff, #e5e5e9);
-  color: #111;
-
-  border: none;
-  cursor: pointer;
-
   opacity: 0.4;
-  transition: all 0.25s ease;
 }
 
 #notifyBtn.enabled {
   opacity: 1;
-}
-
-#notifyBtn:hover {
-  transform: translateY(-2px);
 }
 
 /* Message */
@@ -265,11 +335,19 @@ header::after {
    =============================== */
 
 .faq-section {
-  margin-top: 80px;
   text-align: center;
 }
 
-/* Divider lines */
+.faq-section h3 {
+  margin-top: 20px;
+}
+
+.faq-section p {
+  margin-bottom: 10px;
+  opacity: 0.8;
+}
+
+/* Divider */
 .faq-section::before,
 .faq-section::after {
   content: "";
@@ -278,6 +356,34 @@ header::after {
   height: 1px;
   margin: 20px auto;
   background: linear-gradient(to right, transparent, #fff, transparent);
+}
+
+/* ===============================
+   NAV (RESTORED)
+   =============================== */
+
+.nav-minimal {
+  margin-top: 60px;
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.nav-minimal a {
+  padding: 10px 20px;
+  border-radius: 999px;
+  text-decoration: none;
+  color: #f5f5f7;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+
+  transition: all 0.25s ease;
+}
+
+.nav-minimal a:hover {
+  transform: translateY(-2px);
 }
 
 /* ===============================
