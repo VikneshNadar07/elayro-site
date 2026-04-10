@@ -1,147 +1,106 @@
-/* ===============================
-   DYNAMIC HOOK SYSTEM
-   =============================== */
-
-const hooks = {
-  "/": "From decision to outcome.",
-  "/index.html": "From decision to outcome.",
-
-  "/replyfast.html": "Respond instantly. Communicate clearly.",
-  
-  "/elira.html": "Turn intention into independence.",
-  
-  "/execution.html": "Every decision becomes action."
-};
-
-function setDynamicHook() {
-  const path = window.location.pathname;
-  const hookEl = document.getElementById("dynamicHook");
-
-  if (!hookEl) return;
-
-  const hookText = hooks[path] || "Execution, simplified.";
-  hookEl.textContent = hookText;
-}
-
-document.addEventListener("DOMContentLoaded", setDynamicHook);
-
-
-
-/* ===============================
-   REPLYFAST DEMO SYSTEM
-   =============================== */
-
 const situationsMap = {
-  Work: [
-    "Follow-up",
-    "Meeting Delay",
-    "Send Report"
-  ],
-  Friend: [
-    "Plan Weekend",
-    "Reply Late",
-    "Casual Chat"
-  ],
-  Client: [
-    "Project Update",
-    "Pricing",
-    "Deadline"
-  ]
+  Work: ["Follow-up", "Delay", "Report"],
+  Friend: ["Plan", "Apology", "Casual Reply"],
+  Client: ["Proposal", "Meeting", "Deadline"]
 };
 
 const repliesMap = {
-  "Follow-up": [
-    "Just checking in on this.",
-    "Following up on my previous message.",
-    "Any updates on this?"
-  ],
-  "Meeting Delay": [
-    "Running a bit late, will join shortly.",
-    "Apologies, I'll be a few minutes late.",
-    "Joining in a moment."
-  ],
-  "Send Report": [
-    "I’ll send it by today.",
-    "Sharing the report shortly.",
-    "You’ll have it soon."
-  ],
-  "Plan Weekend": [
-    "Sounds good, what time?",
-    "Let’s do it, I’m in.",
-    "I’m free, let’s plan."
-  ],
-  "Reply Late": [
-    "Sorry, just saw this.",
-    "Apologies for the late reply.",
-    "Got back to this now."
-  ],
-  "Casual Chat": [
-    "Haha nice!",
-    "That’s interesting.",
-    "Tell me more."
-  ],
-  "Project Update": [
-    "Project is on track.",
-    "Sharing progress shortly.",
-    "Everything is moving well."
-  ],
-  "Pricing": [
-    "Sharing pricing details shortly.",
-    "Let me send you the breakdown.",
-    "I’ll get back with numbers."
-  ],
-  "Deadline": [
-    "We’ll meet the deadline.",
-    "On track for completion.",
-    "Will deliver as planned."
-  ]
+  "Work-Follow-up": ["Just following up on this.", "Any updates?", "Checking in.", "Quick follow-up."],
+  "Work-Delay": ["Slight delay.", "Running behind.", "Will update soon.", "Thanks for patience."],
+  "Work-Report": ["Sending today.", "Ready shortly.", "Sharing soon.", "By end of day."],
+
+  "Friend-Plan": ["Let’s do it!", "Sounds good!", "I’m in!", "Let’s plan."],
+  "Friend-Apology": ["Sorry!", "My bad.", "Apologies.", "Won’t happen again."],
+  "Friend-Casual Reply": ["Nice!", "Haha!", "Love that!", "Awesome!"],
+
+  "Client-Proposal": ["Sharing soon.", "In progress.", "Working on it.", "Will send shortly."],
+  "Client-Meeting": ["Let’s schedule.", "Available anytime.", "What time works?", "Let me know."],
+  "Client-Deadline": ["On time.", "On track.", "Will deliver.", "Aligned."]
 };
 
-function initReplyFast() {
-  const audienceButtons = document.querySelectorAll(".audience-btn");
-  const situationsContainer = document.getElementById("situations");
-  const repliesContainer = document.getElementById("replies");
-  const resetBtn = document.getElementById("reset");
+const audienceBtns = document.querySelectorAll(".audience-btn");
+const situationsDiv = document.getElementById("situations");
+const repliesDiv = document.getElementById("replies");
 
-  if (!audienceButtons.length) return;
+const changeBtn = document.getElementById("change");
+const resetBtn = document.getElementById("reset");
+const actions = document.getElementById("actions");
 
-  audienceButtons.forEach(btn => {
-    btn.addEventListener("click", () => {
-      const value = btn.dataset.value;
+let selectedAudience = null;
+let selectedSituation = null;
 
-      situationsContainer.innerHTML = "";
-      repliesContainer.innerHTML = "";
+audienceBtns.forEach(btn => {
+  btn.onclick = () => {
+    if (selectedAudience) return;
 
-      situationsMap[value].forEach(situation => {
-        const el = document.createElement("button");
-        el.className = "btn situation-btn";
-        el.textContent = situation;
+    selectedAudience = btn.dataset.value;
+    audienceBtns.forEach(b => b.disabled = true);
+    btn.classList.add("active");
 
-        el.onclick = () => {
-          repliesContainer.innerHTML = "";
+    situationsDiv.innerHTML = "";
 
-          repliesMap[situation].forEach(reply => {
-            const r = document.createElement("div");
-            r.className = "reply";
-            r.textContent = reply;
-            repliesContainer.appendChild(r);
-          });
+    situationsMap[selectedAudience].forEach(s => {
+      const b = document.createElement("button");
+      b.className = "btn situation-btn";
+      b.textContent = s;
 
-          resetBtn.style.display = "inline-block";
-        };
+      b.onclick = () => {
+        if (selectedSituation) return;
 
-        situationsContainer.appendChild(el);
-      });
+        selectedSituation = s;
+        document.querySelectorAll(".situation-btn").forEach(x => x.disabled = true);
+        b.classList.add("active");
+
+        showReplies();
+      };
+
+      situationsDiv.appendChild(b);
     });
+  };
+});
+
+function showReplies() {
+  repliesDiv.innerHTML = "";
+
+  const key = `${selectedAudience}-${selectedSituation}`;
+  const list = shuffle([...repliesMap[key]]).slice(0, 4);
+
+  list.forEach(text => {
+    const btn = document.createElement("button");
+    btn.className = "reply-btn";
+    btn.textContent = text;
+
+    btn.onclick = () => {
+      navigator.clipboard.writeText(text);
+      btn.textContent = "Copied ✓";
+      setTimeout(() => btn.textContent = text, 1000);
+    };
+
+    repliesDiv.appendChild(btn);
   });
 
-  if (resetBtn) {
-    resetBtn.addEventListener("click", () => {
-      situationsContainer.innerHTML = "";
-      repliesContainer.innerHTML = "";
-      resetBtn.style.display = "none";
-    });
-  }
+  actions.style.display = "flex";
 }
 
-document.addEventListener("DOMContentLoaded", initReplyFast);
+changeBtn.onclick = () => {
+  if (!selectedAudience || !selectedSituation) return;
+  showReplies();
+};
+
+resetBtn.onclick = () => {
+  selectedAudience = null;
+  selectedSituation = null;
+
+  audienceBtns.forEach(b => {
+    b.disabled = false;
+    b.classList.remove("active");
+  });
+
+  situationsDiv.innerHTML = "";
+  repliesDiv.innerHTML = "";
+  actions.style.display = "none";
+};
+
+function shuffle(arr) {
+  return arr.sort(() => Math.random() - 0.5);
+}
