@@ -1,43 +1,65 @@
-// Smooth Scroll for internal links
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-  anchor.addEventListener('click', function (e) {
-    e.preventDefault();
-    document.querySelector(this.getAttribute('href'))
-      .scrollIntoView({ behavior: 'smooth' });
+// ===== ReplyFast Interaction =====
+
+// Audience → Situations → Replies flow
+const situationsData = {
+  Work: ["Deadline delay", "Meeting request", "Follow-up"],
+  Friend: ["Casual reply", "Plan meetup", "Apology"],
+  Client: ["Project update", "Price discussion", "Clarification"]
+};
+
+const repliesData = {
+  "Deadline delay": ["I’ll need a bit more time, will update shortly."],
+  "Meeting request": ["Sure, let me know a time that works."],
+  "Follow-up": ["Just checking in on this, any updates?"],
+
+  "Casual reply": ["Haha, that sounds great!"],
+  "Plan meetup": ["Let’s do it, when are you free?"],
+  "Apology": ["Sorry about that, didn’t mean to miss it."],
+
+  "Project update": ["The project is progressing well, I’ll share an update soon."],
+  "Price discussion": ["Let’s discuss pricing based on your requirements."],
+  "Clarification": ["Could you clarify a bit more so I can assist better?"]
+};
+
+const audienceButtons = document.querySelectorAll(".audience-btn");
+const situationsDiv = document.getElementById("situations");
+const repliesDiv = document.getElementById("replies");
+const resetBtn = document.getElementById("reset");
+
+if (audienceButtons) {
+  audienceButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+      const audience = btn.dataset.value;
+      situationsDiv.innerHTML = "";
+      repliesDiv.innerHTML = "";
+
+      situationsData[audience].forEach(situation => {
+        const sBtn = document.createElement("button");
+        sBtn.textContent = situation;
+        sBtn.className = "btn";
+        sBtn.onclick = () => showReplies(situation);
+        situationsDiv.appendChild(sBtn);
+      });
+    });
   });
-});
+}
 
-// Button Ripple Effect
-document.querySelectorAll('.btn').forEach(btn => {
-  btn.addEventListener('click', function (e) {
-    const circle = document.createElement('span');
-    const diameter = Math.max(this.clientWidth, this.clientHeight);
-    const radius = diameter / 2;
+function showReplies(situation) {
+  repliesDiv.innerHTML = "";
 
-    circle.style.width = circle.style.height = `${diameter}px`;
-    circle.style.left = `${e.clientX - this.offsetLeft - radius}px`;
-    circle.style.top = `${e.clientY - this.offsetTop - radius}px`;
-    circle.classList.add('ripple');
-
-    const ripple = this.getElementsByClassName('ripple')[0];
-    if (ripple) ripple.remove();
-
-    this.appendChild(circle);
+  repliesData[situation].forEach(reply => {
+    const p = document.createElement("p");
+    p.textContent = reply;
+    repliesDiv.appendChild(p);
   });
-});
 
-// Section Reveal on Scroll
-const revealSections = document.querySelectorAll('section');
-const revealOptions = { threshold: 0.15 };
+  if (resetBtn) resetBtn.style.display = "block";
+}
 
-const revealOnScroll = new IntersectionObserver((entries, observer) => {
-  entries.forEach(entry => {
-    if (!entry.isIntersecting) return;
-    entry.target.classList.add('visible');
-    observer.unobserve(entry.target);
+if (resetBtn) {
+  resetBtn.addEventListener("click", () => {
+    situationsDiv.innerHTML = "";
+    repliesDiv.innerHTML = "";
+    resetBtn.style.display = "none";
   });
-}, revealOptions);
-
-revealSections.forEach(section => {
-  revealOnScroll.observe(section);
-});
+}
