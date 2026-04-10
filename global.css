@@ -1,5 +1,5 @@
 /* ===============================
-   ELAYRO FINAL CLEAN UI SYSTEM
+   ELAYRO FINAL LOCKED UI SYSTEM
    =============================== */
 
 html, body {
@@ -30,7 +30,7 @@ header {
   width: 100%;
   max-width: 680px;
 
-  margin: clamp(80px, 14vh, 140px) auto clamp(50px, 8vh, 90px);
+  margin: clamp(70px, 12vh, 120px) auto clamp(60px, 10vh, 100px);
 
   display: flex;
   flex-direction: column;
@@ -46,7 +46,7 @@ header h1 {
   line-height: 1.2;
 
   max-width: 90%;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 /* Punch */
@@ -56,7 +56,7 @@ header h1 {
   letter-spacing: 0.4px;
 
   opacity: 0.95;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 /* Hook */
@@ -69,6 +69,26 @@ header h1 {
 
   max-width: 75%;
   min-height: 24px;
+}
+
+/* Hero line */
+header::after {
+  content: "";
+  display: block;
+
+  width: 70px;
+  height: 1px;
+
+  margin: 16px auto 0;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.7),
+    transparent
+  );
+
+  opacity: 0.7;
 }
 
 /* ===============================
@@ -90,7 +110,7 @@ header h1 {
 /* Sections */
 section {
   width: 100%;
-  margin: clamp(50px, 7vh, 90px) 0;
+  margin: clamp(60px, 10vh, 110px) 0;
 
   display: flex;
   flex-direction: column;
@@ -106,7 +126,7 @@ h2 {
   font-size: clamp(16px, 1.6vw, 20px);
   font-weight: 500;
   margin-bottom: 12px;
-  opacity: 0.8;
+  opacity: 0.75;
 }
 
 h3 {
@@ -117,18 +137,19 @@ h3 {
 p {
   font-size: clamp(14px, 1.2vw, 16px);
   max-width: 620px;
-  line-height: 1.7;
-  opacity: 0.85;
+  line-height: 1.75;
+  letter-spacing: 0.2px;
+  opacity: 0.8;
 }
 
 /* ===============================
-   FEATURE LIST (REPLACES BULLETS)
+   FEATURE LIST (FINAL)
    =============================== */
 
 .feature-list {
   width: 100%;
   max-width: 520px;
-  margin: 20px auto 0;
+  margin: 24px auto 0;
   text-align: left;
 }
 
@@ -137,7 +158,7 @@ p {
   align-items: baseline;
   gap: 10px;
 
-  padding: 10px 0;
+  padding: 12px 0;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
 
@@ -146,17 +167,17 @@ p {
 }
 
 .feature-title {
-  font-weight: 500;
+  font-weight: 600;
   min-width: 110px;
   color: #ffffff;
 }
 
 .feature-desc {
-  opacity: 0.75;
+  opacity: 0.7;
   line-height: 1.6;
 }
 
-/* Mobile fix */
+/* Mobile */
 @media (max-width: 480px) {
   .feature-item {
     flex-direction: column;
@@ -183,7 +204,7 @@ a:hover {
 }
 
 /* ===============================
-   NAV
+   NAVIGATION
    =============================== */
 
 .nav-minimal {
@@ -192,6 +213,8 @@ a:hover {
   gap: 10px;
   justify-content: center;
   flex-wrap: wrap;
+
+  opacity: 0.5;
 }
 
 .nav-minimal a {
@@ -219,7 +242,7 @@ a:hover {
 
 .faq-section {
   position: relative;
-  padding: 50px 0;
+  padding: 100px 0;
 }
 
 .faq-section::before,
@@ -235,19 +258,19 @@ a:hover {
   background: linear-gradient(
     to right,
     transparent,
-    rgba(255,255,255,0.25),
+    rgba(255,255,255,0.6),
     transparent
   );
-
-  opacity: 0.6;
 }
 
+/* top line */
 .faq-section::before {
-  top: 0;
+  top: 25px;
 }
 
+/* bottom line */
 .faq-section::after {
-  bottom: 0;
+  bottom: 25px;
 }
 
 /* ===============================
@@ -256,9 +279,9 @@ a:hover {
 
 .footer-global {
   margin-top: auto;
-  padding: 30px 0;
+  padding: 40px 0;
   text-align: center;
-  opacity: 0.4;
+  opacity: 0.35;
   font-size: 13px;
 }
 
