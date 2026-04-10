@@ -1,39 +1,43 @@
-// Smooth reveal on scroll
-const revealElements = document.querySelectorAll('.content section, .divider, .email-box');
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('fade-in');
-      observer.unobserve(entry.target);
-    }
+// Smooth Scroll for internal links
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+  anchor.addEventListener('click', function (e) {
+    e.preventDefault();
+    document.querySelector(this.getAttribute('href'))
+      .scrollIntoView({ behavior: 'smooth' });
   });
-}, { threshold: 0.1 });
+});
 
-revealElements.forEach(el => observer.observe(el));
+// Button Ripple Effect
+document.querySelectorAll('.btn').forEach(btn => {
+  btn.addEventListener('click', function (e) {
+    const circle = document.createElement('span');
+    const diameter = Math.max(this.clientWidth, this.clientHeight);
+    const radius = diameter / 2;
 
-// Email notify button activation
-const emailInput = document.getElementById('email');
-const botCheck = document.getElementById('botcheck');
-const notifyBtn = document.getElementById('notify');
+    circle.style.width = circle.style.height = `${diameter}px`;
+    circle.style.left = `${e.clientX - this.offsetLeft - radius}px`;
+    circle.style.top = `${e.clientY - this.offsetTop - radius}px`;
+    circle.classList.add('ripple');
 
-function toggleNotify() {
-  if (emailInput.value.includes('@') && botCheck.checked) {
-    notifyBtn.disabled = false;
-    notifyBtn.classList.add('glow');
-    notifyBtn.style.cursor = 'pointer';
-  } else {
-    notifyBtn.disabled = true;
-    notifyBtn.classList.remove('glow');
-    notifyBtn.style.cursor = 'not-allowed';
-  }
-}
+    const ripple = this.getElementsByClassName('ripple')[0];
+    if (ripple) ripple.remove();
 
-emailInput.addEventListener('input', toggleNotify);
-botCheck.addEventListener('change', toggleNotify);
+    this.appendChild(circle);
+  });
+});
 
-// Parallax header effect
-document.addEventListener('scroll', () => {
-  const header = document.querySelector('header');
-  const scrollY = window.scrollY;
-  header.style.transform = `translateY(${scrollY * 0.2}px)`;
+// Section Reveal on Scroll
+const revealSections = document.querySelectorAll('section');
+const revealOptions = { threshold: 0.15 };
+
+const revealOnScroll = new IntersectionObserver((entries, observer) => {
+  entries.forEach(entry => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add('visible');
+    observer.unobserve(entry.target);
+  });
+}, revealOptions);
+
+revealSections.forEach(section => {
+  revealOnScroll.observe(section);
 });
