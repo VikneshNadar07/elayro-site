@@ -1,5 +1,5 @@
 /* ===============================
-   ELAYRO FINAL LOCKED UI SYSTEM
+   ELAYRO FINAL CLEAN UI SYSTEM
    =============================== */
 
 html, body {
@@ -23,32 +23,7 @@ body {
 }
 
 /* ===============================
-   APPLE LINE GLOW
-   =============================== */
-
-body::before {
-  content: "";
-  position: fixed;
-  top: 0;
-  left: 50%;
-  transform: translateX(-50%);
-
-  width: 0.8px;
-  height: 160px;
-
-  background: linear-gradient(
-    to bottom,
-    rgba(255,255,255,0.35),
-    rgba(255,255,255,0.12),
-    transparent
-  );
-
-  opacity: 0.6;
-  pointer-events: none;
-}
-
-/* ===============================
-   HERO (FINAL DOMINANCE)
+   HERO
    =============================== */
 
 header {
@@ -61,8 +36,6 @@ header {
   flex-direction: column;
   align-items: center;
   text-align: center;
-
-  transform: translateY(-6px);
 }
 
 /* Title */
@@ -84,18 +57,6 @@ header h1 {
 
   opacity: 0.95;
   margin-bottom: 10px;
-
-  position: relative;
-}
-
-/* Punch divider */
-.punch::after {
-  content: "";
-  display: block;
-  width: 30px;
-  height: 1px;
-  margin: 10px auto 0;
-  background: rgba(255,255,255,0.25);
 }
 
 /* Hook */
@@ -135,8 +96,6 @@ section {
   flex-direction: column;
   align-items: center;
   text-align: center;
-
-  opacity: 0.9;
 }
 
 /* ===============================
@@ -147,7 +106,7 @@ h2 {
   font-size: clamp(16px, 1.6vw, 20px);
   font-weight: 500;
   margin-bottom: 12px;
-  opacity: 0.75;
+  opacity: 0.8;
 }
 
 h3 {
@@ -158,25 +117,26 @@ h3 {
 p {
   font-size: clamp(14px, 1.2vw, 16px);
   max-width: 620px;
-  line-height: 1.75;
-  letter-spacing: 0.2px;
-  opacity: 0.8;
+  line-height: 1.7;
+  opacity: 0.85;
 }
 
 /* ===============================
-   FEATURE LIST (FINAL)
+   FEATURE LIST (REPLACES BULLETS)
    =============================== */
 
 .feature-list {
   width: 100%;
   max-width: 520px;
-  margin: 24px auto 0;
+  margin: 20px auto 0;
+  text-align: left;
 }
 
 .feature-item {
   display: flex;
   align-items: baseline;
   gap: 10px;
+
   padding: 10px 0;
   border-bottom: 1px solid rgba(255,255,255,0.06);
 }
@@ -196,7 +156,7 @@ p {
   line-height: 1.6;
 }
 
-/* Mobile */
+/* Mobile fix */
 @media (max-width: 480px) {
   .feature-item {
     flex-direction: column;
@@ -223,7 +183,7 @@ a:hover {
 }
 
 /* ===============================
-   NAVIGATION
+   NAV
    =============================== */
 
 .nav-minimal {
@@ -232,7 +192,6 @@ a:hover {
   gap: 10px;
   justify-content: center;
   flex-wrap: wrap;
-  opacity: 0.6;
 }
 
 .nav-minimal a {
@@ -255,7 +214,7 @@ a:hover {
 }
 
 /* ===============================
-   FAQ DIVIDER LINES
+   FAQ DIVIDER
    =============================== */
 
 .faq-section {
@@ -283,8 +242,13 @@ a:hover {
   opacity: 0.6;
 }
 
-.faq-section::before { top: 0; }
-.faq-section::after { bottom: 0; }
+.faq-section::before {
+  top: 0;
+}
+
+.faq-section::after {
+  bottom: 0;
+}
 
 /* ===============================
    FOOTER
