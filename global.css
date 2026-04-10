@@ -1,5 +1,5 @@
 /* ===============================
-   ELAYRO FINAL POLISHED UI
+   ELAYRO FINAL LOCKED UI SYSTEM
    =============================== */
 
 html, body {
@@ -16,13 +16,13 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-start; /* 🔥 always start from top */
+  justify-content: flex-start;
 
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
 
-/* ===== GLOW ===== */
+/* ===== BACKGROUND GLOW ===== */
 body::before {
   content: "";
   position: fixed;
@@ -35,39 +35,82 @@ body::before {
   pointer-events: none;
 }
 
-/* ===== HERO ===== */
-header {
-  width: 90%;
-  max-width: 720px;
-  text-align: center;
+/* ===============================
+   HERO (FINAL)
+   =============================== */
 
-  margin-top: clamp(60px, 10vh, 120px);
-  margin-bottom: clamp(30px, 5vh, 60px);
+header {
+  width: 100%;
+  max-width: 680px;
+
+  margin: clamp(80px, 14vh, 140px) auto 50px auto;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
+/* Title */
 header h1 {
-  font-size: clamp(28px, 3.8vw, 44px);
+  font-size: clamp(30px, 4vw, 46px);
   font-weight: 600;
   letter-spacing: -0.6px;
   line-height: 1.2;
-  margin-bottom: 12px;
+
+  max-width: 90%;
+  margin-bottom: 16px;
 }
 
+/* Punch */
 .punch {
-  font-size: clamp(15px, 1.3vw, 18px);
-  opacity: 0.75;
-  margin-bottom: 6px;
+  font-size: clamp(14px, 1.2vw, 16px);
+  font-weight: 500;
+  letter-spacing: 0.4px;
+
+  opacity: 0.85;
+  margin-bottom: 10px;
+
+  position: relative;
 }
 
+/* Punch divider */
+.punch::after {
+  content: "";
+  display: block;
+  width: 30px;
+  height: 1px;
+  margin: 10px auto 0;
+  background: rgba(255,255,255,0.2);
+}
+
+/* Hook */
 .hook {
-  font-size: clamp(14px, 1.1vw, 16px);
-  opacity: 0.55;
+  font-size: clamp(15px, 1.3vw, 18px);
+  opacity: 0.65;
+  line-height: 1.6;
+
+  max-width: 75%;
+  min-height: 24px;
 }
 
-/* ===== CONTENT ===== */
+/* Subtle hero glow */
+header::after {
+  content: "";
+  width: 140px;
+  height: 50px;
+  margin-top: 25px;
+  background: radial-gradient(circle, rgba(255,255,255,0.08), transparent 70%);
+}
+
+/* ===============================
+   CONTENT
+   =============================== */
+
 .content {
-  width: 90%;
-  max-width: 720px;
+  width: 100%;
+  max-width: 680px;
+  padding: 0 20px;
 
   display: flex;
   flex-direction: column;
@@ -76,7 +119,7 @@ header h1 {
   flex: 1;
 }
 
-/* ===== SECTIONS ===== */
+/* Sections */
 section {
   width: 100%;
   margin: clamp(40px, 6vh, 80px) 0;
@@ -84,37 +127,40 @@ section {
   display: flex;
   flex-direction: column;
   align-items: center;
+  text-align: center;
 }
 
-/* ===== TYPOGRAPHY ===== */
+/* ===============================
+   TYPOGRAPHY
+   =============================== */
+
 h2 {
   font-size: clamp(18px, 2vw, 24px);
   font-weight: 500;
   margin-bottom: 12px;
-  text-align: center;
 }
 
 h3 {
   font-size: 15px;
   margin-top: 16px;
-  text-align: center;
 }
 
 p {
   font-size: clamp(14px, 1.2vw, 16px);
   max-width: 620px;
-  text-align: center;
   line-height: 1.7;
   opacity: 0.85;
 }
 
-/* ===== 🔥 BULLET FIX (FINAL PERFECT) ===== */
+/* ===============================
+   BULLETS (FINAL FIX)
+   =============================== */
+
 ul {
   max-width: 520px;
   margin: 10px auto;
-
-  padding-left: 18px; /* keeps bullets aligned */
-  text-align: left;   /* readable */
+  padding-left: 18px;
+  text-align: left;
 }
 
 li {
@@ -123,7 +169,10 @@ li {
   margin-bottom: 8px;
 }
 
-/* ===== LINKS ===== */
+/* ===============================
+   LINKS
+   =============================== */
+
 a {
   color: #9ab8ff;
   text-decoration: none;
@@ -134,7 +183,10 @@ a:hover {
   opacity: 0.7;
 }
 
-/* ===== NAV ===== */
+/* ===============================
+   NAVIGATION
+   =============================== */
+
 .nav-minimal {
   margin: clamp(40px, 6vh, 80px) 0 20px;
   display: flex;
@@ -163,17 +215,10 @@ a:hover {
   display: none;
 }
 
-/* ===== ACTION BOX ===== */
-.action-box {
-  width: 100%;
-  padding: 24px;
-  border-radius: 18px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
-  text-align: center;
-}
+/* ===============================
+   FOOTER
+   =============================== */
 
-/* ===== FOOTER ===== */
 .footer-global {
   margin-top: auto;
   padding: 30px 0;
@@ -182,9 +227,12 @@ a:hover {
   font-size: 13px;
 }
 
-/* ===== SMALL SCREEN ===== */
+/* ===============================
+   MOBILE
+   =============================== */
+
 @media (max-width: 480px) {
   header {
-    margin-top: 50px;
+    margin-top: 60px;
   }
 }
