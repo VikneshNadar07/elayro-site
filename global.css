@@ -1,13 +1,277 @@
+/* ===============================
+   ELAYRO FINAL LOCKED UI SYSTEM
+   =============================== */
 
-body{margin:0;font-family:Inter,sans-serif;background:#0b0b0c;color:#fff}
-header{text-align:center;margin-top:80px}
-header::after{content:"";display:block;width:80px;height:1px;background:#fff;margin:20px auto}
-.content{max-width:680px;margin:auto;padding:0 20px}
-section{margin:80px 0;text-align:center}
-.feature-list{max-width:520px;margin:20px auto;text-align:left}
-.feature-item{display:flex;gap:10px;padding:10px 0;border-bottom:1px solid #333}
-.feature-title{font-weight:600;min-width:110px}
-.faq-section{position:relative;padding:80px 0}
-.faq-section::before,.faq-section::after{content:"";position:absolute;left:50%;transform:translateX(-50%);width:120px;height:1px;background:#fff}
-.faq-section::before{top:10px}
-.faq-section::after{bottom:10px}
+html, body {
+  height: 100%;
+}
+
+/* ===== BODY ===== */
+body {
+  margin: 0;
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: #0b0b0c;
+  color: #f5f5f7;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ===============================
+   HERO
+   =============================== */
+
+header {
+  width: 100%;
+  max-width: 680px;
+
+  margin: clamp(70px, 12vh, 120px) auto clamp(60px, 10vh, 100px);
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* Title */
+header h1 {
+  font-size: clamp(30px, 4vw, 46px);
+  font-weight: 600;
+  letter-spacing: -0.7px;
+  line-height: 1.2;
+
+  margin-bottom: 14px;
+}
+
+/* Punch (brand tagline) */
+.punch {
+  font-size: clamp(16px, 1.6vw, 20px);
+  font-weight: 500;
+  letter-spacing: 0.4px;
+
+  opacity: 0.95;
+  margin-bottom: 8px;
+}
+
+/* Hook (dynamic) */
+.hook {
+  font-size: clamp(17px, 1.8vw, 22px);
+  font-weight: 400;
+
+  opacity: 0.85;
+  line-height: 1.6;
+
+  max-width: 75%;
+  min-height: 24px;
+}
+
+/* Hero line */
+header::after {
+  content: "";
+  display: block;
+
+  width: 70px;
+  height: 1px;
+
+  margin: 16px auto 0;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.7),
+    transparent
+  );
+
+  opacity: 0.7;
+}
+
+/* ===============================
+   CONTENT
+   =============================== */
+
+.content {
+  width: 100%;
+  max-width: 680px;
+  padding: 0 20px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  flex: 1;
+}
+
+/* Sections */
+section {
+  width: 100%;
+  margin: clamp(60px, 10vh, 110px) 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+/* ===============================
+   TYPOGRAPHY
+   =============================== */
+
+h2 {
+  font-size: clamp(18px, 2vw, 22px);
+  font-weight: 500;
+  margin-bottom: 12px;
+  opacity: 0.85;
+}
+
+p {
+  font-size: clamp(14px, 1.2vw, 16px);
+  max-width: 620px;
+  line-height: 1.75;
+  opacity: 0.8;
+}
+
+/* ===============================
+   SECTION NAV (SMART CTA LINKS)
+   =============================== */
+
+.section-nav {
+  margin-top: 18px;
+}
+
+.section-nav a {
+  font-size: 14px;
+  color: #9ab8ff;
+  text-decoration: none;
+  position: relative;
+  transition: opacity 0.25s ease;
+  letter-spacing: 0.2px;
+}
+
+/* underline animation */
+.section-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+
+  width: 0%;
+  height: 1px;
+  background: #9ab8ff;
+
+  transition: width 0.25s ease;
+}
+
+.section-nav a:hover::after {
+  width: 100%;
+}
+
+.section-nav a:hover {
+  opacity: 0.8;
+}
+
+/* ===============================
+   FEATURE LIST (NO BULLETS)
+   =============================== */
+
+.feature-list {
+  width: 100%;
+  max-width: 520px;
+  margin: 24px auto 0;
+  text-align: left;
+}
+
+.feature-item {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+}
+
+.feature-item:last-child {
+  border-bottom: none;
+}
+
+.feature-title {
+  font-weight: 600;
+  min-width: 110px;
+  color: #ffffff;
+}
+
+.feature-desc {
+  opacity: 0.7;
+  line-height: 1.6;
+}
+
+/* ===============================
+   FAQ DIVIDER
+   =============================== */
+
+.faq-section {
+  position: relative;
+  padding: 100px 0;
+}
+
+.faq-section::before,
+.faq-section::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+
+  width: 120px;
+  height: 1px;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.6),
+    transparent
+  );
+}
+
+/* top line */
+.faq-section::before {
+  top: 25px;
+}
+
+/* bottom line */
+.faq-section::after {
+  bottom: 25px;
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+
+.footer-global {
+  margin-top: auto;
+  padding: 40px 0;
+  text-align: center;
+  opacity: 0.35;
+  font-size: 13px;
+}
+
+/* ===============================
+   MOBILE
+   =============================== */
+
+@media (max-width: 480px) {
+  header {
+    margin-top: 60px;
+  }
+
+  .feature-item {
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .feature-title {
+    min-width: unset;
+  }
+}
