@@ -270,3 +270,38 @@ document.addEventListener("DOMContentLoaded", () => {
   runDemo();
 
 });
+/* =========================
+   PAGE LOAD ANIMATION
+   ========================= */
+window.addEventListener("DOMContentLoaded", () => {
+  document.body.classList.add("loaded");
+});
+
+/* =========================
+   SCROLL PROGRESS
+   ========================= */
+window.addEventListener("scroll", () => {
+  const scrollTop = window.scrollY;
+  const height = document.body.scrollHeight - window.innerHeight;
+  const progress = (scrollTop / height) * 100;
+  const bar = document.querySelector(".scroll-progress");
+  if (bar) bar.style.width = progress + "%";
+});
+
+/* =========================
+   NAV ACTIVE STATE
+   ========================= */
+(function () {
+  const path = window.location.pathname;
+  let current = "home";
+
+  if (path.includes("outflow")) current = "outflow";
+  else if (path.includes("elira")) current = "elira";
+  else if (path.includes("execution")) current = "execution";
+
+  document.querySelectorAll(".nav-minimal a").forEach(link => {
+    if (link.dataset.page === current) {
+      link.classList.add("active");
+    }
+  });
+})();
