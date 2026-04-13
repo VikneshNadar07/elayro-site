@@ -390,6 +390,28 @@ section p {
   transform: translateY(0);
   filter: blur(0);
 }
+/* ===============================
+   FULL UI LOCK (GLOBAL)
+   =============================== */
+
+.chat-area {
+  pointer-events: none;
+  user-select: none;
+}
+
+.chat-box,
+.message,
+.option-btn,
+input,
+button {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* disable drag */
+* {
+  -webkit-user-drag: none;
+}
 
 /* ===============================
    FOOTER
