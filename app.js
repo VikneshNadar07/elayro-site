@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", () => {
   function createClient() {
     return {
       messages: [],
-      state: "active", // active | closing | won | lost
+      state: "active",
       isClosed: false
     };
   }
@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     TAB UI STATE
+     TAB UI
      ========================= */
 
   function updateTabUI() {
@@ -67,51 +67,24 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     ADVANCED INTENT DETECTION
+     INTENT DETECTION
      ========================= */
 
   function detectIntent(text) {
 
     const t = text.toLowerCase();
 
-    const delaySignals = [
-      "busy","later","not now","next week","get back",
-      "will check","need time","circle back"
-    ];
+    const delay = ["busy","later","not now","next week","get back","will check"];
+    const evals = ["price","cost","budget","expensive","quote","how much"];
+    const reject = ["not interested","no thanks","no need","went with someone else"];
+    const ready = ["ok","sounds good","let's proceed","go ahead","i'm in"];
 
-    const evaluationSignals = [
-      "price","cost","budget","expensive","afford",
-      "quote","pricing","how much"
-    ];
+    const has = (arr) => arr.some(s => t.includes(s));
 
-    const rejectionSignals = [
-      "not interested","no thanks","no need","already have",
-      "went with someone else","no longer"
-    ];
-
-    const readySignals = [
-      "ok","sounds good","looks good","let's proceed",
-      "go ahead","works for me","i'm in","deal"
-    ];
-
-    const hesitationSignals = [
-      "thinking","not sure","maybe","considering",
-      "let me think","will decide","unsure"
-    ];
-
-    const ghostSignals = [
-      "sorry for late reply","just saw this",
-      "been busy","missed this"
-    ];
-
-    const matches = (arr) => arr.some(s => t.includes(s));
-
-    if (matches(rejectionSignals)) return "rejection";
-    if (matches(readySignals)) return "ready";
-    if (matches(evaluationSignals)) return "evaluation";
-    if (matches(delaySignals)) return "delay";
-    if (matches(hesitationSignals)) return "evaluation";
-    if (matches(ghostSignals)) return "followup";
+    if (has(reject)) return "rejection";
+    if (has(ready)) return "ready";
+    if (has(evals)) return "evaluation";
+    if (has(delay)) return "delay";
 
     return "followup";
   }
@@ -159,7 +132,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     OPTIONS UI
+     OPTIONS
      ========================= */
 
   function showOptions(list) {
@@ -189,7 +162,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     SELECTION LOGIC
+     SELECTION
      ========================= */
 
   function handleSelection(text, index) {
@@ -203,8 +176,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     removeOptions();
 
-    /* ===== WIN CONDITION ===== */
-
     if (client.state === "closing" && index === 0) {
       client.state = "won";
       client.isClosed = true;
@@ -215,7 +186,7 @@ document.addEventListener("DOMContentLoaded", () => {
       return;
     }
 
-    narration.innerText = "Copied & sent. Waiting...";
+    narration.innerText = "Copied & sent. Waiting for next client message...";
   }
 
   /* =========================
@@ -237,11 +208,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       const intent = detectIntent(text);
 
-      /* ===== STATE TRANSITIONS ===== */
-
-      if (intent === "ready") {
-        client.state = "closing";
-      }
+      if (intent === "ready") client.state = "closing";
 
       if (intent === "rejection") {
         client.state = "lost";
@@ -253,34 +220,40 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      /* ===== NORMAL FLOW ===== */
-
       narration.innerText = "Suggested responses";
 
       const list = generate(intent);
       showOptions(list);
 
-    }, 250);
+    }, 400);
   }
 
   /* =========================
      INPUT
      ========================= */
 
+  function handleSend() {
+    const client = clients[activeClient];
+    if (client.isClosed) return;
+
+    const text = input.value.trim();
+    if (!text) return;
+
+    // ✅ FIXED: clearly mark client message
+    addMessage("Client: " + text, "system");
+
+    input.value = "";
+
+    analyze(text);
+  }
+
   if (sendBtn && input) {
-    sendBtn.onclick = () => {
+    sendBtn.onclick = handleSend;
 
-      const client = clients[activeClient];
-      if (client.isClosed) return;
-
-      const text = input.value.trim();
-      if (!text) return;
-
-      addMessage(text, "system"); // client message
-      input.value = "";
-
-      analyze(text);
-    };
+    // ✅ ENTER SUPPORT
+    input.addEventListener("keypress", (e) => {
+      if (e.key === "Enter") handleSend();
+    });
   }
 
   /* =========================
