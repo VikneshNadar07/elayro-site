@@ -1,13 +1,47 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+  /* =========================
+     GLOBAL: DYNAMIC HOOK
+     ========================= */
+
+  const hookEl = document.getElementById("dynamicHook");
+
+  if (hookEl) {
+    const hooks = [
+      "From uncertainty to outcome.",
+      "Execution removes hesitation.",
+      "Every message should move forward.",
+      "Clarity creates momentum.",
+      "Structure turns intent into results."
+    ];
+
+    let i = 0;
+
+    function rotateHook() {
+      hookEl.style.opacity = 0;
+
+      setTimeout(() => {
+        hookEl.innerText = hooks[i];
+        hookEl.style.opacity = 0.6;
+        i = (i + 1) % hooks.length;
+      }, 300);
+    }
+
+    rotateHook();
+    setInterval(rotateHook, 4000);
+  }
+
+  /* =========================
+     CHAT SYSTEM (SAFE LOAD)
+     ========================= */
+
   const chatBox = document.getElementById("chatBox");
-  const narration = document.getElementById("narration");
   const clientTabs = document.querySelectorAll(".client");
   const optionsPanel = document.getElementById("optionsPanel");
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
 
-  if (!chatBox || !narration || !optionsPanel) return;
+  if (!chatBox || !optionsPanel || !input || !sendBtn) return;
 
   let activeClient = 0;
 
@@ -78,7 +112,11 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
+
+    chatBox.scrollTo({
+      top: chatBox.scrollHeight,
+      behavior: "smooth"
+    });
   }
 
   function showTyping() {
@@ -167,12 +205,11 @@ document.addEventListener("DOMContentLoaded", () => {
     optionsPanel.innerHTML = "";
     chatArea.classList.remove("dimmed");
 
-    // 🔥 FIXED: now LEFT side (system)
     addMessage(selected.innerText, "system");
   }
 
   /* =========================
-     DEMO FLOW
+     DEMO FLOW (CLEAN)
      ========================= */
 
   async function runDemo() {
@@ -180,7 +217,6 @@ document.addEventListener("DOMContentLoaded", () => {
     activeClient = 0;
     updateTabs();
     clearChat();
-    narration.innerText = "User input received.";
 
     let msg = "Client said they are busy this week";
     await simulateUser(msg);
@@ -219,7 +255,6 @@ document.addEventListener("DOMContentLoaded", () => {
     activeClient = 1;
     updateTabs();
     clearChat();
-    narration.innerText = "Switching client...";
 
     msg = "Client asked about pricing";
     await simulateUser(msg);
@@ -241,7 +276,6 @@ document.addEventListener("DOMContentLoaded", () => {
     activeClient = 0;
     updateTabs();
     clearChat();
-    narration.innerText = "Continuing...";
 
     msg = "Client said let's proceed";
     await simulateUser(msg);
@@ -265,14 +299,14 @@ document.addEventListener("DOMContentLoaded", () => {
     runDemo();
   }
 
-  narration.innerText = "Live demo — Outflow in action.";
   updateTabs();
   runDemo();
-
 });
+
 /* =========================
-   PAGE LOAD ANIMATION
+   PAGE LOAD
    ========================= */
+
 window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
 });
@@ -280,6 +314,7 @@ window.addEventListener("DOMContentLoaded", () => {
 /* =========================
    SCROLL PROGRESS
    ========================= */
+
 window.addEventListener("scroll", () => {
   const scrollTop = window.scrollY;
   const height = document.body.scrollHeight - window.innerHeight;
@@ -289,8 +324,9 @@ window.addEventListener("scroll", () => {
 });
 
 /* =========================
-   NAV ACTIVE STATE
+   NAV ACTIVE + AUTO HIDE
    ========================= */
+
 (function () {
   const path = window.location.pathname;
   let current = "home";
@@ -302,6 +338,12 @@ window.addEventListener("scroll", () => {
   document.querySelectorAll(".nav-minimal a").forEach(link => {
     if (link.dataset.page === current) {
       link.classList.add("active");
+
+      // 🔥 smooth hide
+      link.classList.add("hide");
+      setTimeout(() => {
+        link.style.display = "none";
+      }, 300);
     }
   });
 })();
