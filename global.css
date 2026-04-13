@@ -1029,3 +1029,17 @@ a::after {
 body {
   -webkit-font-smoothing: antialiased;
 }
+.scroll-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(255,255,255,0.1);
+  color: #fff;
+  cursor: pointer;
+  opacity: 0;
+  transition: 0.3s;
+}
