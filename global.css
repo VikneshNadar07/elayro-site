@@ -761,3 +761,124 @@ a::after {
 .typing span {
   background: #666;
 }
+/* ===============================
+   FINAL DEMO STABILITY FIX
+   =============================== */
+
+/* prevent chat collapse completely */
+.chat-box {
+  min-height: 280px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+/* keep full chat UI stable */
+.chat-area {
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+/* ===============================
+   MESSAGE ANIMATION (SMOOTH)
+   =============================== */
+
+.fade-in-up {
+  animation: slideUpSmooth 0.5s ease;
+}
+
+@keyframes slideUpSmooth {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   OPTION STAGGER (READABLE)
+   =============================== */
+
+.response-pill {
+  opacity: 0;
+  animation: fadeOption 0.4s ease forwards;
+}
+
+@keyframes fadeOption {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 0.85;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   SELECTED OPTION (CLEAR FEEDBACK)
+   =============================== */
+
+.response-pill.selected {
+  background: #fff !important;
+  color: #000 !important;
+  transform: scale(0.98);
+  opacity: 1;
+}
+
+/* ===============================
+   TYPING (SLOW + CALM)
+   =============================== */
+
+.typing span {
+  width: 6px;
+  height: 6px;
+  background: #777;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 4px;
+  animation: blinkSlow 1.6s infinite;
+}
+
+@keyframes blinkSlow {
+  0%, 80%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
+}
+
+/* ===============================
+   SCROLL SMOOTHNESS
+   =============================== */
+
+.chat-box {
+  scroll-behavior: smooth;
+}
+
+/* ===============================
+   EMPTY STATE STABILITY
+   =============================== */
+
+.chat-box:empty::before {
+  content: "Conversation will appear here...";
+  opacity: 0.25;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* ===============================
+   FINAL POLISH
+   =============================== */
+
+/* slight spacing balance */
+.message {
+  animation: slideUpSmooth 0.5s ease;
+}
+
+/* remove jitter on fast updates */
+.response-pill,
+.message {
+  will-change: transform, opacity;
+}
