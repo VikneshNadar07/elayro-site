@@ -402,6 +402,107 @@ section:not(:first-child) {
   text-decoration: underline;
   color: inherit;
 }
+/* ===============================
+   OUTFLOW DEMO UI
+   =============================== */
+
+.demo-container {
+  max-width: 700px;
+  margin: 40px auto;
+  border-radius: 16px;
+  padding: 20px;
+  background: #0f0f10;
+  border: 1px solid rgba(255,255,255,0.08);
+}
+
+.clients {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+  justify-content: center;
+}
+
+.client {
+  padding: 6px 14px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  cursor: pointer;
+  font-size: 13px;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: 0.2s;
+}
+
+.client.active {
+  background: #fff;
+  color: #000;
+}
+
+.chat-area {
+  border-radius: 14px;
+  padding: 16px;
+  background: #121213;
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+}
+
+.narration {
+  font-size: 12px;
+  opacity: 0.6;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+/* MESSAGES */
+
+.message {
+  padding: 10px 14px;
+  border-radius: 12px;
+  max-width: 75%;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #2a2a2a;
+}
+
+.message.system {
+  align-self: flex-start;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* RESPONSE PILLS */
+
+.response-options {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.response-pill {
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  font-size: 13px;
+  cursor: pointer;
+  border: 1px solid rgba(255,255,255,0.1);
+  transition: 0.2s;
+}
+
+.response-pill:hover {
+  background: rgba(255,255,255,0.12);
+}
 
 /* ===============================
    MOBILE
