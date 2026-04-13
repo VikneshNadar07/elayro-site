@@ -285,3 +285,133 @@ section p {
   opacity: 0.6;
   border-top: none; /* 🔥 removes unwanted line */
 }
+
+/* ===============================
+   TYPOGRAPHY SYSTEM (ELITE)
+   =============================== */
+
+/* HEADINGS */
+
+header h1 {
+  font-weight: 600;
+  letter-spacing: -1px;
+  line-height: 1.1;
+}
+
+section h2 {
+  font-weight: 500;
+  letter-spacing: -0.4px;
+  line-height: 1.3;
+  margin-bottom: 16px;
+}
+
+/* PARAGRAPHS */
+
+section p {
+  font-size: 16px;
+  line-height: 1.75;
+  letter-spacing: -0.1px;
+  margin: 12px auto;
+  max-width: 540px;
+  opacity: 0.85;
+}
+
+/* tighter spacing for stacked paragraphs */
+section p + p {
+  margin-top: 6px;
+}
+
+/* ===============================
+   SPACING SYSTEM (BALANCED AIR)
+   =============================== */
+
+section {
+  margin: clamp(80px, 11vh, 130px) 0;
+}
+
+/* tighter for feature blocks */
+.feature-list {
+  margin-top: 20px;
+}
+
+/* ===============================
+   FEATURE ITEMS (CLEAN GRID)
+   =============================== */
+
+.feature-list {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+  max-width: 520px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.feature-item {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  opacity: 0.85;
+}
+
+.feature-title {
+  font-weight: 500;
+}
+
+.feature-desc {
+  opacity: 0.6;
+}
+
+/* ===============================
+   CHAT TYPOGRAPHY
+   =============================== */
+
+.message.system {
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.response-pill {
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+/* ===============================
+   NAV SPACING FIX
+   =============================== */
+
+.nav-minimal {
+  margin-top: 70px;
+}
+
+/* ===============================
+   FOOTER TYPOGRAPHY
+   =============================== */
+
+.footer-global h3 {
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.footer-global p {
+  margin: 6px 0;
+}
+
+/* ===============================
+   MOBILE REFINEMENT
+   =============================== */
+
+@media (max-width: 480px) {
+
+  section {
+    margin: 60px 0;
+  }
+
+  section p {
+    font-size: 15px;
+  }
+
+  .feature-list {
+    grid-template-columns: 1fr;
+  }
+}
