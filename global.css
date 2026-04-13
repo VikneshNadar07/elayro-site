@@ -882,3 +882,150 @@ a::after {
 .message {
   will-change: transform, opacity;
 }
+/* ===============================
+   FINAL 1% POLISH (CINEMATIC FEEL)
+   =============================== */
+
+/* smoother + slower message entry */
+.fade-in-up {
+  animation: slideUpUltra 0.6s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes slideUpUltra {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   OPTION FLOW (MORE READABLE)
+   =============================== */
+
+.response-pill {
+  opacity: 0;
+  animation: fadeOptionSoft 0.5s ease forwards;
+}
+
+@keyframes fadeOptionSoft {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 0.85;
+    transform: translateY(0);
+  }
+}
+
+/* add slight delay feel per option */
+.response-pill:nth-child(1) { animation-delay: 0.05s; }
+.response-pill:nth-child(2) { animation-delay: 0.12s; }
+.response-pill:nth-child(3) { animation-delay: 0.2s; }
+.response-pill:nth-child(4) { animation-delay: 0.28s; }
+
+/* ===============================
+   MESSAGE RHYTHM (IMPORTANT)
+   =============================== */
+
+.message {
+  transition: all 0.25s ease;
+}
+
+/* slight breathing space for readability */
+.message + .message {
+  margin-top: 6px;
+}
+
+/* ===============================
+   SELECTED RESPONSE (MORE NATURAL)
+   =============================== */
+
+.response-pill.selected {
+  transform: scale(0.97);
+  transition: all 0.25s ease;
+}
+
+/* ===============================
+   CHAT FLOW SMOOTHNESS
+   =============================== */
+
+.chat-box {
+  scroll-behavior: smooth;
+}
+
+/* soften scroll edges */
+.chat-box::-webkit-scrollbar {
+  width: 4px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.1);
+  border-radius: 10px;
+}
+
+/* ===============================
+   TYPING (MORE HUMAN)
+   =============================== */
+
+.typing span {
+  animation: blinkHuman 1.8s infinite;
+}
+
+@keyframes blinkHuman {
+  0%, 80%, 100% { opacity: 0.2; transform: translateY(0); }
+  40% { opacity: 1; transform: translateY(-2px); }
+}
+
+/* ===============================
+   NARRATION (LESS DISTRACTION)
+   =============================== */
+
+.narration {
+  transition: opacity 0.4s ease;
+  opacity: 0.45;
+}
+
+/* ===============================
+   CLIENT SWITCH SMOOTHNESS
+   =============================== */
+
+.client {
+  transition: all 0.2s ease;
+}
+
+.client.active {
+  transform: scale(1.05);
+}
+
+/* ===============================
+   DEMO IMMERSION (SUBTLE)
+   =============================== */
+
+.demo-container {
+  transition: all 0.3s ease;
+}
+
+/* slight focus effect */
+.demo-container:focus-within {
+  border-color: rgba(255,255,255,0.1);
+}
+
+/* ===============================
+   FINAL MICRO-POLISH
+   =============================== */
+
+/* prevent sudden jumps */
+* {
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* smoother perception overall */
+body {
+  -webkit-font-smoothing: antialiased;
+}
