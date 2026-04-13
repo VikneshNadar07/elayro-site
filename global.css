@@ -645,3 +645,52 @@ a::after {
 .input-area button:hover {
   background: rgba(255,255,255,0.15);
 }
+/* ===============================
+   REAL CHAT CONVERSATION FIX
+   =============================== */
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-height: 340px;
+  overflow-y: auto;
+}
+
+/* base message */
+.message {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* CLIENT (LEFT) */
+.message.system {
+  align-self: flex-start;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06);
+  border-top-left-radius: 6px;
+  font-style: italic;
+  opacity: 0.9;
+}
+
+/* USER (RIGHT) */
+.message.user {
+  align-self: flex-end;
+  background: #ffffff;
+  color: #000;
+  border-top-right-radius: 6px;
+}
+
+/* spacing between messages */
+.message + .message {
+  margin-top: 4px;
+}
+
+/* response pills stay full width */
+.response-pill {
+  align-self: stretch;
+}
