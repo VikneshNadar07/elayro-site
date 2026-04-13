@@ -1,5 +1,5 @@
 /* ===============================
-   OUTFLOW FINAL INTELLIGENT DEMO
+   OUTFLOW FINAL DEMO (ADAPTIVE)
    =============================== */
 
 const chatBox = document.getElementById("chatBox");
@@ -9,7 +9,7 @@ const clientsUI = document.querySelectorAll(".client");
 if (chatBox) {
 
   let activeClient = 0;
-  let stageIndex = 0;
+  const progress = [0, 0];
 
   const clients = [
     {
@@ -18,6 +18,7 @@ if (chatBox) {
         {
           label: "Analyzing situation...",
           system: "Client showed interest but stopped responding.",
+          next: 1,
           options: [
             { text: "Hey — just checking in, still interested?", type: "best", confidence: "high", reason: "Direct, low-pressure re-engagement" },
             { text: "Quick follow-up — want me to share next steps?", type: "safe", confidence: "medium", reason: "Adds value while following up" },
@@ -28,6 +29,7 @@ if (chatBox) {
         {
           label: "Client responded",
           system: "Client: 'Yes, just been busy.'",
+          next: 2,
           options: [
             { text: "No worries — I’ll keep this simple.", type: "best", confidence: "high", reason: "Reduces friction immediately" },
             { text: "Totally understand, here’s the next step.", type: "safe", confidence: "medium", reason: "Moves forward with clarity" },
@@ -38,6 +40,7 @@ if (chatBox) {
         {
           label: "Plan shared",
           system: "You shared a quick plan with the client.",
+          next: 3,
           options: [
             { text: "Here’s a simple plan to get started.", type: "best", confidence: "high", reason: "Clear and actionable" },
             { text: "Sharing a quick outline for you.", type: "safe", confidence: "medium", reason: "Neutral delivery" },
@@ -48,6 +51,7 @@ if (chatBox) {
         {
           label: "Waiting for response",
           system: "Client hasn’t responded after seeing the plan.",
+          next: [3, 4], // 🔁 loop or continue
           options: [
             { text: "Just checking — had a chance to look at the plan?", type: "best", confidence: "high", reason: "Direct but polite follow-up" },
             { text: "Let me know if you want me to adjust anything.", type: "safe", confidence: "medium", reason: "Shows flexibility" },
@@ -58,6 +62,7 @@ if (chatBox) {
         {
           label: "Engagement confirmed",
           system: "Client: 'Looks good, let’s proceed.'",
+          next: "end",
           options: [
             { text: "Great — I’ll finalize and get started.", type: "best", confidence: "high", reason: "Confident close" },
             { text: "Perfect, I’ll move ahead with this.", type: "safe", confidence: "medium", reason: "Smooth transition" },
@@ -75,6 +80,7 @@ if (chatBox) {
         {
           label: "Analyzing situation...",
           system: "Client showed interest but went silent.",
+          next: 1,
           options: [
             { text: "Hey — just following up, still interested?", type: "best", confidence: "high", reason: "Clear re-engagement" },
             { text: "Should I share a quick outline?", type: "safe", confidence: "medium", reason: "Value-first approach" },
@@ -85,6 +91,7 @@ if (chatBox) {
         {
           label: "Client responded",
           system: "Client: 'Yes, you can share details.'",
+          next: 2,
           options: [
             { text: "Great — I’ll share a simple plan.", type: "best", confidence: "high", reason: "Moves forward efficiently" },
             { text: "Perfect, sending an outline now.", type: "safe", confidence: "medium", reason: "Clear progression" },
@@ -95,6 +102,7 @@ if (chatBox) {
         {
           label: "Plan shared",
           system: "You shared a plan with the client.",
+          next: [2, 3], // 🔁 loop or move
           options: [
             { text: "Here’s the plan — let me know what you think.", type: "best", confidence: "high", reason: "Invites response" },
             { text: "Sharing this for your review.", type: "safe", confidence: "medium", reason: "Neutral tone" },
@@ -105,6 +113,7 @@ if (chatBox) {
         {
           label: "Client response",
           system: "Client: 'We decided to go with another option.'",
+          next: "end",
           options: [
             { text: "Got it — appreciate you letting me know.", type: "best", confidence: "high", reason: "Professional closure" },
             { text: "No problem at all, thanks for the update.", type: "safe", confidence: "medium", reason: "Maintains relationship" },
@@ -135,8 +144,8 @@ if (chatBox) {
 
   function showStage() {
     chatBox.innerHTML = "";
-    const stage = clients[activeClient].stages[stageIndex];
 
+    const stage = clients[activeClient].stages[progress[activeClient]];
     narration.textContent = stage.label;
 
     const typing = showTyping();
@@ -207,9 +216,19 @@ if (chatBox) {
 
     setTimeout(() => {
       removeTyping(typing);
-      stageIndex++;
 
-      if (stageIndex >= clients[activeClient].stages.length) {
+      const stage = clients[activeClient].stages[progress[activeClient]];
+
+      if (Array.isArray(stage.next)) {
+        progress[activeClient] =
+          stage.next[Math.floor(Math.random() * stage.next.length)];
+      } else if (stage.next === "end") {
+        progress[activeClient] = "end";
+      } else {
+        progress[activeClient] = stage.next;
+      }
+
+      if (progress[activeClient] === "end") {
 
         chatBox.innerHTML = "";
         const finalTyping = showTyping();
@@ -220,6 +239,7 @@ if (chatBox) {
           const finalMsg = document.createElement("div");
           finalMsg.className = "message system";
           finalMsg.textContent = clients[activeClient].final;
+
           chatBox.appendChild(finalMsg);
 
           narration.textContent =
@@ -229,7 +249,7 @@ if (chatBox) {
 
           setTimeout(() => {
             activeClient = activeClient === 0 ? 1 : 0;
-            stageIndex = 0;
+            progress[activeClient] = 0;
             updateClientUI();
             showStage();
           }, 4000);
@@ -248,6 +268,14 @@ if (chatBox) {
       c.classList.toggle("active", i === activeClient);
     });
   }
+
+  clientsUI.forEach((btn, index) => {
+    btn.onclick = () => {
+      activeClient = index;
+      updateClientUI();
+      showStage();
+    };
+  });
 
   updateClientUI();
   showStage();
