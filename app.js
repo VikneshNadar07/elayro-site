@@ -64,7 +64,14 @@ document.addEventListener("DOMContentLoaded", () => {
       statusEl.style.opacity = 0.6;
     }, 200);
   }
+// disable selection globally
+document.addEventListener("selectstart", e => e.preventDefault());
+document.addEventListener("dragstart", e => e.preventDefault());
 
+// disable input
+input.addEventListener("focus", e => e.target.blur());
+sendBtn.addEventListener("click", e => e.preventDefault());
+  
   /* =========================
      UI HELPERS
      ========================= */
@@ -194,107 +201,169 @@ document.addEventListener("DOMContentLoaded", () => {
      DEMO FLOW
      ========================= */
 
-  async function runDemo() {
+async function runDemo() {
 
-    chats = { 0: [], 1: [] };
-    clientStatus = { 0: "active", 1: "active" };
+  chats = { 0: [], 1: [] };
 
-    document.querySelectorAll(".client").forEach((c, i) => {
-      c.classList.remove("pending", "won");
-      if (i < 2) c.classList.add("active");
-    });
-
-    activeClient = 0;
-    updateTabs();
-    renderChat(activeClient);
-
-    let msg;
-
-    /* CLIENT 1 */
-
-    msg = "Client said they are busy this week";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    setStatus("Analyzing conversation...");
-    await wait(1200);
-
-    await showOptions([
-      "No worries — I’ll keep this simple for you.",
-      "All good, I can summarize this quickly."
-    ]);
-
-    await wait(2000);
-
-    /* CLIENT 2 */
-
-    setStatus("Switching conversation...");
-    await wait(800);
-
-    activeClient = 1;
-    updateTabs();
-    renderChat(activeClient);
-
-    msg = "Client asked about pricing";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    setStatus("Analyzing conversation...");
-    await wait(1200);
-
-    await showOptions([
-      "Happy to break this down based on your needs.",
-      "I can share a quick cost overview."
-    ]);
-
-    await wait(2000);
-
-    /* CLOSE CLIENT 1 */
-
-    setStatus("Switching conversation...");
-    await wait(800);
-
-    activeClient = 0;
-    updateTabs();
-    renderChat(activeClient);
-
-    msg = "Client said let's proceed";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    await showOptions([
-      "Great — I’ll finalize everything."
-    ]);
-
-    addMessage("Outcome achieved.", "system");
-
-    /* CLOSE CLIENT 2 */
-
-    await wait(2000);
-
-    activeClient = 1;
-    updateTabs();
-    renderChat(activeClient);
-
-    addMessage("Outcome achieved.", "system");
-
-    /* CLEAN LOOP RESET */
-
-    setStatus("Preparing next conversation...");
-    await wait(4000);
-
-    setStatus("Restarting flow...");
-    await wait(2000);
-
-    setStatus("");
-
-    runDemo();
-  }
-
+  activeClient = 0;
   updateTabs();
-  runDemo();
+  renderChat(activeClient);
 
-});
+  let msg;
+
+  /* =========================
+     CLIENT 1 — STEP 1
+     ========================= */
+
+  msg = "Client said they are busy this week";
+  await simulateUser(msg);
+  await wait(readTime(msg));
+
+  await showOptions([
+    "No worries — I’ll keep this simple for you.",
+    "All good, I can summarize this quickly.",
+    "Following up when it works for you.",
+    "Let me know when this becomes a priority."
+  ]);
+
+  /* =========================
+     CLIENT 1 — STEP 2
+     ========================= */
+
+  await wait(2000);
+
+  msg = "Client said maybe next week";
+  await simulateUser(msg);
+  await wait(readTime(msg));
+
+  await showOptions([
+    "Sure — I’ll follow up early next week.",
+    "Works — I’ll check back in then.",
+    "I’ll keep this ready for you.",
+    "Let me know if anything changes."
+  ]);
+
+  /* =========================
+     SWITCH → CLIENT 2
+     ========================= */
+
+  await wait(2000);
+
+  activeClient = 1;
+  updateTabs();
+  renderChat(activeClient);
+
+  /* =========================
+     CLIENT 2 — STEP 1
+     ========================= */
+
+  msg = "Client asked about pricing";
+  await simulateUser(msg);
+  await wait(readTime(msg));
+
+  await showOptions([
+    "Happy to break this down based on your needs.",
+    "I can share a quick cost overview.",
+    "Let me know if you want full details.",
+    "We can customize based on your budget."
+  ]);
+
+  /* =========================
+     BACK → CLIENT 1
+     ========================= */
+
+  await wait(2000);
+
+  activeClient = 0;
+  updateTabs();
+  renderChat(activeClient);
+
+  /* =========================
+     CLIENT 1 — STEP 3
+     ========================= */
+
+  msg = "Client asked if this can start soon";
+  await simulateUser(msg);
+  await wait(readTime(msg));
+
+  await showOptions([
+    "Yes — we can begin immediately.",
+    "We can start as early as this week.",
+    "I’ll align everything and get started.",
+    "We’re ready to move forward anytime."
+  ]);
+
+  /* =========================
+     CLIENT 1 — STEP 4 (CLOSE WON)
+     ========================= */
+
+  await wait(2000);
+
+  msg = "Client said let's proceed";
+  await simulateUser(msg);
+  await wait(readTime(msg));
+
+  await showOptions([
+    "Great — I’ll finalize everything.",
+    "Perfect — I’ll get started.",
+    "Moving ahead with this.",
+    "Let’s begin."
+  ]);
+
+  addMessage("Outcome achieved.", "system");
+
+  /* =========================
+     SWITCH → CLIENT 2
+     ========================= */
+
+  await wait(2000);
+
+  activeClient = 1;
+  updateTabs();
+  renderChat(activeClient);
+
+  /* =========================
+     CLIENT 2 — STEP 2
+     ========================= */
+
+  msg = "Client said they need to think";
+  await simulateUser(msg);
+  await wait(readTime(msg));
+
+  await showOptions([
+    "No problem — take your time.",
+    "Happy to revisit when you're ready.",
+    "I’ll follow up later.",
+    "Let me know if you have questions."
+  ]);
+
+  /* =========================
+     CLIENT 2 — STEP 3 (CLOSE LOST)
+     ========================= */
+
+  await wait(2000);
+
+  msg = "Client stopped responding";
+  await simulateUser(msg);
+  await wait(readTime(msg));
+
+  await showOptions([
+    "I’ll close this for now.",
+    "Happy to reconnect later.",
+    "Leaving this open if needed.",
+    "Feel free to reach out anytime."
+  ]);
+
+  addMessage("Conversation ended.", "system");
+
+  /* =========================
+     RESET
+     ========================= */
+
+  await wait(6000);
+
+  runDemo();
+}
 
 /* =========================
    PAGE LOAD
