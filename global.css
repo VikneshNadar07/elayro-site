@@ -545,6 +545,58 @@ section:not(:first-child) {
 .conf.high { color: #6eff6e; }
 .conf.medium { color: #ffd66e; }
 .conf.low { color: #ff7b7b; }
+
+/* ===============================
+   AI THINKING + REASONING UI
+   =============================== */
+
+.typing {
+  display: flex;
+  gap: 4px;
+  padding: 10px;
+}
+
+.dot {
+  width: 6px;
+  height: 6px;
+  background: #888;
+  border-radius: 50%;
+  animation: blink 1.2s infinite;
+}
+
+.dot:nth-child(2) { animation-delay: 0.2s; }
+.dot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes blink {
+  0%, 80%, 100% { opacity: 0.2; }
+  40% { opacity: 1; }
+}
+
+.response-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.response-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  opacity: 0.7;
+}
+
+.badge.best { color: #6eff6e; }
+.badge.safe { color: #ffd66e; }
+.badge.fallback { color: #ff7b7b; }
+
+.conf.high { color: #6eff6e; }
+.conf.medium { color: #ffd66e; }
+.conf.low { color: #ff7b7b; }
+
+.reason {
+  font-size: 11px;
+  opacity: 0.5;
+}
 /* ===============================
    MOBILE
    =============================== */
