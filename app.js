@@ -1,5 +1,5 @@
 /* ===============================
-   OUTFLOW MULTI-CLIENT INTELLIGENT FLOW
+   OUTFLOW FINAL INTELLIGENT DEMO
    =============================== */
 
 const chatBox = document.getElementById("chatBox");
@@ -19,30 +19,50 @@ if (chatBox) {
           label: "Analyzing situation...",
           system: "Client showed interest but stopped responding.",
           options: [
-            { text: "Hey — just checking in, still interested?", type: "best", confidence: "high" },
-            { text: "Quick follow-up — want me to share next steps?", type: "safe", confidence: "medium" },
-            { text: "Should I send a short outline?", type: "safe", confidence: "medium" },
-            { text: "Let me know if this is still relevant.", type: "fallback", confidence: "low" }
+            { text: "Hey — just checking in, still interested?", type: "best", confidence: "high", reason: "Direct, low-pressure re-engagement" },
+            { text: "Quick follow-up — want me to share next steps?", type: "safe", confidence: "medium", reason: "Adds value while following up" },
+            { text: "Should I send a short outline?", type: "safe", confidence: "medium", reason: "Soft entry into discussion" },
+            { text: "Let me know if this is still relevant.", type: "fallback", confidence: "low", reason: "Passive, low engagement trigger" }
           ]
         },
         {
           label: "Client responded",
           system: "Client: 'Yes, just been busy.'",
           options: [
-            { text: "No worries — I’ll keep this simple.", type: "best", confidence: "high" },
-            { text: "Totally understand, here’s the next step.", type: "safe", confidence: "medium" },
-            { text: "Let’s move forward when you're ready.", type: "safe", confidence: "medium" },
-            { text: "Here’s a quick breakdown.", type: "fallback", confidence: "low" }
+            { text: "No worries — I’ll keep this simple.", type: "best", confidence: "high", reason: "Reduces friction immediately" },
+            { text: "Totally understand, here’s the next step.", type: "safe", confidence: "medium", reason: "Moves forward with clarity" },
+            { text: "Let’s move forward when you're ready.", type: "safe", confidence: "medium", reason: "Keeps control but flexible" },
+            { text: "Here’s a quick breakdown.", type: "fallback", confidence: "low", reason: "Less personalized" }
           ]
         },
         {
-          label: "Engagement phase",
-          system: "Client is open — move forward.",
+          label: "Plan shared",
+          system: "You shared a quick plan with the client.",
           options: [
-            { text: "I’ll send a quick plan now.", type: "best", confidence: "high" },
-            { text: "Let’s finalize this together.", type: "safe", confidence: "medium" },
-            { text: "Here’s exactly how we proceed.", type: "safe", confidence: "medium" },
-            { text: "We can start right away.", type: "fallback", confidence: "low" }
+            { text: "Here’s a simple plan to get started.", type: "best", confidence: "high", reason: "Clear and actionable" },
+            { text: "Sharing a quick outline for you.", type: "safe", confidence: "medium", reason: "Neutral delivery" },
+            { text: "Let me know your thoughts on this.", type: "safe", confidence: "medium", reason: "Invites feedback" },
+            { text: "This is a rough idea we can refine.", type: "fallback", confidence: "low", reason: "Less confidence signal" }
+          ]
+        },
+        {
+          label: "Waiting for response",
+          system: "Client hasn’t responded after seeing the plan.",
+          options: [
+            { text: "Just checking — had a chance to look at the plan?", type: "best", confidence: "high", reason: "Direct but polite follow-up" },
+            { text: "Let me know if you want me to adjust anything.", type: "safe", confidence: "medium", reason: "Shows flexibility" },
+            { text: "Happy to clarify anything if needed.", type: "safe", confidence: "medium", reason: "Supportive tone" },
+            { text: "Following up on the plan I shared.", type: "fallback", confidence: "low", reason: "Generic follow-up" }
+          ]
+        },
+        {
+          label: "Engagement confirmed",
+          system: "Client: 'Looks good, let’s proceed.'",
+          options: [
+            { text: "Great — I’ll finalize and get started.", type: "best", confidence: "high", reason: "Confident close" },
+            { text: "Perfect, I’ll move ahead with this.", type: "safe", confidence: "medium", reason: "Smooth transition" },
+            { text: "Let’s lock this in and proceed.", type: "safe", confidence: "medium", reason: "Strong direction" },
+            { text: "Sounds good, moving forward.", type: "fallback", confidence: "low", reason: "Less decisive" }
           ]
         }
       ],
@@ -56,30 +76,40 @@ if (chatBox) {
           label: "Analyzing situation...",
           system: "Client showed interest but went silent.",
           options: [
-            { text: "Hey — just following up, still interested?", type: "best", confidence: "high" },
-            { text: "Should I share a quick outline?", type: "safe", confidence: "medium" },
-            { text: "Let me know if timing works.", type: "safe", confidence: "medium" },
-            { text: "Happy to reconnect if needed.", type: "fallback", confidence: "low" }
+            { text: "Hey — just following up, still interested?", type: "best", confidence: "high", reason: "Clear re-engagement" },
+            { text: "Should I share a quick outline?", type: "safe", confidence: "medium", reason: "Value-first approach" },
+            { text: "Let me know if timing works.", type: "safe", confidence: "medium", reason: "Flexible approach" },
+            { text: "Happy to reconnect if needed.", type: "fallback", confidence: "low", reason: "Low urgency" }
           ]
         },
         {
           label: "Client responded",
-          system: "Client: 'Hey, I went with someone else.'",
+          system: "Client: 'Yes, you can share details.'",
           options: [
-            { text: "Got it — appreciate you letting me know.", type: "best", confidence: "high" },
-            { text: "No problem at all, thanks for the update.", type: "safe", confidence: "medium" },
-            { text: "Totally understand, wishing you the best.", type: "safe", confidence: "medium" },
-            { text: "Thanks for considering — appreciate it.", type: "fallback", confidence: "low" }
+            { text: "Great — I’ll share a simple plan.", type: "best", confidence: "high", reason: "Moves forward efficiently" },
+            { text: "Perfect, sending an outline now.", type: "safe", confidence: "medium", reason: "Clear progression" },
+            { text: "I’ll keep it clear and quick for you.", type: "safe", confidence: "medium", reason: "Reduces friction" },
+            { text: "Sharing initial thoughts.", type: "fallback", confidence: "low", reason: "Less structured" }
           ]
         },
         {
-          label: "Closure phase",
-          system: "Client decision is external.",
+          label: "Plan shared",
+          system: "You shared a plan with the client.",
           options: [
-            { text: "If anything changes, feel free to reach out.", type: "best", confidence: "high" },
-            { text: "Happy to connect in future if needed.", type: "safe", confidence: "medium" },
-            { text: "Open anytime if you need support.", type: "safe", confidence: "medium" },
-            { text: "All the best with your project.", type: "fallback", confidence: "low" }
+            { text: "Here’s the plan — let me know what you think.", type: "best", confidence: "high", reason: "Invites response" },
+            { text: "Sharing this for your review.", type: "safe", confidence: "medium", reason: "Neutral tone" },
+            { text: "Happy to tweak this based on your needs.", type: "safe", confidence: "medium", reason: "Flexible approach" },
+            { text: "Let me know if this works.", type: "fallback", confidence: "low", reason: "Passive" }
+          ]
+        },
+        {
+          label: "Client response",
+          system: "Client: 'We decided to go with another option.'",
+          options: [
+            { text: "Got it — appreciate you letting me know.", type: "best", confidence: "high", reason: "Professional closure" },
+            { text: "No problem at all, thanks for the update.", type: "safe", confidence: "medium", reason: "Maintains relationship" },
+            { text: "Totally understand, wishing you the best.", type: "safe", confidence: "medium", reason: "Positive exit" },
+            { text: "Thanks for considering.", type: "fallback", confidence: "low", reason: "Minimal response" }
           ]
         }
       ],
@@ -87,10 +117,20 @@ if (chatBox) {
     }
   ];
 
-  function updateClientUI() {
-    clientsUI.forEach((c, i) => {
-      c.classList.toggle("active", i === activeClient);
-    });
+  function showTyping() {
+    const typing = document.createElement("div");
+    typing.className = "typing";
+    for (let i = 0; i < 3; i++) {
+      const dot = document.createElement("div");
+      dot.className = "dot";
+      typing.appendChild(dot);
+    }
+    chatBox.appendChild(typing);
+    return typing;
+  }
+
+  function removeTyping(el) {
+    if (el) el.remove();
   }
 
   function showStage() {
@@ -99,44 +139,58 @@ if (chatBox) {
 
     narration.textContent = stage.label;
 
-    const msg = document.createElement("div");
-    msg.className = "message system";
-    msg.textContent = stage.system;
-    chatBox.appendChild(msg);
+    const typing = showTyping();
 
-    const container = document.createElement("div");
-    container.className = "response-options";
+    setTimeout(() => {
+      removeTyping(typing);
 
-    stage.options.forEach(opt => {
-      const pill = document.createElement("div");
-      pill.className = "response-pill";
+      const msg = document.createElement("div");
+      msg.className = "message system";
+      msg.textContent = stage.system;
+      chatBox.appendChild(msg);
 
-      const text = document.createElement("div");
-      text.textContent = opt.text;
+      setTimeout(() => {
+        const container = document.createElement("div");
+        container.className = "response-options";
 
-      const meta = document.createElement("div");
-      meta.className = "response-meta";
+        stage.options.forEach(opt => {
+          const pill = document.createElement("div");
+          pill.className = "response-pill";
 
-      const badge = document.createElement("span");
-      badge.className = `badge ${opt.type}`;
-      badge.textContent = opt.type.toUpperCase();
+          const text = document.createElement("div");
+          text.textContent = opt.text;
 
-      const conf = document.createElement("span");
-      conf.className = `conf ${opt.confidence}`;
-      conf.textContent = opt.confidence;
+          const meta = document.createElement("div");
+          meta.className = "response-meta";
 
-      meta.appendChild(badge);
-      meta.appendChild(conf);
+          const badge = document.createElement("span");
+          badge.className = `badge ${opt.type}`;
+          badge.textContent = opt.type.toUpperCase();
 
-      pill.appendChild(text);
-      pill.appendChild(meta);
+          const conf = document.createElement("span");
+          conf.className = `conf ${opt.confidence}`;
+          conf.textContent = opt.confidence;
 
-      pill.onclick = () => handleSelection(opt.text);
+          const reason = document.createElement("div");
+          reason.className = "reason";
+          reason.textContent = opt.reason;
 
-      container.appendChild(pill);
-    });
+          meta.appendChild(badge);
+          meta.appendChild(conf);
 
-    chatBox.appendChild(container);
+          pill.appendChild(text);
+          pill.appendChild(meta);
+          pill.appendChild(reason);
+
+          pill.onclick = () => handleSelection(opt.text);
+
+          container.appendChild(pill);
+        });
+
+        chatBox.appendChild(container);
+      }, 600);
+
+    }, 900);
   }
 
   function handleSelection(text) {
@@ -147,32 +201,40 @@ if (chatBox) {
     userMsg.textContent = text;
     chatBox.appendChild(userMsg);
 
-    narration.textContent = "Processing...";
+    narration.textContent = "Thinking...";
+
+    const typing = showTyping();
 
     setTimeout(() => {
+      removeTyping(typing);
       stageIndex++;
 
       if (stageIndex >= clients[activeClient].stages.length) {
 
         chatBox.innerHTML = "";
-
-        const finalMsg = document.createElement("div");
-        finalMsg.className = "message system";
-        finalMsg.textContent = clients[activeClient].final;
-
-        chatBox.appendChild(finalMsg);
-
-        narration.textContent =
-          clients[activeClient].outcome === "won"
-            ? "Outcome: Success"
-            : "Outcome: Closed (External)";
+        const finalTyping = showTyping();
 
         setTimeout(() => {
-          activeClient = activeClient === 0 ? 1 : 0;
-          stageIndex = 0;
-          updateClientUI();
-          showStage();
-        }, 4000);
+          removeTyping(finalTyping);
+
+          const finalMsg = document.createElement("div");
+          finalMsg.className = "message system";
+          finalMsg.textContent = clients[activeClient].final;
+          chatBox.appendChild(finalMsg);
+
+          narration.textContent =
+            clients[activeClient].outcome === "won"
+              ? "Outcome: Success"
+              : "Outcome: Closed (External)";
+
+          setTimeout(() => {
+            activeClient = activeClient === 0 ? 1 : 0;
+            stageIndex = 0;
+            updateClientUI();
+            showStage();
+          }, 4000);
+
+        }, 1000);
 
       } else {
         showStage();
@@ -181,14 +243,11 @@ if (chatBox) {
     }, 1000);
   }
 
-  clientsUI.forEach((btn, index) => {
-    btn.onclick = () => {
-      activeClient = index;
-      stageIndex = 0;
-      updateClientUI();
-      showStage();
-    };
-  });
+  function updateClientUI() {
+    clientsUI.forEach((c, i) => {
+      c.classList.toggle("active", i === activeClient);
+    });
+  }
 
   updateClientUI();
   showStage();
