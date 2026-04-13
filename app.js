@@ -9,28 +9,22 @@ document.addEventListener("DOMContentLoaded", () => {
   let activeClient = 0;
 
   /* =========================
-     TIMING ENGINE (HUMAN)
+     TIMING ENGINE
      ========================= */
 
   const wait = (t) => new Promise(res => setTimeout(res, t));
-
-  const readTime = (text) => Math.max(1200, text.length * 35);
+  const readTime = (t) => Math.max(1200, t.length * 35);
   const thinkTime = () => 1600 + Math.random() * 400;
 
   /* =========================
-     TAB UI
+     UI HELPERS
      ========================= */
 
   function updateTabs() {
     clientTabs.forEach((tab, i) => {
-      tab.classList.remove("active");
-      if (i === activeClient) tab.classList.add("active");
+      tab.classList.toggle("active", i === activeClient);
     });
   }
-
-  /* =========================
-     CHAT HELPERS
-     ========================= */
 
   function clearChat() {
     chatBox.innerHTML = "";
@@ -42,6 +36,7 @@ document.addEventListener("DOMContentLoaded", () => {
     div.innerText = text;
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
+    checkScroll();
   }
 
   function showTyping() {
@@ -66,6 +61,7 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => {
         chatBox.appendChild(div);
         chatBox.scrollTop = chatBox.scrollHeight;
+        checkScroll();
       }, i * 220);
     });
   }
@@ -82,40 +78,78 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     DEMO FLOW (FINAL)
+     SCROLL BUTTON
+     ========================= */
+
+  const scrollBtn = document.createElement("button");
+  scrollBtn.innerText = "↓";
+  scrollBtn.className = "scroll-btn";
+  document.body.appendChild(scrollBtn);
+
+  scrollBtn.onclick = () => {
+    chatBox.scrollTop = chatBox.scrollHeight;
+  };
+
+  function checkScroll() {
+    if (chatBox.scrollHeight > chatBox.clientHeight + 50) {
+      scrollBtn.style.opacity = "1";
+    } else {
+      scrollBtn.style.opacity = "0";
+    }
+  }
+
+  /* =========================
+     DEMO FLOW
      ========================= */
 
   async function runDemo() {
 
-    /* ===== CLIENT 1 START ===== */
+    /* ===== CLIENT 1 (PART 1) ===== */
     activeClient = 0;
     updateTabs();
     clearChat();
     narration.innerText = "User input received.";
 
-    await wait(1200);
+    let msg = "Client said they are busy this week";
+    addMessage(msg, "user");
 
-    const msg1 = "Client said they are busy this week";
-    addMessage(msg1, "user");
+    await wait(readTime(msg));
 
-    await wait(readTime(msg1));
-
-    narration.innerText = "Analyzing...";
     showTyping();
-
     await wait(thinkTime());
     removeTyping();
 
-    const opt1 = [
+    let opt = [
       "No worries — I’ll keep this simple for you.",
       "All good, I can summarize this quickly.",
       "Following up when it works for you.",
       "Let me know when this becomes a priority."
     ];
 
-    showOptions(opt1);
+    showOptions(opt);
+    await wait(readTime(opt[0]));
+    selectOption(0);
 
-    await wait(readTime(opt1[0]));
+    /* SECOND TURN */
+    await wait(2000);
+
+    msg = "Client said maybe next week";
+    addMessage(msg, "user");
+
+    await wait(readTime(msg));
+
+    showTyping();
+    await wait(thinkTime());
+    removeTyping();
+
+    showOptions([
+      "Sure — I’ll follow up early next week.",
+      "Works — I’ll check back in then.",
+      "I’ll keep this ready for you.",
+      "Let me know if anything changes."
+    ]);
+
+    await wait(2000);
     selectOption(0);
 
     /* ===== SWITCH CLIENT 2 ===== */
@@ -126,29 +160,45 @@ document.addEventListener("DOMContentLoaded", () => {
     clearChat();
     narration.innerText = "Switching client...";
 
-    await wait(1200);
+    msg = "Client asked about pricing";
+    addMessage(msg, "user");
 
-    const msg2 = "Client asked about pricing";
-    addMessage(msg2, "user");
+    await wait(readTime(msg));
 
-    await wait(readTime(msg2));
-
-    narration.innerText = "Analyzing...";
     showTyping();
-
     await wait(thinkTime());
     removeTyping();
 
-    const opt2 = [
+    showOptions([
       "Happy to break this down based on your needs.",
-      "I can share a quick cost overview for clarity.",
-      "Let me know if you want more details.",
-      "Take your time reviewing this."
-    ];
+      "I can share a quick cost overview.",
+      "Let me know if you want full details.",
+      "We can customize based on your budget."
+    ]);
 
-    showOptions(opt2);
+    await wait(2000);
+    selectOption(0);
 
-    await wait(readTime(opt2[0]));
+    /* SECOND TURN CLIENT 2 */
+    await wait(2000);
+
+    msg = "Client asked for final details";
+    addMessage(msg, "user");
+
+    await wait(readTime(msg));
+
+    showTyping();
+    await wait(thinkTime());
+    removeTyping();
+
+    showOptions([
+      "I’ll send everything clearly in one message.",
+      "Sharing full details now.",
+      "Here’s everything you need to get started.",
+      "Let me break it down simply."
+    ]);
+
+    await wait(2000);
     selectOption(0);
 
     /* ===== BACK CLIENT 1 (CLOSE) ===== */
@@ -157,32 +207,28 @@ document.addEventListener("DOMContentLoaded", () => {
     activeClient = 0;
     updateTabs();
     clearChat();
-    narration.innerText = "Continuing conversation...";
+    narration.innerText = "Continuing...";
 
-    await wait(1200);
+    msg = "Client said let's proceed";
+    addMessage(msg, "user");
 
-    const msg3 = "Client said let's proceed";
-    addMessage(msg3, "user");
-
-    await wait(readTime(msg3));
+    await wait(readTime(msg));
 
     showTyping();
     await wait(thinkTime());
     removeTyping();
 
-    const opt3 = [
-      "Great — I’ll finalize everything and get started.",
-      "Perfect, I’ll move ahead with the next steps.",
-      "I’ll take this forward now.",
-      "Sounds good."
-    ];
+    showOptions([
+      "Great — I’ll finalize everything.",
+      "Perfect — I’ll get started.",
+      "Moving ahead with this.",
+      "Let’s begin."
+    ]);
 
-    showOptions(opt3);
-
-    await wait(readTime(opt3[0]));
+    await wait(2000);
     selectOption(0);
 
-    await wait(1400);
+    await wait(1200);
     addMessage("Outcome achieved.", "system");
 
     /* ===== CLIENT 2 (CLOSE) ===== */
@@ -193,34 +239,30 @@ document.addEventListener("DOMContentLoaded", () => {
     clearChat();
     narration.innerText = "Finalizing...";
 
-    await wait(1200);
+    msg = "Client said okay that works";
+    addMessage(msg, "user");
 
-    const msg4 = "Client said okay that works";
-    addMessage(msg4, "user");
-
-    await wait(readTime(msg4));
+    await wait(readTime(msg));
 
     showTyping();
     await wait(thinkTime());
     removeTyping();
 
-    const opt4 = [
-      "Perfect — I’ll proceed with this.",
-      "Great, I’ll move ahead now.",
-      "Sounds good, taking this forward.",
-      "All set."
-    ];
+    showOptions([
+      "Perfect — proceeding now.",
+      "Great — I’ll move ahead.",
+      "All set — starting now.",
+      "Sounds good."
+    ]);
 
-    showOptions(opt4);
-
-    await wait(readTime(opt4[0]));
+    await wait(2000);
     selectOption(0);
 
-    await wait(1400);
+    await wait(1200);
     addMessage("Outcome achieved.", "system");
 
-    /* ===== LOOP ===== */
-    await wait(3200);
+    /* LOOP */
+    await wait(3000);
     runDemo();
   }
 
