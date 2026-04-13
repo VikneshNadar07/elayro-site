@@ -250,3 +250,54 @@ header h1 {
 @media (max-width: 480px) {
   header { margin-top: 60px; }
 }
+
+
+
+/* === OUTFLOW FINAL PATCH (NON-DESTRUCTIVE) === */
+
+.demo-footer {
+  display: flex;
+  justify-content: center;
+  margin-top: 14px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+.reset-btn {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+  color: #aaa;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.reset-btn:hover {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+}
+
+.tag.strong {
+  background: #1e2f4d;
+  color: #4da3ff;
+}
+
+.tag.worse {
+  background: #3d1f1f;
+  color: #ff4d4d;
+}
+
+.response-pill .meta {
+  margin-top: 4px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+}
+
+.reason {
+  margin-top: 3px;
+  font-size: 11px;
+  opacity: 0.5;
+}
