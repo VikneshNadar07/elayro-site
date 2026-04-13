@@ -645,6 +645,17 @@ section:not(:first-child) {
   font-size: 11px;
   opacity: 0.5;
 }
+.prob-box {
+  font-size: 12px;
+  margin-bottom: 8px;
+  opacity: 0.8;
+}
+
+.tone-box {
+  font-size: 11px;
+  margin-bottom: 10px;
+  opacity: 0.6;
+}
 /* ===============================
    MOBILE
    =============================== */
