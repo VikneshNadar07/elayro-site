@@ -39,20 +39,31 @@ document.addEventListener("DOMContentLoaded", () => {
   const optionsPanel = document.getElementById("optionsPanel");
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
+  const statusEl = document.getElementById("systemStatus");
 
   if (!chatBox || !optionsPanel || !input || !sendBtn) return;
 
   let activeClient = 0;
 
-  // 🔥 CHAT MEMORY
   let chats = { 0: [], 1: [] };
-
-  // 🔥 STATUS SYSTEM
   let clientStatus = { 0: "active", 1: "active" };
 
   const wait = (t) => new Promise(res => setTimeout(res, t));
-  const readTime = (t) => Math.max(1200, t.length * 35);
-  const thinkTime = () => 1600 + Math.random() * 400;
+  const readTime = (t) => Math.max(1400, t.length * 40);
+
+  /* =========================
+     STATUS TEXT
+     ========================= */
+
+  function setStatus(text) {
+    if (!statusEl) return;
+    statusEl.style.opacity = 0;
+
+    setTimeout(() => {
+      statusEl.innerText = text;
+      statusEl.style.opacity = 0.6;
+    }, 200);
+  }
 
   /* =========================
      UI HELPERS
@@ -92,7 +103,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function addMessage(text, type) {
-
     chats[activeClient].push({ text, type });
 
     const div = document.createElement("div");
@@ -121,45 +131,29 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     STATUS SYSTEM
-     ========================= */
-
-  function setClientStatus(index, status) {
-    const tab = document.querySelector(`.client[data-client="${index}"]`);
-    if (!tab) return;
-
-    tab.classList.remove("active", "pending", "won");
-    tab.classList.add(status);
-
-    clientStatus[index] = status;
-    updateConversion();
-  }
-
-  function updateConversion() {
-    const el = document.getElementById("conversionIndicator");
-    if (!el) return;
-
-    const values = Object.values(clientStatus);
-    const closed = values.filter(s => s === "won").length;
-
-    el.innerText = `${closed} / 2 Closed`;
-  }
-
-  /* =========================
      INPUT SIMULATION
      ========================= */
 
   async function typeInput(text) {
+    input.classList.add("ai-active");
     input.value = "";
+
     for (let i = 0; i < text.length; i++) {
       input.value += text[i];
-      await wait(20);
+      await wait(18 + Math.random() * 30);
     }
+
+    await wait(200);
+    input.classList.remove("ai-active");
   }
 
   async function simulateUser(text) {
     await typeInput(text);
-    await wait(300);
+
+    sendBtn.classList.add("sending");
+    await wait(200);
+    sendBtn.classList.remove("sending");
+
     input.value = "";
     addMessage(text, "user");
   }
@@ -170,6 +164,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   async function showOptions(list) {
 
+    setStatus("Selecting best response...");
+
     optionsPanel.innerHTML = "";
 
     list.forEach(text => {
@@ -179,24 +175,27 @@ document.addEventListener("DOMContentLoaded", () => {
       optionsPanel.appendChild(btn);
     });
 
-    await wait(1500);
+    await wait(2200 + Math.random() * 800);
 
-    const selected = optionsPanel.children[0];
+    const randomIndex = Math.floor(Math.random() * optionsPanel.children.length);
+    const selected = optionsPanel.children[randomIndex];
+
     selected.classList.add("selected");
 
     await wait(300);
 
     optionsPanel.innerHTML = "";
     addMessage(selected.innerText, "system");
+
+    setStatus("");
   }
 
   /* =========================
-     DEMO FLOW (FINAL)
+     DEMO FLOW
      ========================= */
 
   async function runDemo() {
 
-    // 🔥 RESET
     chats = { 0: [], 1: [] };
     clientStatus = { 0: "active", 1: "active" };
 
@@ -217,7 +216,8 @@ document.addEventListener("DOMContentLoaded", () => {
     await simulateUser(msg);
     await wait(readTime(msg));
 
-    setClientStatus(0, "pending");
+    setStatus("Analyzing conversation...");
+    await wait(1200);
 
     await showOptions([
       "No worries — I’ll keep this simple for you.",
@@ -228,6 +228,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     /* CLIENT 2 */
 
+    setStatus("Switching conversation...");
+    await wait(800);
+
     activeClient = 1;
     updateTabs();
     renderChat(activeClient);
@@ -236,7 +239,8 @@ document.addEventListener("DOMContentLoaded", () => {
     await simulateUser(msg);
     await wait(readTime(msg));
 
-    setClientStatus(1, "pending");
+    setStatus("Analyzing conversation...");
+    await wait(1200);
 
     await showOptions([
       "Happy to break this down based on your needs.",
@@ -246,6 +250,9 @@ document.addEventListener("DOMContentLoaded", () => {
     await wait(2000);
 
     /* CLOSE CLIENT 1 */
+
+    setStatus("Switching conversation...");
+    await wait(800);
 
     activeClient = 0;
     updateTabs();
@@ -260,7 +267,6 @@ document.addEventListener("DOMContentLoaded", () => {
     ]);
 
     addMessage("Outcome achieved.", "system");
-    setClientStatus(0, "won");
 
     /* CLOSE CLIENT 2 */
 
@@ -271,17 +277,23 @@ document.addEventListener("DOMContentLoaded", () => {
     renderChat(activeClient);
 
     addMessage("Outcome achieved.", "system");
-    setClientStatus(1, "won");
 
-    /* 🔥 WAIT 15s THEN RESET */
+    /* CLEAN LOOP RESET */
 
-    await wait(15000);
+    setStatus("Preparing next conversation...");
+    await wait(4000);
+
+    setStatus("Restarting flow...");
+    await wait(2000);
+
+    setStatus("");
 
     runDemo();
   }
 
   updateTabs();
   runDemo();
+
 });
 
 /* =========================
@@ -323,3 +335,39 @@ window.addEventListener("scroll", () => {
     }
   });
 })();
+
+/* =========================
+   SCROLL REVEAL
+   ========================= */
+
+const revealElements = document.querySelectorAll("section, .demo-container");
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add("visible");
+    }
+  });
+}, { threshold: 0.12 });
+
+revealElements.forEach(el => {
+  el.classList.add("reveal");
+  observer.observe(el);
+});
+
+/* =========================
+   PAGE TRANSITION
+   ========================= */
+
+document.querySelectorAll("a").forEach(link => {
+  if (link.href && link.href.includes(window.location.origin)) {
+    link.addEventListener("click", (e) => {
+      e.preventDefault();
+      document.body.style.opacity = "0";
+      document.body.style.transform = "translateY(6px)";
+      setTimeout(() => {
+        window.location.href = link.href;
+      }, 250);
+    });
+  }
+});
