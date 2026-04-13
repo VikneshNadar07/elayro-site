@@ -555,3 +555,65 @@ a::after {
 .section-divider {
   opacity: 0.6;
 }
+
+/* ===============================
+   RESPONSE PILLS (UPGRADED)
+   =============================== */
+
+.response-pill {
+  position: relative;
+  padding: 14px 16px;
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.06);
+
+  cursor: pointer;
+}
+
+/* hover */
+.response-pill:hover {
+  background: rgba(255,255,255,0.08);
+}
+
+/* ===============================
+   TEXT (BIG + CLEAR)
+   =============================== */
+
+.pill-text {
+  font-size: 14px;
+  line-height: 1.6;
+  text-align: left;
+}
+
+/* ===============================
+   LABEL (TOP RIGHT)
+   =============================== */
+
+.pill-label {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+
+  font-size: 10px;
+  opacity: 0.6;
+  letter-spacing: 0.5px;
+}
+
+/* subtle color hints */
+
+.pill-label.best {
+  color: #6eff6e;
+}
+
+.pill-label.strong {
+  color: #ffd66e;
+}
+
+.pill-label.safe {
+  color: #aaa;
+}
+
+.pill-label.casual {
+  color: #888;
+}
