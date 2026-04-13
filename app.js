@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function rotateHook() {
       hookEl.style.opacity = 0;
-
       setTimeout(() => {
         hookEl.innerText = hooks[i];
         hookEl.style.opacity = 0.6;
@@ -32,7 +31,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     CHAT SYSTEM (SAFE LOAD)
+     CHAT SYSTEM
      ========================= */
 
   const chatBox = document.getElementById("chatBox");
@@ -45,39 +44,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let activeClient = 0;
 
+  // 🔥 CHAT MEMORY
+  let chats = { 0: [], 1: [] };
+
+  // 🔥 STATUS SYSTEM
+  let clientStatus = { 0: "active", 1: "active" };
+
   const wait = (t) => new Promise(res => setTimeout(res, t));
   const readTime = (t) => Math.max(1200, t.length * 35);
   const thinkTime = () => 1600 + Math.random() * 400;
-
-  /* =========================
-     GHOST CURSOR
-     ========================= */
-
-  const ghostCursor = document.createElement("div");
-  ghostCursor.className = "ghost-cursor";
-  document.body.appendChild(ghostCursor);
-
-  function moveTo(el) {
-    const r = el.getBoundingClientRect();
-    ghostCursor.style.opacity = "1";
-    ghostCursor.style.left = r.left + r.width / 2 + "px";
-    ghostCursor.style.top = r.top + r.height / 2 + "px";
-  }
-
-  function clickCursor() {
-    ghostCursor.style.transform = "translate(-50%, -50%) scale(0.7)";
-    setTimeout(() => {
-      ghostCursor.style.transform = "translate(-50%, -50%) scale(1)";
-    }, 100);
-  }
-
-  function hideCursor() {
-    setTimeout(() => ghostCursor.style.opacity = "0", 250);
-  }
-
-  async function hesitate() {
-    await wait(200 + Math.random() * 200);
-  }
 
   /* =========================
      UI HELPERS
@@ -89,11 +64,37 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  function clearChat() {
+  function renderChat(clientIndex) {
     chatBox.innerHTML = "";
+
+    chats[clientIndex].forEach(msg => {
+      const div = document.createElement("div");
+      div.className = `message ${msg.type}`;
+
+      if (msg.type === "system") {
+        const label = document.createElement("div");
+        label.className = "msg-label";
+        label.innerText = "Outflow";
+
+        const content = document.createElement("div");
+        content.innerText = msg.text;
+
+        div.appendChild(label);
+        div.appendChild(content);
+      } else {
+        div.innerText = msg.text;
+      }
+
+      chatBox.appendChild(div);
+    });
+
+    chatBox.scrollTop = chatBox.scrollHeight;
   }
 
   function addMessage(text, type) {
+
+    chats[activeClient].push({ text, type });
+
     const div = document.createElement("div");
     div.className = `message ${type} fade-in-up`;
 
@@ -119,16 +120,29 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  function showTyping() {
-    const div = document.createElement("div");
-    div.className = "message system typing";
-    div.innerHTML = `<span></span><span></span><span></span>`;
-    chatBox.appendChild(div);
+  /* =========================
+     STATUS SYSTEM
+     ========================= */
+
+  function setClientStatus(index, status) {
+    const tab = document.querySelector(`.client[data-client="${index}"]`);
+    if (!tab) return;
+
+    tab.classList.remove("active", "pending", "won");
+    tab.classList.add(status);
+
+    clientStatus[index] = status;
+    updateConversion();
   }
 
-  function removeTyping() {
-    const t = document.querySelector(".typing");
-    if (t) t.remove();
+  function updateConversion() {
+    const el = document.getElementById("conversionIndicator");
+    if (!el) return;
+
+    const values = Object.values(clientStatus);
+    const closed = values.filter(s => s === "won").length;
+
+    el.innerText = `${closed} / 2 Closed`;
   }
 
   /* =========================
@@ -139,163 +153,130 @@ document.addEventListener("DOMContentLoaded", () => {
     input.value = "";
     for (let i = 0; i < text.length; i++) {
       input.value += text[i];
-      await wait(20 + Math.random() * 30);
+      await wait(20);
     }
   }
 
   async function simulateUser(text) {
-    moveTo(input);
-    await wait(400);
-    clickCursor();
-
-    await wait(200);
     await typeInput(text);
-
     await wait(300);
-
-    moveTo(sendBtn);
-    await wait(400);
-    clickCursor();
-
-    await wait(200);
-
     input.value = "";
     addMessage(text, "user");
-
-    hideCursor();
   }
 
   /* =========================
      OPTIONS
      ========================= */
 
-  async function showOptions(list, autoIndex = 0) {
+  async function showOptions(list) {
 
     optionsPanel.innerHTML = "";
-    const chatArea = document.querySelector(".chat-area");
-    chatArea.classList.add("dimmed");
 
-    let buttons = [];
-
-    list.forEach((text, i) => {
+    list.forEach(text => {
       const btn = document.createElement("div");
       btn.className = "option-btn";
       btn.innerText = text;
-
-      setTimeout(() => optionsPanel.appendChild(btn), i * 120);
-      buttons.push(btn);
+      optionsPanel.appendChild(btn);
     });
 
     await wait(1500);
 
-    const selected = buttons[autoIndex];
-    if (!selected) return;
-
-    moveTo(selected);
-    await wait(300);
-
-    await hesitate();
-
-    clickCursor();
+    const selected = optionsPanel.children[0];
     selected.classList.add("selected");
 
     await wait(300);
 
-    hideCursor();
     optionsPanel.innerHTML = "";
-    chatArea.classList.remove("dimmed");
-
     addMessage(selected.innerText, "system");
   }
 
   /* =========================
-     DEMO FLOW (CLEAN)
+     DEMO FLOW (FINAL)
      ========================= */
 
   async function runDemo() {
 
+    // 🔥 RESET
+    chats = { 0: [], 1: [] };
+    clientStatus = { 0: "active", 1: "active" };
+
+    document.querySelectorAll(".client").forEach((c, i) => {
+      c.classList.remove("pending", "won");
+      if (i < 2) c.classList.add("active");
+    });
+
     activeClient = 0;
     updateTabs();
-    clearChat();
+    renderChat(activeClient);
 
-    let msg = "Client said they are busy this week";
+    let msg;
+
+    /* CLIENT 1 */
+
+    msg = "Client said they are busy this week";
     await simulateUser(msg);
     await wait(readTime(msg));
 
-    showTyping();
-    await wait(thinkTime());
-    removeTyping();
+    setClientStatus(0, "pending");
 
     await showOptions([
       "No worries — I’ll keep this simple for you.",
-      "All good, I can summarize this quickly.",
-      "Following up when it works for you.",
-      "Let me know when this becomes a priority."
+      "All good, I can summarize this quickly."
     ]);
 
     await wait(2000);
 
-    msg = "Client said maybe next week";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    showTyping();
-    await wait(thinkTime());
-    removeTyping();
-
-    await showOptions([
-      "Sure — I’ll follow up early next week.",
-      "Works — I’ll check back in then.",
-      "I’ll keep this ready for you.",
-      "Let me know if anything changes."
-    ]);
-
-    await wait(2500);
+    /* CLIENT 2 */
 
     activeClient = 1;
     updateTabs();
-    clearChat();
+    renderChat(activeClient);
 
     msg = "Client asked about pricing";
     await simulateUser(msg);
     await wait(readTime(msg));
 
-    showTyping();
-    await wait(thinkTime());
-    removeTyping();
+    setClientStatus(1, "pending");
 
     await showOptions([
       "Happy to break this down based on your needs.",
-      "I can share a quick cost overview.",
-      "Let me know if you want full details.",
-      "We can customize based on your budget."
+      "I can share a quick cost overview."
     ]);
 
-    await wait(2500);
+    await wait(2000);
+
+    /* CLOSE CLIENT 1 */
 
     activeClient = 0;
     updateTabs();
-    clearChat();
+    renderChat(activeClient);
 
     msg = "Client said let's proceed";
     await simulateUser(msg);
     await wait(readTime(msg));
 
-    showTyping();
-    await wait(thinkTime());
-    removeTyping();
-
     await showOptions([
-      "Great — I’ll finalize everything.",
-      "Perfect — I’ll get started.",
-      "Moving ahead with this.",
-      "Let’s begin."
+      "Great — I’ll finalize everything."
     ]);
 
-    await wait(1000);
     addMessage("Outcome achieved.", "system");
+    setClientStatus(0, "won");
 
-    await wait(3000);
+    /* CLOSE CLIENT 2 */
+
+    await wait(2000);
+
+    activeClient = 1;
+    updateTabs();
+    renderChat(activeClient);
+
+    addMessage("Outcome achieved.", "system");
+    setClientStatus(1, "won");
+
+    /* 🔥 WAIT 15s THEN RESET */
+
+    await wait(15000);
+
     runDemo();
   }
 
@@ -324,7 +305,7 @@ window.addEventListener("scroll", () => {
 });
 
 /* =========================
-   NAV ACTIVE + AUTO HIDE
+   NAV AUTO HIDE
    ========================= */
 
 (function () {
@@ -337,13 +318,8 @@ window.addEventListener("scroll", () => {
 
   document.querySelectorAll(".nav-minimal a").forEach(link => {
     if (link.dataset.page === current) {
-      link.classList.add("active");
-
-      // 🔥 smooth hide
       link.classList.add("hide");
-      setTimeout(() => {
-        link.style.display = "none";
-      }, 300);
+      setTimeout(() => link.style.display = "none", 300);
     }
   });
 })();
