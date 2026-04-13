@@ -390,3 +390,26 @@ document.addEventListener("DOMContentLoaded", function () {
   init();
   showStage();
 });
+
+// ===============================
+// CURSOR GLOW SYSTEM
+// ===============================
+
+const glow = document.createElement("div");
+glow.className = "cursor-glow";
+document.body.appendChild(glow);
+
+document.addEventListener("mousemove", (e) => {
+  glow.style.left = e.clientX + "px";
+  glow.style.top = e.clientY + "px";
+});
+
+// ===============================
+// PAGE TRANSITION FEEL
+// ===============================
+
+document.querySelectorAll("a").forEach(link => {
+  link.addEventListener("click", () => {
+    document.body.style.opacity = "0";
+  });
+});
