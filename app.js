@@ -39,39 +39,25 @@ document.addEventListener("DOMContentLoaded", () => {
   const optionsPanel = document.getElementById("optionsPanel");
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
-  const statusEl = document.getElementById("systemStatus");
 
   if (!chatBox || !optionsPanel || !input || !sendBtn) return;
 
   let activeClient = 0;
-
   let chats = { 0: [], 1: [] };
-  let clientStatus = { 0: "active", 1: "active" };
 
   const wait = (t) => new Promise(res => setTimeout(res, t));
   const readTime = (t) => Math.max(1400, t.length * 40);
 
   /* =========================
-     STATUS TEXT
+     LOCK UI
      ========================= */
 
-  function setStatus(text) {
-    if (!statusEl) return;
-    statusEl.style.opacity = 0;
+  document.addEventListener("selectstart", e => e.preventDefault());
+  document.addEventListener("dragstart", e => e.preventDefault());
 
-    setTimeout(() => {
-      statusEl.innerText = text;
-      statusEl.style.opacity = 0.6;
-    }, 200);
-  }
-// disable selection globally
-document.addEventListener("selectstart", e => e.preventDefault());
-document.addEventListener("dragstart", e => e.preventDefault());
+  input.addEventListener("focus", e => e.target.blur());
+  sendBtn.addEventListener("click", e => e.preventDefault());
 
-// disable input
-input.addEventListener("focus", e => e.target.blur());
-sendBtn.addEventListener("click", e => e.preventDefault());
-  
   /* =========================
      UI HELPERS
      ========================= */
@@ -171,8 +157,6 @@ sendBtn.addEventListener("click", e => e.preventDefault());
 
   async function showOptions(list) {
 
-    setStatus("Selecting best response...");
-
     optionsPanel.innerHTML = "";
 
     list.forEach(text => {
@@ -182,200 +166,160 @@ sendBtn.addEventListener("click", e => e.preventDefault());
       optionsPanel.appendChild(btn);
     });
 
-    await wait(2200 + Math.random() * 800);
+    await wait(2500 + Math.random() * 1000);
+
+    if (!optionsPanel.children.length) return;
 
     const randomIndex = Math.floor(Math.random() * optionsPanel.children.length);
     const selected = optionsPanel.children[randomIndex];
 
     selected.classList.add("selected");
 
-    await wait(300);
+    await wait(400);
 
     optionsPanel.innerHTML = "";
     addMessage(selected.innerText, "system");
-
-    setStatus("");
   }
 
   /* =========================
      DEMO FLOW
      ========================= */
 
-async function runDemo() {
+  async function runDemo() {
 
-  chats = { 0: [], 1: [] };
+    chats = { 0: [], 1: [] };
 
-  activeClient = 0;
-  updateTabs();
-  renderChat(activeClient);
+    activeClient = 0;
+    updateTabs();
+    renderChat(activeClient);
 
-  let msg;
+    let msg;
 
-  /* =========================
-     CLIENT 1 — STEP 1
-     ========================= */
+    // CLIENT 1
+    msg = "Client said they are busy this week";
+    await simulateUser(msg);
+    await wait(readTime(msg));
 
-  msg = "Client said they are busy this week";
-  await simulateUser(msg);
-  await wait(readTime(msg));
+    await showOptions([
+      "No worries — I’ll keep this simple for you.",
+      "All good, I can summarize this quickly.",
+      "Following up when it works for you.",
+      "Let me know when this becomes a priority."
+    ]);
 
-  await showOptions([
-    "No worries — I’ll keep this simple for you.",
-    "All good, I can summarize this quickly.",
-    "Following up when it works for you.",
-    "Let me know when this becomes a priority."
-  ]);
+    await wait(2000);
 
-  /* =========================
-     CLIENT 1 — STEP 2
-     ========================= */
+    msg = "Client said maybe next week";
+    await simulateUser(msg);
+    await wait(readTime(msg));
 
-  await wait(2000);
+    await showOptions([
+      "Sure — I’ll follow up early next week.",
+      "Works — I’ll check back in then.",
+      "I’ll keep this ready for you.",
+      "Let me know if anything changes."
+    ]);
 
-  msg = "Client said maybe next week";
-  await simulateUser(msg);
-  await wait(readTime(msg));
+    // SWITCH CLIENT 2
+    await wait(2000);
+    activeClient = 1;
+    updateTabs();
+    renderChat(activeClient);
 
-  await showOptions([
-    "Sure — I’ll follow up early next week.",
-    "Works — I’ll check back in then.",
-    "I’ll keep this ready for you.",
-    "Let me know if anything changes."
-  ]);
+    msg = "Client asked about pricing";
+    await simulateUser(msg);
+    await wait(readTime(msg));
 
-  /* =========================
-     SWITCH → CLIENT 2
-     ========================= */
+    await showOptions([
+      "Happy to break this down based on your needs.",
+      "I can share a quick cost overview.",
+      "Let me know if you want full details.",
+      "We can customize based on your budget."
+    ]);
 
-  await wait(2000);
+    // BACK CLIENT 1
+    await wait(2000);
+    activeClient = 0;
+    updateTabs();
+    renderChat(activeClient);
 
-  activeClient = 1;
-  updateTabs();
-  renderChat(activeClient);
+    msg = "Client asked if this can start soon";
+    await simulateUser(msg);
+    await wait(readTime(msg));
 
-  /* =========================
-     CLIENT 2 — STEP 1
-     ========================= */
+    await showOptions([
+      "Yes — we can begin immediately.",
+      "We can start as early as this week.",
+      "I’ll align everything and get started.",
+      "We’re ready to move forward anytime."
+    ]);
 
-  msg = "Client asked about pricing";
-  await simulateUser(msg);
-  await wait(readTime(msg));
+    await wait(2000);
 
-  await showOptions([
-    "Happy to break this down based on your needs.",
-    "I can share a quick cost overview.",
-    "Let me know if you want full details.",
-    "We can customize based on your budget."
-  ]);
+    msg = "Client said let's proceed";
+    await simulateUser(msg);
+    await wait(readTime(msg));
 
-  /* =========================
-     BACK → CLIENT 1
-     ========================= */
+    await showOptions([
+      "Great — I’ll finalize everything.",
+      "Perfect — I’ll get started.",
+      "Moving ahead with this.",
+      "Let’s begin."
+    ]);
 
-  await wait(2000);
+    addMessage("Outcome achieved.", "system");
 
-  activeClient = 0;
-  updateTabs();
-  renderChat(activeClient);
+    // CLIENT 2 CONTINUE
+    await wait(2000);
+    activeClient = 1;
+    updateTabs();
+    renderChat(activeClient);
 
-  /* =========================
-     CLIENT 1 — STEP 3
-     ========================= */
+    msg = "Client said they need to think";
+    await simulateUser(msg);
+    await wait(readTime(msg));
 
-  msg = "Client asked if this can start soon";
-  await simulateUser(msg);
-  await wait(readTime(msg));
+    await showOptions([
+      "No problem — take your time.",
+      "Happy to revisit when you're ready.",
+      "I’ll follow up later.",
+      "Let me know if you have questions."
+    ]);
 
-  await showOptions([
-    "Yes — we can begin immediately.",
-    "We can start as early as this week.",
-    "I’ll align everything and get started.",
-    "We’re ready to move forward anytime."
-  ]);
+    await wait(2000);
 
-  /* =========================
-     CLIENT 1 — STEP 4 (CLOSE WON)
-     ========================= */
+    msg = "Client stopped responding";
+    await simulateUser(msg);
+    await wait(readTime(msg));
 
-  await wait(2000);
+    await showOptions([
+      "I’ll close this for now.",
+      "Happy to reconnect later.",
+      "Leaving this open if needed.",
+      "Feel free to reach out anytime."
+    ]);
 
-  msg = "Client said let's proceed";
-  await simulateUser(msg);
-  await wait(readTime(msg));
+    addMessage("Conversation ended.", "system");
 
-  await showOptions([
-    "Great — I’ll finalize everything.",
-    "Perfect — I’ll get started.",
-    "Moving ahead with this.",
-    "Let’s begin."
-  ]);
-
-  addMessage("Outcome achieved.", "system");
-
-  /* =========================
-     SWITCH → CLIENT 2
-     ========================= */
-
-  await wait(2000);
-
-  activeClient = 1;
-  updateTabs();
-  renderChat(activeClient);
-
-  /* =========================
-     CLIENT 2 — STEP 2
-     ========================= */
-
-  msg = "Client said they need to think";
-  await simulateUser(msg);
-  await wait(readTime(msg));
-
-  await showOptions([
-    "No problem — take your time.",
-    "Happy to revisit when you're ready.",
-    "I’ll follow up later.",
-    "Let me know if you have questions."
-  ]);
+    await wait(6000);
+    runDemo();
+  }
 
   /* =========================
-     CLIENT 2 — STEP 3 (CLOSE LOST)
+     START DEMO
      ========================= */
-
-  await wait(2000);
-
-  msg = "Client stopped responding";
-  await simulateUser(msg);
-  await wait(readTime(msg));
-
-  await showOptions([
-    "I’ll close this for now.",
-    "Happy to reconnect later.",
-    "Leaving this open if needed.",
-    "Feel free to reach out anytime."
-  ]);
-
-  addMessage("Conversation ended.", "system");
-
-  /* =========================
-     RESET
-     ========================= */
-
-  await wait(6000);
 
   runDemo();
-}
+
+});
 
 /* =========================
-   PAGE LOAD
+   GLOBAL OUTSIDE DOM
    ========================= */
 
 window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
 });
-
-/* =========================
-   SCROLL PROGRESS
-   ========================= */
 
 window.addEventListener("scroll", () => {
   const scrollTop = window.scrollY;
@@ -384,10 +328,6 @@ window.addEventListener("scroll", () => {
   const bar = document.querySelector(".scroll-progress");
   if (bar) bar.style.width = progress + "%";
 });
-
-/* =========================
-   NAV AUTO HIDE
-   ========================= */
 
 (function () {
   const path = window.location.pathname;
@@ -405,10 +345,6 @@ window.addEventListener("scroll", () => {
   });
 })();
 
-/* =========================
-   SCROLL REVEAL
-   ========================= */
-
 const revealElements = document.querySelectorAll("section, .demo-container");
 
 const observer = new IntersectionObserver((entries) => {
@@ -423,10 +359,6 @@ revealElements.forEach(el => {
   el.classList.add("reveal");
   observer.observe(el);
 });
-
-/* =========================
-   PAGE TRANSITION
-   ========================= */
 
 document.querySelectorAll("a").forEach(link => {
   if (link.href && link.href.includes(window.location.origin)) {
