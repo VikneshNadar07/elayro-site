@@ -1,10 +1,11 @@
-/* ===============================
-   OUTFLOW FINAL SYSTEM (LOCKED)
-   =============================== */
+/* ======================================================
+   OUTFLOW FINAL SYSTEM (LOCKED DEMO VERSION)
+   ====================================================== */
 
 const chatBox = document.getElementById("chatBox");
 const narration = document.getElementById("narration");
 const clientsUI = document.querySelectorAll(".client");
+const resetBtn = document.getElementById("resetDemo");
 
 if (chatBox && narration && clientsUI.length > 0) {
 
@@ -12,335 +13,213 @@ if (chatBox && narration && clientsUI.length > 0) {
 
   const progress = [0, 0];
   const outcomeScore = [50, 50];
-  const completed = [false, false]; // 🔥 LOCK STATE
+  const completed = [false, false];
 
+  /* =========================
+     OPTION GENERATOR
+     ========================= */
+  function generateOptions(baseText) {
+    return [
+      {
+        text: baseText,
+        type: "best",
+        confidence: "high",
+        reason: "Direct, clear, and action-driven"
+      },
+      {
+        text: baseText.replace("just", "").replace("—", ""),
+        type: "strong",
+        confidence: "medium",
+        reason: "Strong alternative with slightly softer tone"
+      },
+      {
+        text: "Following up on this.",
+        type: "safe",
+        confidence: "medium",
+        reason: "Neutral, keeps conversation alive"
+      },
+      {
+        text: "Let me know if this is still relevant.",
+        type: "worse",
+        confidence: "low",
+        reason: "Passive, risks losing momentum"
+      }
+    ];
+  }
+
+  /* =========================
+     CLIENT FLOWS
+     ========================= */
   const clients = [
     {
-      outcome: "won",
       final: "Client confirmed. Deal closed successfully.",
       stages: [
         {
-          label: "Analyzing situation...",
-          system: "Client showed interest but stopped responding.",
+          label: "Conversation active",
+          system: "Client engaged earlier but conversation slowed down.",
           next: 1,
-          options: [
-            {
-              text: "Hey — just checking in, still interested?",
-              type: "best",
-              confidence: "high",
-              reason: "Direct and re-engages immediately"
-            },
-            {
-              text: "Quick follow-up — want me to share next steps?",
-              type: "safe",
-              confidence: "medium",
-              reason: "Keeps momentum going"
-            },
-            {
-              text: "Let me know if this is still relevant.",
-              type: "fallback",
-              confidence: "low",
-              reason: "Passive and low engagement"
-            }
-          ]
+          options: generateOptions("Hey — just checking in, still interested?")
         },
         {
           label: "Client responded",
           system: "Client: 'Yes, just been busy.'",
           next: 2,
-          options: [
-            {
-              text: "No worries — I’ll keep this simple.",
-              type: "best",
-              confidence: "high",
-              reason: "Reduces friction immediately"
-            },
-            {
-              text: "Totally understand, here’s the next step.",
-              type: "safe",
-              confidence: "medium",
-              reason: "Moves forward with clarity"
-            },
-            {
-              text: "Let’s move forward when you're ready.",
-              type: "fallback",
-              confidence: "low",
-              reason: "Too passive, delays progress"
-            }
-          ]
+          options: generateOptions("No worries — I’ll keep this simple.")
         },
         {
           label: "Plan shared",
           system: "You shared a quick plan.",
           next: 3,
-          options: [
-            {
-              text: "Here’s a simple plan to get started.",
-              type: "best",
-              confidence: "high",
-              reason: "Clear and actionable"
-            },
-            {
-              text: "Sharing a quick outline for you.",
-              type: "safe",
-              confidence: "medium",
-              reason: "Still helpful but less direct"
-            },
-            {
-              text: "Let me know your thoughts.",
-              type: "fallback",
-              confidence: "low",
-              reason: "No direction given"
-            }
-          ]
+          options: generateOptions("Here’s a simple plan to get started.")
         },
         {
           label: "Waiting for response",
           system: "Client hasn’t responded.",
           next: 4,
-          options: [
-            {
-              text: "Just checking — had a chance to look?",
-              type: "best",
-              confidence: "high",
-              reason: "Strong follow-up without pressure"
-            },
-            {
-              text: "Happy to adjust anything if needed.",
-              type: "safe",
-              confidence: "medium",
-              reason: "Supportive but passive"
-            },
-            {
-              text: "Following up on the plan.",
-              type: "fallback",
-              confidence: "low",
-              reason: "Weak and generic"
-            }
-          ]
+          options: generateOptions("Just checking — had a chance to look?")
         },
         {
           label: "Engagement confirmed",
           system: "Client: 'Looks good, let’s proceed.'",
           next: "end",
-          options: [
-            {
-              text: "Great — I’ll finalize and start.",
-              type: "best",
-              confidence: "high",
-              reason: "Confident close"
-            },
-            {
-              text: "Perfect, I’ll move ahead.",
-              type: "safe",
-              confidence: "medium",
-              reason: "Clear but softer"
-            }
-          ]
+          options: generateOptions("Great — I’ll finalize and start.")
         }
       ]
     },
 
     {
-      outcome: "lost",
       final: "Conversation closed. Client chose another option.",
       stages: [
         {
-          label: "Analyzing situation...",
-          system: "Client showed interest but went silent.",
+          label: "Initial conversation",
+          system: "New client responded to your initial message.",
           next: 1,
-          options: [
-            {
-              text: "Hey — just following up, still interested?",
-              type: "best",
-              confidence: "high",
-              reason: "Direct re-engagement"
-            },
-            {
-              text: "Should I share a quick outline?",
-              type: "safe",
-              confidence: "medium",
-              reason: "Value-first approach"
-            },
-            {
-              text: "Let me know if timing works.",
-              type: "fallback",
-              confidence: "low",
-              reason: "Passive and weak"
-            }
-          ]
+          options: generateOptions("Great connecting — what are you currently looking for?")
         },
         {
-          label: "Client responded",
-          system: "Client: 'Yes, share details.'",
+          label: "Client engaged",
+          system: "Client is open but evaluating options.",
           next: 2,
-          options: [
-            {
-              text: "Great — I’ll share a simple plan.",
-              type: "best",
-              confidence: "high",
-              reason: "Moves forward clearly"
-            },
-            {
-              text: "Sending outline now.",
-              type: "safe",
-              confidence: "medium",
-              reason: "Neutral progress"
-            }
-          ]
+          options: generateOptions("Let me outline a simple approach for you.")
         },
         {
           label: "Plan shared",
           system: "You shared a plan.",
           next: 3,
-          options: [
-            {
-              text: "Here’s the plan — let me know.",
-              type: "best",
-              confidence: "high",
-              reason: "Clear and professional"
-            },
-            {
-              text: "Happy to tweak this.",
-              type: "safe",
-              confidence: "medium",
-              reason: "Flexible approach"
-            }
-          ]
+          options: generateOptions("Here’s a quick plan — let me know your thoughts.")
         },
         {
           label: "Client response",
           system: "Client: 'We chose another option.'",
           next: "end",
-          options: [
-            {
-              text: "Got it — appreciate the update.",
-              type: "best",
-              confidence: "high",
-              reason: "Professional close"
-            },
-            {
-              text: "No problem, thanks for letting me know.",
-              type: "safe",
-              confidence: "medium",
-              reason: "Neutral close"
-            }
-          ]
+          options: generateOptions("Got it — appreciate the update.")
         }
       ]
     }
   ];
 
-  function getStateText(score) {
-    if (score > 65) return "Momentum building.";
-    if (score > 45) return "Maintaining balanced communication.";
-    return "Engagement weakening.";
+  /* =========================
+     DYNAMIC START (ONLY 0 OR 1)
+     ========================= */
+  function initializeClients() {
+    for (let i = 0; i < clients.length; i++) {
+
+      const startStage = Math.random() < 0.5 ? 0 : 1;
+      progress[i] = startStage;
+
+      if (startStage === 0) {
+        outcomeScore[i] = 45 + Math.floor(Math.random() * 10);
+      } else {
+        outcomeScore[i] = 55 + Math.floor(Math.random() * 10);
+      }
+
+      completed[i] = false;
+    }
   }
 
+  /* =========================
+     STATE META
+     ========================= */
+  function getStateMeta(score) {
+    if (score > 70) return { label: "Closing", color: "green" };
+    if (score > 50) return { label: "Engaged", color: "blue" };
+    if (score > 35) return { label: "Stalled", color: "yellow" };
+    return { label: "Weak", color: "red" };
+  }
+
+  /* =========================
+     RENDER
+     ========================= */
   function showStage() {
 
-    // 🔒 HARD LOCK AFTER END
     if (completed[activeClient]) {
-      chatBox.innerHTML = "";
-
-      const msg = document.createElement("div");
-      msg.className = "message system";
-      msg.textContent = clients[activeClient].final;
-
-      chatBox.appendChild(msg);
+      chatBox.innerHTML = `<div class="message system">${clients[activeClient].final}</div>`;
       narration.textContent = "Outcome reached";
       return;
     }
 
-    chatBox.innerHTML = "";
-
     const stage = clients[activeClient].stages[progress[activeClient]];
-    narration.textContent = stage.label;
+    const meta = getStateMeta(outcomeScore[activeClient]);
 
-    const state = document.createElement("div");
-    state.className = "prob-box";
-    state.textContent = getStateText(outcomeScore[activeClient]);
-    chatBox.appendChild(state);
+    narration.innerHTML = `
+      ${stage.label}
+      <span class="state ${meta.color}">${meta.label}</span>
+    `;
 
-    const msg = document.createElement("div");
-    msg.className = "message system";
-    msg.textContent = stage.system;
-    chatBox.appendChild(msg);
-
-    const container = document.createElement("div");
-    container.className = "response-options";
+    chatBox.innerHTML = `<div class="message system">${stage.system}</div>`;
 
     stage.options.forEach(opt => {
-      const pill = document.createElement("div");
-      pill.className = "response-pill";
+      const div = document.createElement("div");
+      div.className = "response-pill";
 
-      pill.innerHTML = `
+      div.innerHTML = `
         <div>${opt.text}</div>
-        <div class="response-meta">
-          <span class="badge ${opt.type}">${opt.type.toUpperCase()}</span>
+        <div class="meta">
+          <span class="tag ${opt.type}">${opt.type.toUpperCase()}</span>
           <span class="conf ${opt.confidence}">${opt.confidence}</span>
         </div>
         <div class="reason">${opt.reason}</div>
       `;
 
-      pill.onclick = () => handleSelection(opt);
-      container.appendChild(pill);
+      div.onclick = () => handleSelection(opt);
+      chatBox.appendChild(div);
     });
-
-    chatBox.appendChild(container);
   }
 
+  /* =========================
+     ACTION
+     ========================= */
   function handleSelection(opt) {
 
     if (completed[activeClient]) return;
 
-    chatBox.innerHTML = "";
-
-    const userMsg = document.createElement("div");
-    userMsg.className = "message user";
-    userMsg.textContent = opt.text;
-    chatBox.appendChild(userMsg);
-
-    if (opt.type === "best") outcomeScore[activeClient] += 10;
-    if (opt.type === "safe") outcomeScore[activeClient] += 4;
-    if (opt.type === "fallback") outcomeScore[activeClient] -= 6;
+    if (opt.type === "best") outcomeScore[activeClient] += 12;
+    if (opt.type === "strong") outcomeScore[activeClient] += 8;
+    if (opt.type === "safe") outcomeScore[activeClient] += 3;
+    if (opt.type === "worse") outcomeScore[activeClient] -= 10;
 
     outcomeScore[activeClient] = Math.max(0, Math.min(100, outcomeScore[activeClient]));
 
-    setTimeout(() => {
+    const stage = clients[activeClient].stages[progress[activeClient]];
 
-      const stage = clients[activeClient].stages[progress[activeClient]];
-
-      if (stage.next === "end") {
-
-        completed[activeClient] = true;
-
-        chatBox.innerHTML = "";
-
-        const msg = document.createElement("div");
-        msg.className = "message system";
-        msg.textContent = clients[activeClient].final;
-
-        chatBox.appendChild(msg);
-        narration.textContent = "Outcome reached";
-
-        return;
-      }
-
-      progress[activeClient] = stage.next;
+    if (stage.next === "end") {
+      completed[activeClient] = true;
       showStage();
+      return;
+    }
 
-    }, 600);
+    progress[activeClient] = stage.next;
+    showStage();
   }
 
+  /* =========================
+     SWITCH CLIENT
+     ========================= */
   clientsUI.forEach((btn, i) => {
+    if (btn.classList.contains("add")) return;
+
     btn.onclick = () => {
-
       activeClient = i;
-
-      chatBox.innerHTML = "";
-      narration.textContent = "";
-
       showStage();
 
       clientsUI.forEach((c, idx) => {
@@ -349,5 +228,32 @@ if (chatBox && narration && clientsUI.length > 0) {
     };
   });
 
+  /* =========================
+     RESET ONLY ACTIVE CLIENT
+     ========================= */
+  if (resetBtn) {
+    resetBtn.onclick = () => {
+
+      const i = activeClient;
+
+      completed[i] = false;
+
+      const startStage = Math.random() < 0.5 ? 0 : 1;
+      progress[i] = startStage;
+
+      if (startStage === 0) {
+        outcomeScore[i] = 45 + Math.floor(Math.random() * 10);
+      } else {
+        outcomeScore[i] = 55 + Math.floor(Math.random() * 10);
+      }
+
+      showStage();
+    };
+  }
+
+  /* =========================
+     INIT
+     ========================= */
+  initializeClients();
   showStage();
 }
