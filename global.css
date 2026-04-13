@@ -309,7 +309,102 @@ section p {
   font-size: 13px;
   opacity: 0.6;
 }
+/* ===============================
+   ELITE INDEX NAV BUTTONS
+   =============================== */
 
+.index-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.index-links a {
+  display: inline-block;
+  padding: 10px 18px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.12);
+
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+
+  backdrop-filter: blur(6px);
+
+  transition: all 0.25s ease;
+}
+
+/* hover = lift */
+.index-links a:hover {
+  background: rgba(255,255,255,0.14);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
+/* click = press */
+.index-links a:active {
+  transform: scale(0.96);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* ===============================
+   ELITE SECTION DIVIDER
+   =============================== */
+
+.section-divider {
+  width: 100%;
+  max-width: 520px;
+  height: 1px;
+  margin: 40px auto;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.15),
+    rgba(255,255,255,0.25),
+    rgba(255,255,255,0.15),
+    transparent
+  );
+
+  position: relative;
+}
+
+/* subtle glow center */
+.section-divider::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -1px;
+  transform: translateX(-50%);
+  width: 120px;
+  height: 2px;
+
+  background: rgba(255,255,255,0.2);
+  filter: blur(4px);
+  opacity: 0.7;
+}
+
+/* ===============================
+   HERO DIVIDER (SPECIAL)
+   =============================== */
+
+.hero-divider {
+  margin-top: 40px;
+  margin-bottom: 10px;
+}
+
+/* ===============================
+   FAQ DIVIDER (TOP + BOTTOM)
+   =============================== */
+
+.faq-divider {
+  margin: 30px auto;
+  opacity: 0.8;
+}
 /* ===============================
    MOBILE
    =============================== */
