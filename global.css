@@ -3,7 +3,6 @@
    =============================== */
 
 * { box-sizing: border-box; }
-
 html { scroll-behavior: smooth; }
 
 body {
@@ -16,6 +15,16 @@ body {
   align-items: center;
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
+
+  /* page transition */
+  opacity: 0;
+  transform: translateY(6px);
+  transition: all 0.4s ease;
+}
+
+body.loaded {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 /* subtle background */
@@ -25,6 +34,21 @@ body::before {
   inset: -20%;
   background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.04), transparent 60%);
   z-index: -1;
+}
+
+/* ===============================
+   SCROLL PROGRESS
+   =============================== */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: #fff;
+  z-index: 9999;
+  opacity: 0.6;
 }
 
 /* ===============================
@@ -55,13 +79,16 @@ header h1 {
 }
 
 /* ===============================
-   SECTIONS
+   SECTIONS (FLEXIBLE)
    =============================== */
 
 section {
-  margin: clamp(80px, 12vh, 120px) 0;
+  margin: 80px 0;
   text-align: center;
 }
+
+section:first-of-type { margin-top: 60px; }
+section:last-of-type { margin-bottom: 60px; }
 
 section p {
   opacity: 0.85;
@@ -80,6 +107,63 @@ section p {
   height: 1px;
   margin: 40px auto;
   background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
+}
+
+/* ===============================
+   NAV (MINIMAL + ACTIVE)
+   =============================== */
+
+.nav-minimal {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 40px 0;
+}
+
+.nav-minimal a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 14px;
+  transition: 0.2s ease;
+}
+
+.nav-minimal a:hover { color: #fff; }
+
+.nav-minimal a.active {
+  color: #fff;
+  position: relative;
+}
+
+.nav-minimal a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1px;
+  background: #fff;
+  opacity: 0.6;
+}
+
+/* ===============================
+   INDEX LINKS (BUTTON STYLE)
+   =============================== */
+
+.index-links a {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  background: rgba(255,255,255,0.04);
+  transition: 0.2s ease;
+}
+
+.index-links a:hover {
+  background: rgba(255,255,255,0.08);
 }
 
 /* ===============================
@@ -130,13 +214,12 @@ section p {
   background: #101012;
   border-radius: 12px;
   padding: 14px;
-  min-height: 420px; /* 🔥 prevents shrinking */
+  min-height: 380px;
+  max-height: 500px;
   border: 1px solid rgba(255,255,255,0.06);
 }
 
-.chat-area.dimmed {
-  opacity: 0.35;
-}
+.chat-area.dimmed { opacity: 0.35; }
 
 /* ===============================
    CHAT BOX
@@ -148,7 +231,6 @@ section p {
   flex-direction: column;
   gap: 10px;
   overflow-y: auto;
-  scroll-behavior: smooth;
 }
 
 /* ===============================
@@ -174,17 +256,13 @@ section p {
   background: #1a1a1a;
 }
 
-/* label */
 .msg-label {
   font-size: 10px;
   opacity: 0.5;
   margin-bottom: 4px;
 }
 
-/* ===============================
-   ANIMATION
-   =============================== */
-
+/* animation */
 .fade-in-up {
   animation: slideUp 0.4s ease;
 }
@@ -205,10 +283,6 @@ section p {
   flex-direction: column;
   gap: 10px;
 }
-
-/* ===============================
-   OPTION BUTTON
-   =============================== */
 
 .option-btn {
   padding: 12px 14px;
@@ -236,7 +310,6 @@ section p {
   margin-top: 12px;
 }
 
-/* input */
 .input-area input {
   flex: 1;
   padding: 12px 14px;
@@ -247,7 +320,6 @@ section p {
   outline: none;
 }
 
-/* send button */
 .input-area button {
   padding: 12px 18px;
   border-radius: 10px;
@@ -258,13 +330,8 @@ section p {
   transition: all 0.2s ease;
 }
 
-.input-area button:hover {
-  transform: translateY(-1px);
-}
-
-.input-area button:active {
-  transform: scale(0.96);
-}
+.input-area button:hover { transform: translateY(-1px); }
+.input-area button:active { transform: scale(0.96); }
 
 /* ===============================
    GHOST CURSOR
