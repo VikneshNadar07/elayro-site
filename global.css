@@ -1,316 +1,272 @@
-/* ===============================
-   RESET + BASE
-   =============================== */
+document.addEventListener("DOMContentLoaded", () => {
 
-* { box-sizing: border-box; }
+  const chatBox = document.getElementById("chatBox");
+  const narration = document.getElementById("narration");
+  const clientTabs = document.querySelectorAll(".client");
+  const optionsPanel = document.getElementById("optionsPanel");
+  const input = document.getElementById("userInput");
+  const sendBtn = document.getElementById("sendBtn");
 
-html { scroll-behavior: smooth; }
+  if (!chatBox || !narration || !optionsPanel) return;
 
-body {
-  margin: 0;
-  font-family: Inter, -apple-system, sans-serif;
-  background: #0b0b0c;
-  color: #f5f5f7;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  -webkit-font-smoothing: antialiased;
-}
+  let activeClient = 0;
 
-/* ===============================
-   BACKGROUND
-   =============================== */
+  const wait = (t) => new Promise(res => setTimeout(res, t));
+  const readTime = (t) => Math.max(1200, t.length * 35);
+  const thinkTime = () => 1600 + Math.random() * 400;
 
-body::before {
-  content: "";
-  position: fixed;
-  inset: -20%;
-  background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.04), transparent 60%);
-  z-index: -1;
-}
+  /* =========================
+     GHOST CURSOR
+     ========================= */
 
-/* ===============================
-   HEADER
-   =============================== */
+  const ghostCursor = document.createElement("div");
+  ghostCursor.className = "ghost-cursor";
+  document.body.appendChild(ghostCursor);
 
-header {
-  text-align: center;
-  margin-top: clamp(70px, 10vh, 120px);
-}
-
-header h1 {
-  font-size: clamp(32px, 4vw, 48px);
-  font-weight: 600;
-  letter-spacing: -0.8px;
-  margin-bottom: 10px;
-  line-height: 1.1;
-}
-
-.punch { font-size: 18px; opacity: 0.9; }
-.hook { font-size: 16px; opacity: 0.65; max-width: 520px; margin: auto; }
-
-/* ===============================
-   CONTENT
-   =============================== */
-
-.content {
-  width: 100%;
-  max-width: 720px;
-  padding: 0 20px;
-}
-
-/* ===============================
-   SECTIONS
-   =============================== */
-
-section {
-  width: 100%;
-  margin: clamp(80px, 11vh, 130px) 0;
-  text-align: center;
-}
-
-section h2 {
-  font-size: clamp(22px, 2.5vw, 28px);
-  font-weight: 500;
-  margin-bottom: 16px;
-}
-
-section p {
-  font-size: 16px;
-  line-height: 1.75;
-  max-width: 540px;
-  margin: 12px auto;
-  opacity: 0.85;
-}
-
-/* ===============================
-   DIVIDER
-   =============================== */
-
-.section-divider {
-  width: 100%;
-  max-width: 520px;
-  height: 1px;
-  margin: 40px auto;
-  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
-}
-
-/* ===============================
-   DEMO CONTAINER
-   =============================== */
-
-.demo-container {
-  max-width: 700px;
-  margin: 40px auto;
-  padding: 18px;
-  border-radius: 14px;
-  background: #0e0e0f;
-  border: 1px solid rgba(255,255,255,0.05);
-  transition: 0.3s ease;
-}
-
-/* ===============================
-   CLIENT TABS
-   =============================== */
-
-.clients {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  margin-bottom: 18px;
-}
-
-.client {
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.05);
-  font-size: 13px;
-  border: 1px solid rgba(255,255,255,0.08);
-  opacity: 0.7;
-}
-
-.client.active {
-  background: #fff;
-  color: #000;
-  opacity: 1;
-  transform: scale(1.05);
-}
-
-/* ===============================
-   CHAT AREA
-   =============================== */
-
-.chat-area {
-  position: relative;
-  z-index: 1;
-  padding: 14px;
-  border-radius: 12px;
-  background: #101012;
-  border: 1px solid rgba(255,255,255,0.06);
-  min-height: 380px;
-  display: flex;
-  flex-direction: column;
-}
-
-.chat-area.dimmed {
-  opacity: 0.35;
-}
-
-/* ===============================
-   CHAT BOX
-   =============================== */
-
-.chat-box {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  min-height: 280px;
-  max-height: 340px;
-  overflow-y: auto;
-  scroll-behavior: smooth;
-  contain: layout paint;
-}
-
-/* ===============================
-   MESSAGE
-   =============================== */
-
-.message {
-  max-width: 75%;
-  padding: 10px 14px;
-  border-radius: 14px;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.message.system {
-  align-self: flex-start;
-  background: #1a1a1a;
-  border: 1px solid rgba(255,255,255,0.06);
-}
-
-.message.user {
-  align-self: flex-end;
-  background: #fff;
-  color: #000;
-}
-
-/* ===============================
-   ANIMATION
-   =============================== */
-
-.fade-in-up {
-  animation: slideUpUltra 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@keyframes slideUpUltra {
-  from { opacity: 0; transform: translateY(18px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ===============================
-   OPTIONS PANEL (FIXED 🔥)
-   =============================== */
-
-.options-panel {
-  position: fixed;
-  bottom: 20px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: calc(100% - 40px);
-  max-width: 640px;
-
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-
-  padding: 10px;
-  border-radius: 16px;
-
-  background: rgba(20,20,20,0.55);
-  backdrop-filter: blur(18px);
-
-  border: 1px solid rgba(255,255,255,0.08);
-  z-index: 20;
-}
-
-/* mobile fix */
-@media (max-width: 480px) {
-  .options-panel {
-    width: calc(100% - 20px);
-    bottom: 12px;
+  function moveTo(el) {
+    const r = el.getBoundingClientRect();
+    ghostCursor.style.opacity = "1";
+    ghostCursor.style.left = r.left + r.width / 2 + "px";
+    ghostCursor.style.top = r.top + r.height / 2 + "px";
   }
-}
 
-/* ===============================
-   OPTION BUTTON
-   =============================== */
+  function clickCursor() {
+    ghostCursor.style.transform = "translate(-50%, -50%) scale(0.7)";
+    setTimeout(() => {
+      ghostCursor.style.transform = "translate(-50%, -50%) scale(1)";
+    }, 100);
+  }
 
-.option-btn {
-  padding: 14px 16px;
-  border-radius: 12px;
-  text-align: left;
+  function hideCursor() {
+    setTimeout(() => ghostCursor.style.opacity = "0", 250);
+  }
 
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  async function hesitate() {
+    await wait(200 + Math.random() * 200);
+  }
 
-  transition: all 0.25s ease;
-}
+  /* =========================
+     UI HELPERS
+     ========================= */
 
-.option-btn.selected {
-  background: #fff;
-  color: #000;
-  transform: scale(0.97);
-}
+  function updateTabs() {
+    clientTabs.forEach((t, i) =>
+      t.classList.toggle("active", i === activeClient)
+    );
+  }
 
-/* ===============================
-   GHOST CURSOR
-   =============================== */
+  function clearChat() {
+    chatBox.innerHTML = "";
+  }
 
-.ghost-cursor {
-  position: fixed;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  background: #fff;
-  opacity: 0;
-  pointer-events: none;
-  transform: translate(-50%, -50%);
-  transition: 
-    opacity 0.25s ease,
-    transform 0.15s ease,
-    left 0.25s ease,
-    top 0.25s ease;
-  z-index: 999;
-}
+  function addMessage(text, type) {
+    const div = document.createElement("div");
+    div.className = `message ${type} fade-in-up`;
 
-/* ===============================
-   SCROLL BUTTON
-   =============================== */
+    if (type === "system") {
+      const label = document.createElement("div");
+      label.className = "msg-label";
+      label.innerText = "Outflow";
 
-.scroll-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  border: none;
-  opacity: 0;
-  backdrop-filter: blur(6px);
-}
+      const content = document.createElement("div");
+      content.innerText = text;
 
-/* ===============================
-   FOOTER
-   =============================== */
+      div.appendChild(label);
+      div.appendChild(content);
+    } else {
+      div.innerText = text;
+    }
 
-.footer-global {
-  margin-top: auto;
-  padding: 40px;
-  text-align: center;
-  font-size: 13px;
-  opacity: 0.6;
-}
+    chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  function showTyping() {
+    const div = document.createElement("div");
+    div.className = "message system typing";
+    div.innerHTML = `<span></span><span></span><span></span>`;
+    chatBox.appendChild(div);
+  }
+
+  function removeTyping() {
+    const t = document.querySelector(".typing");
+    if (t) t.remove();
+  }
+
+  /* =========================
+     INPUT SIMULATION
+     ========================= */
+
+  async function typeInput(text) {
+    input.value = "";
+    for (let i = 0; i < text.length; i++) {
+      input.value += text[i];
+      await wait(20 + Math.random() * 30);
+    }
+  }
+
+  async function simulateUser(text) {
+    moveTo(input);
+    await wait(400);
+    clickCursor();
+
+    await wait(200);
+    await typeInput(text);
+
+    await wait(300);
+
+    moveTo(sendBtn);
+    await wait(400);
+    clickCursor();
+
+    await wait(200);
+
+    input.value = "";
+    addMessage(text, "user");
+
+    hideCursor();
+  }
+
+  /* =========================
+     OPTIONS
+     ========================= */
+
+  async function showOptions(list, autoIndex = 0) {
+
+    optionsPanel.innerHTML = "";
+    const chatArea = document.querySelector(".chat-area");
+    chatArea.classList.add("dimmed");
+
+    let buttons = [];
+
+    list.forEach((text, i) => {
+      const btn = document.createElement("div");
+      btn.className = "option-btn";
+      btn.innerText = text;
+
+      setTimeout(() => optionsPanel.appendChild(btn), i * 120);
+      buttons.push(btn);
+    });
+
+    await wait(1500);
+
+    const selected = buttons[autoIndex];
+    if (!selected) return;
+
+    moveTo(selected);
+    await wait(300);
+
+    await hesitate();
+
+    clickCursor();
+    selected.classList.add("selected");
+
+    await wait(300);
+
+    hideCursor();
+    optionsPanel.innerHTML = "";
+    chatArea.classList.remove("dimmed");
+
+    // 🔥 FIXED: now LEFT side (system)
+    addMessage(selected.innerText, "system");
+  }
+
+  /* =========================
+     DEMO FLOW
+     ========================= */
+
+  async function runDemo() {
+
+    activeClient = 0;
+    updateTabs();
+    clearChat();
+    narration.innerText = "User input received.";
+
+    let msg = "Client said they are busy this week";
+    await simulateUser(msg);
+    await wait(readTime(msg));
+
+    showTyping();
+    await wait(thinkTime());
+    removeTyping();
+
+    await showOptions([
+      "No worries — I’ll keep this simple for you.",
+      "All good, I can summarize this quickly.",
+      "Following up when it works for you.",
+      "Let me know when this becomes a priority."
+    ]);
+
+    await wait(2000);
+
+    msg = "Client said maybe next week";
+    await simulateUser(msg);
+    await wait(readTime(msg));
+
+    showTyping();
+    await wait(thinkTime());
+    removeTyping();
+
+    await showOptions([
+      "Sure — I’ll follow up early next week.",
+      "Works — I’ll check back in then.",
+      "I’ll keep this ready for you.",
+      "Let me know if anything changes."
+    ]);
+
+    await wait(2500);
+
+    activeClient = 1;
+    updateTabs();
+    clearChat();
+    narration.innerText = "Switching client...";
+
+    msg = "Client asked about pricing";
+    await simulateUser(msg);
+    await wait(readTime(msg));
+
+    showTyping();
+    await wait(thinkTime());
+    removeTyping();
+
+    await showOptions([
+      "Happy to break this down based on your needs.",
+      "I can share a quick cost overview.",
+      "Let me know if you want full details.",
+      "We can customize based on your budget."
+    ]);
+
+    await wait(2500);
+
+    activeClient = 0;
+    updateTabs();
+    clearChat();
+    narration.innerText = "Continuing...";
+
+    msg = "Client said let's proceed";
+    await simulateUser(msg);
+    await wait(readTime(msg));
+
+    showTyping();
+    await wait(thinkTime());
+    removeTyping();
+
+    await showOptions([
+      "Great — I’ll finalize everything.",
+      "Perfect — I’ll get started.",
+      "Moving ahead with this.",
+      "Let’s begin."
+    ]);
+
+    await wait(1000);
+    addMessage("Outcome achieved.", "system");
+
+    await wait(3000);
+    runDemo();
+  }
+
+  narration.innerText = "Live demo — Outflow in action.";
+  updateTabs();
+  runDemo();
+
+});
