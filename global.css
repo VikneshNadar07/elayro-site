@@ -694,3 +694,70 @@ a::after {
 .response-pill {
   align-self: stretch;
 }
+/* ===============================
+   DEMO MODE (FINAL LOCK)
+   =============================== */
+
+/* disable all interaction */
+.input-area,
+.response-pill,
+.client {
+  pointer-events: none !important;
+  cursor: default !important;
+}
+
+/* remove hover effects completely */
+.response-pill:hover,
+.client:hover,
+.reset-btn:hover {
+  background: inherit !important;
+  color: inherit !important;
+}
+
+/* slightly dim response options (non-clickable feel) */
+.response-pill {
+  opacity: 0.85;
+}
+
+/* narration more subtle (feels like system thinking) */
+.narration {
+  opacity: 0.5;
+}
+
+/* hide reset button completely */
+#resetDemo {
+  display: none !important;
+}
+
+/* remove input visually (demo mode) */
+.input-area {
+  display: none !important;
+}
+
+/* soften client tabs (no click feel) */
+.client {
+  opacity: 0.7;
+}
+
+.client.active {
+  opacity: 1;
+}
+
+/* ===============================
+   DEMO FOCUS (CINEMATIC FEEL)
+   =============================== */
+
+.demo-container {
+  border: 1px solid rgba(255,255,255,0.05);
+  background: #0e0e0f;
+}
+
+/* subtle fade feel */
+.chat-area {
+  background: #101012;
+}
+
+/* typing animation more subtle */
+.typing span {
+  background: #666;
+}
