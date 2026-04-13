@@ -503,7 +503,48 @@ section:not(:first-child) {
 .response-pill:hover {
   background: rgba(255,255,255,0.12);
 }
+/* ===============================
+   RESPONSE INTELLIGENCE UI
+   =============================== */
 
+.response-pill {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 10px 12px;
+}
+
+.response-meta {
+  font-size: 11px;
+  opacity: 0.6;
+  display: flex;
+  justify-content: space-between;
+}
+
+.badge {
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-size: 10px;
+}
+
+.badge.best {
+  background: #1f3d1f;
+  color: #6eff6e;
+}
+
+.badge.safe {
+  background: #2a2a2a;
+  color: #ccc;
+}
+
+.badge.fallback {
+  background: #3a1f1f;
+  color: #ff7b7b;
+}
+
+.conf.high { color: #6eff6e; }
+.conf.medium { color: #ffd66e; }
+.conf.low { color: #ff7b7b; }
 /* ===============================
    MOBILE
    =============================== */
