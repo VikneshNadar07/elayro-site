@@ -92,15 +92,16 @@
 
     <!-- CLIENT TABS -->
     <div class="clients">
-      <div class="client active">Client 1</div>
-      <div class="client">Client 2</div>
+      <div class="client active" data-client="0">Client 1</div>
+      <div class="client" data-client="1">Client 2</div>
       <div class="client add">+</div>
     </div>
 
     <!-- CHAT -->
     <div class="chat-area">
 
-      <!-- narration removed -->
+      <!-- 🔥 SYSTEM STATUS (REQUIRED) -->
+      <div class="system-status" id="systemStatus"></div>
 
       <div class="chat-box" id="chatBox"></div>
 
@@ -134,7 +135,7 @@
 
 <div class="section-divider faq-divider"></div>
 
-<!-- NAV (GLOBAL AUTO-HIDE READY) -->
+<!-- NAV -->
 <nav class="nav-minimal">
   <a href="index.html" data-page="home">Home</a>
   <a href="outflow.html" data-page="outflow">Outflow</a>
