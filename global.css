@@ -1,272 +1,237 @@
-document.addEventListener("DOMContentLoaded", () => {
-
-  const chatBox = document.getElementById("chatBox");
-  const narration = document.getElementById("narration");
-  const clientTabs = document.querySelectorAll(".client");
-  const optionsPanel = document.getElementById("optionsPanel");
-  const input = document.getElementById("userInput");
-  const sendBtn = document.getElementById("sendBtn");
-
-  if (!chatBox || !narration || !optionsPanel) return;
-
-  let activeClient = 0;
-
-  const wait = (t) => new Promise(res => setTimeout(res, t));
-  const readTime = (t) => Math.max(1200, t.length * 35);
-  const thinkTime = () => 1600 + Math.random() * 400;
-
-  /* =========================
-     GHOST CURSOR
-     ========================= */
-
-  const ghostCursor = document.createElement("div");
-  ghostCursor.className = "ghost-cursor";
-  document.body.appendChild(ghostCursor);
-
-  function moveTo(el) {
-    const r = el.getBoundingClientRect();
-    ghostCursor.style.opacity = "1";
-    ghostCursor.style.left = r.left + r.width / 2 + "px";
-    ghostCursor.style.top = r.top + r.height / 2 + "px";
-  }
-
-  function clickCursor() {
-    ghostCursor.style.transform = "translate(-50%, -50%) scale(0.7)";
-    setTimeout(() => {
-      ghostCursor.style.transform = "translate(-50%, -50%) scale(1)";
-    }, 100);
-  }
-
-  function hideCursor() {
-    setTimeout(() => ghostCursor.style.opacity = "0", 250);
-  }
-
-  async function hesitate() {
-    await wait(200 + Math.random() * 200);
-  }
-
-  /* =========================
-     UI HELPERS
-     ========================= */
-
-  function updateTabs() {
-    clientTabs.forEach((t, i) =>
-      t.classList.toggle("active", i === activeClient)
-    );
-  }
-
-  function clearChat() {
-    chatBox.innerHTML = "";
-  }
-
-  function addMessage(text, type) {
-    const div = document.createElement("div");
-    div.className = `message ${type} fade-in-up`;
-
-    if (type === "system") {
-      const label = document.createElement("div");
-      label.className = "msg-label";
-      label.innerText = "Outflow";
-
-      const content = document.createElement("div");
-      content.innerText = text;
-
-      div.appendChild(label);
-      div.appendChild(content);
-    } else {
-      div.innerText = text;
-    }
-
-    chatBox.appendChild(div);
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  function showTyping() {
-    const div = document.createElement("div");
-    div.className = "message system typing";
-    div.innerHTML = `<span></span><span></span><span></span>`;
-    chatBox.appendChild(div);
-  }
-
-  function removeTyping() {
-    const t = document.querySelector(".typing");
-    if (t) t.remove();
-  }
-
-  /* =========================
-     INPUT SIMULATION
-     ========================= */
-
-  async function typeInput(text) {
-    input.value = "";
-    for (let i = 0; i < text.length; i++) {
-      input.value += text[i];
-      await wait(20 + Math.random() * 30);
-    }
-  }
-
-  async function simulateUser(text) {
-    moveTo(input);
-    await wait(400);
-    clickCursor();
-
-    await wait(200);
-    await typeInput(text);
-
-    await wait(300);
-
-    moveTo(sendBtn);
-    await wait(400);
-    clickCursor();
-
-    await wait(200);
-
-    input.value = "";
-    addMessage(text, "user");
-
-    hideCursor();
-  }
-
-  /* =========================
-     OPTIONS
-     ========================= */
-
-  async function showOptions(list, autoIndex = 0) {
-
-    optionsPanel.innerHTML = "";
-    const chatArea = document.querySelector(".chat-area");
-    chatArea.classList.add("dimmed");
-
-    let buttons = [];
-
-    list.forEach((text, i) => {
-      const btn = document.createElement("div");
-      btn.className = "option-btn";
-      btn.innerText = text;
-
-      setTimeout(() => optionsPanel.appendChild(btn), i * 120);
-      buttons.push(btn);
-    });
-
-    await wait(1500);
-
-    const selected = buttons[autoIndex];
-    if (!selected) return;
-
-    moveTo(selected);
-    await wait(300);
-
-    await hesitate();
-
-    clickCursor();
-    selected.classList.add("selected");
-
-    await wait(300);
-
-    hideCursor();
-    optionsPanel.innerHTML = "";
-    chatArea.classList.remove("dimmed");
-
-    // 🔥 FIXED: now LEFT side (system)
-    addMessage(selected.innerText, "system");
-  }
-
-  /* =========================
-     DEMO FLOW
-     ========================= */
-
-  async function runDemo() {
-
-    activeClient = 0;
-    updateTabs();
-    clearChat();
-    narration.innerText = "User input received.";
-
-    let msg = "Client said they are busy this week";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    showTyping();
-    await wait(thinkTime());
-    removeTyping();
-
-    await showOptions([
-      "No worries — I’ll keep this simple for you.",
-      "All good, I can summarize this quickly.",
-      "Following up when it works for you.",
-      "Let me know when this becomes a priority."
-    ]);
-
-    await wait(2000);
-
-    msg = "Client said maybe next week";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    showTyping();
-    await wait(thinkTime());
-    removeTyping();
-
-    await showOptions([
-      "Sure — I’ll follow up early next week.",
-      "Works — I’ll check back in then.",
-      "I’ll keep this ready for you.",
-      "Let me know if anything changes."
-    ]);
-
-    await wait(2500);
-
-    activeClient = 1;
-    updateTabs();
-    clearChat();
-    narration.innerText = "Switching client...";
-
-    msg = "Client asked about pricing";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    showTyping();
-    await wait(thinkTime());
-    removeTyping();
-
-    await showOptions([
-      "Happy to break this down based on your needs.",
-      "I can share a quick cost overview.",
-      "Let me know if you want full details.",
-      "We can customize based on your budget."
-    ]);
-
-    await wait(2500);
-
-    activeClient = 0;
-    updateTabs();
-    clearChat();
-    narration.innerText = "Continuing...";
-
-    msg = "Client said let's proceed";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    showTyping();
-    await wait(thinkTime());
-    removeTyping();
-
-    await showOptions([
-      "Great — I’ll finalize everything.",
-      "Perfect — I’ll get started.",
-      "Moving ahead with this.",
-      "Let’s begin."
-    ]);
-
-    await wait(1000);
-    addMessage("Outcome achieved.", "system");
-
-    await wait(3000);
-    runDemo();
-  }
-
-  narration.innerText = "Live demo — Outflow in action.";
-  updateTabs();
-  runDemo();
-
-});
+/* ===============================
+   RESET + BASE
+   =============================== */
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Inter, -apple-system, sans-serif;
+  background: #0b0b0c;
+  color: #f5f5f7;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* ===============================
+   HEADER
+   =============================== */
+
+header {
+  text-align: center;
+  margin-top: 100px;
+}
+
+header h1 {
+  font-size: 42px;
+  margin-bottom: 10px;
+}
+
+.punch { opacity: 0.9; }
+.hook { opacity: 0.6; }
+
+/* ===============================
+   CONTENT
+   =============================== */
+
+.content {
+  width: 100%;
+  max-width: 720px;
+  padding: 0 20px;
+}
+
+/* ===============================
+   SECTION
+   =============================== */
+
+section {
+  margin: 100px 0;
+  text-align: center;
+}
+
+section p {
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* ===============================
+   DEMO CONTAINER
+   =============================== */
+
+.demo-container {
+  margin-top: 40px;
+  padding: 16px;
+  border-radius: 14px;
+  background: #0e0e0f;
+  border: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ===============================
+   CLIENT TABS
+   =============================== */
+
+.clients {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+
+.client {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.05);
+  font-size: 12px;
+  opacity: 0.7;
+}
+
+.client.active {
+  background: #fff;
+  color: #000;
+  opacity: 1;
+}
+
+/* ===============================
+   CHAT AREA
+   =============================== */
+
+.chat-area {
+  display: flex;
+  flex-direction: column;
+  background: #101012;
+  border-radius: 12px;
+  padding: 14px;
+  min-height: 400px; /* 🔥 fixed height feel */
+}
+
+/* ===============================
+   CHAT BOX
+   =============================== */
+
+.chat-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+}
+
+/* ===============================
+   MESSAGE
+   =============================== */
+
+.message {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #fff;
+  color: #000;
+}
+
+.message.system {
+  align-self: flex-start;
+  background: #1a1a1a;
+}
+
+/* Outflow label */
+.msg-label {
+  font-size: 10px;
+  opacity: 0.5;
+  margin-bottom: 4px;
+}
+
+/* ===============================
+   OPTIONS (INSIDE CHAT)
+   =============================== */
+
+.options-panel {
+  margin-top: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.option-btn {
+  padding: 12px;
+  border-radius: 10px;
+  background: #141414;
+  border: 1px solid rgba(255,255,255,0.06);
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.option-btn.selected {
+  background: #fff;
+  color: #000;
+}
+
+/* ===============================
+   INPUT AREA
+   =============================== */
+
+.input-area {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+/* input */
+.input-area input {
+  flex: 1;
+  padding: 12px;
+  border-radius: 10px;
+  background: #0f0f10;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
+}
+
+/* 🔥 FINAL PREMIUM SEND BUTTON */
+.input-area button {
+  padding: 12px 16px;
+  border-radius: 10px;
+  border: none;
+
+  background: linear-gradient(#fff, #e6e6e6);
+  color: #000;
+
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.input-area button:active {
+  transform: scale(0.96);
+}
+
+/* ===============================
+   GHOST CURSOR
+   =============================== */
+
+.ghost-cursor {
+  position: fixed;
+  width: 10px;
+  height: 10px;
+  background: #fff;
+  border-radius: 50%;
+  pointer-events: none;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  z-index: 999;
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+
+.footer-global {
+  margin-top: auto;
+  padding: 40px;
+  opacity: 0.6;
+  text-align: center;
+}
