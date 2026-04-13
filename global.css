@@ -415,3 +415,143 @@ section {
     grid-template-columns: 1fr;
   }
 }
+
+/* ===============================
+   COLOR SYSTEM (SUBTLE HIERARCHY)
+   =============================== */
+
+:root {
+  --text-primary: #f5f5f7;
+  --text-secondary: #a1a1aa;
+  --text-tertiary: #71717a;
+
+  --border-subtle: rgba(255,255,255,0.06);
+  --bg-subtle: rgba(255,255,255,0.04);
+}
+
+/* ===============================
+   TEXT HIERARCHY
+   =============================== */
+
+body {
+  color: var(--text-primary);
+}
+
+/* secondary text */
+.hook,
+section p,
+.feature-desc {
+  color: var(--text-secondary);
+}
+
+/* tertiary */
+.narration {
+  color: var(--text-tertiary);
+}
+
+/* ===============================
+   HEADINGS CONSISTENCY
+   =============================== */
+
+header h1,
+section h2 {
+  font-weight: 500;
+}
+
+/* ===============================
+   FEATURE GRID ALIGNMENT
+   =============================== */
+
+.feature-item {
+  padding: 6px 8px;
+  border-radius: 8px;
+}
+
+.feature-item:hover {
+  background: var(--bg-subtle);
+}
+
+/* ===============================
+   BUTTON CONSISTENCY
+   =============================== */
+
+.index-links a,
+.nav-minimal a,
+.reset-btn {
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,0.03);
+  color: var(--text-secondary);
+}
+
+/* hover */
+.index-links a:hover,
+.nav-minimal a:hover,
+.reset-btn:hover {
+  background: rgba(255,255,255,0.08);
+  color: var(--text-primary);
+}
+
+/* ===============================
+   RESPONSE PILL BALANCE
+   =============================== */
+
+.response-pill {
+  border: 1px solid var(--border-subtle);
+  background: rgba(255,255,255,0.03);
+}
+
+.response-pill:hover {
+  background: rgba(255,255,255,0.07);
+}
+
+/* ===============================
+   CHAT CLEANUP
+   =============================== */
+
+.chat-area {
+  border: 1px solid var(--border-subtle);
+}
+
+.message.system {
+  border: 1px solid var(--border-subtle);
+}
+
+/* ===============================
+   LINK CLEANUP (REMOVE UNDERLINE EFFECT)
+   =============================== */
+
+a::after {
+  display: none !important;
+}
+
+/* ===============================
+   FOOTER CLEAN ALIGNMENT
+   =============================== */
+
+.footer-global {
+  color: var(--text-secondary);
+}
+
+.footer-global a {
+  color: var(--text-secondary);
+}
+
+.footer-global a:hover {
+  color: var(--text-primary);
+}
+
+/* ===============================
+   FINAL MICRO SPACING FIXES
+   =============================== */
+
+.clients {
+  margin-bottom: 18px;
+}
+
+.demo-footer {
+  margin-top: 18px;
+}
+
+.section-divider {
+  opacity: 0.6;
+}
