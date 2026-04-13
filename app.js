@@ -9,6 +9,15 @@ document.addEventListener("DOMContentLoaded", () => {
   let activeClient = 0;
 
   /* =========================
+     TIMING ENGINE (HUMAN)
+     ========================= */
+
+  const wait = (t) => new Promise(res => setTimeout(res, t));
+
+  const readTime = (text) => Math.max(1200, text.length * 35);
+  const thinkTime = () => 1600 + Math.random() * 400;
+
+  /* =========================
      TAB UI
      ========================= */
 
@@ -29,7 +38,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function addMessage(text, type) {
     const div = document.createElement("div");
-    div.className = `message ${type}`;
+    div.className = `message ${type} fade-in-up`;
     div.innerText = text;
     chatBox.appendChild(div);
     chatBox.scrollTop = chatBox.scrollHeight;
@@ -40,6 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
     div.className = "message system typing";
     div.innerHTML = `<span></span><span></span><span></span>`;
     chatBox.appendChild(div);
+    chatBox.scrollTop = chatBox.scrollHeight;
   }
 
   function removeTyping() {
@@ -48,135 +58,170 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   function showOptions(list) {
-    list.forEach(text => {
+    list.forEach((text, i) => {
       const div = document.createElement("div");
-      div.className = "response-pill";
+      div.className = "response-pill fade-in-up";
       div.innerText = text;
-      chatBox.appendChild(div);
+
+      setTimeout(() => {
+        chatBox.appendChild(div);
+        chatBox.scrollTop = chatBox.scrollHeight;
+      }, i * 220);
     });
   }
 
+  function selectOption(index) {
+    const options = document.querySelectorAll(".response-pill");
+    if (!options[index]) return;
+
+    options[index].classList.add("selected");
+
+    setTimeout(() => {
+      addMessage(options[index].innerText, "user");
+    }, 500);
+  }
+
   /* =========================
-     DEMO FLOW
+     DEMO FLOW (FINAL)
      ========================= */
 
-  function runDemo() {
-
-    clearChat();
+  async function runDemo() {
 
     /* ===== CLIENT 1 START ===== */
     activeClient = 0;
     updateTabs();
-    narration.innerText = "Analyzing conversation...";
+    clearChat();
+    narration.innerText = "User input received.";
 
-    setTimeout(() => {
-      addMessage("Client: Sorry, been busy this week", "system");
-    }, 500);
+    await wait(1200);
 
-    setTimeout(showTyping, 1200);
+    const msg1 = "Client said they are busy this week";
+    addMessage(msg1, "user");
 
-    setTimeout(() => {
-      removeTyping();
-      showOptions([
-        "No worries — I’ll keep this simple for you.",
-        "All good, I can summarize this quickly.",
-        "Following up when it works for you.",
-        "Let me know when this becomes a priority."
-      ]);
-    }, 2000);
+    await wait(readTime(msg1));
 
-    setTimeout(() => {
-      addMessage("No worries — I’ll keep this simple for you.", "user");
-    }, 3000);
+    narration.innerText = "Analyzing...";
+    showTyping();
+
+    await wait(thinkTime());
+    removeTyping();
+
+    const opt1 = [
+      "No worries — I’ll keep this simple for you.",
+      "All good, I can summarize this quickly.",
+      "Following up when it works for you.",
+      "Let me know when this becomes a priority."
+    ];
+
+    showOptions(opt1);
+
+    await wait(readTime(opt1[0]));
+    selectOption(0);
 
     /* ===== SWITCH CLIENT 2 ===== */
-    setTimeout(() => {
-      activeClient = 1;
-      updateTabs();
-      clearChat();
-      narration.innerText = "Switching client...";
-    }, 4200);
+    await wait(2500);
 
-    setTimeout(() => {
-      addMessage("Client: What’s the price?", "system");
-    }, 4800);
+    activeClient = 1;
+    updateTabs();
+    clearChat();
+    narration.innerText = "Switching client...";
 
-    setTimeout(showTyping, 5500);
+    await wait(1200);
 
-    setTimeout(() => {
-      removeTyping();
-      showOptions([
-        "Happy to break this down based on your needs.",
-        "I can share a quick cost overview for clarity.",
-        "Let me know if you want more details.",
-        "Take your time reviewing this."
-      ]);
-    }, 6300);
+    const msg2 = "Client asked about pricing";
+    addMessage(msg2, "user");
 
-    setTimeout(() => {
-      addMessage("Happy to break this down based on your needs.", "user");
-    }, 7200);
+    await wait(readTime(msg2));
+
+    narration.innerText = "Analyzing...";
+    showTyping();
+
+    await wait(thinkTime());
+    removeTyping();
+
+    const opt2 = [
+      "Happy to break this down based on your needs.",
+      "I can share a quick cost overview for clarity.",
+      "Let me know if you want more details.",
+      "Take your time reviewing this."
+    ];
+
+    showOptions(opt2);
+
+    await wait(readTime(opt2[0]));
+    selectOption(0);
 
     /* ===== BACK CLIENT 1 (CLOSE) ===== */
-    setTimeout(() => {
-      activeClient = 0;
-      updateTabs();
-      clearChat();
-      narration.innerText = "Continuing...";
-    }, 8500);
+    await wait(2500);
 
-    setTimeout(() => {
-      addMessage("Client: Sounds good, let's proceed", "system");
-    }, 9000);
+    activeClient = 0;
+    updateTabs();
+    clearChat();
+    narration.innerText = "Continuing conversation...";
 
-    setTimeout(showTyping, 9700);
+    await wait(1200);
 
-    setTimeout(() => {
-      removeTyping();
-      showOptions([
-        "Great — I’ll finalize everything and get started.",
-        "Perfect, I’ll move ahead with the next steps.",
-        "I’ll take this forward now.",
-        "Sounds good."
-      ]);
-    }, 10500);
+    const msg3 = "Client said let's proceed";
+    addMessage(msg3, "user");
 
-    setTimeout(() => {
-      addMessage("Great — I’ll finalize everything and get started.", "user");
-      addMessage("Client confirmed. Deal closed.", "system");
-    }, 11500);
+    await wait(readTime(msg3));
+
+    showTyping();
+    await wait(thinkTime());
+    removeTyping();
+
+    const opt3 = [
+      "Great — I’ll finalize everything and get started.",
+      "Perfect, I’ll move ahead with the next steps.",
+      "I’ll take this forward now.",
+      "Sounds good."
+    ];
+
+    showOptions(opt3);
+
+    await wait(readTime(opt3[0]));
+    selectOption(0);
+
+    await wait(1400);
+    addMessage("Outcome achieved.", "system");
 
     /* ===== CLIENT 2 (CLOSE) ===== */
-    setTimeout(() => {
-      activeClient = 1;
-      updateTabs();
-      clearChat();
-      narration.innerText = "Finalizing...";
-    }, 13000);
+    await wait(2500);
 
-    setTimeout(() => {
-      addMessage("Client: Okay, that works", "system");
-    }, 13500);
+    activeClient = 1;
+    updateTabs();
+    clearChat();
+    narration.innerText = "Finalizing...";
 
-    setTimeout(showTyping, 14200);
+    await wait(1200);
 
-    setTimeout(() => {
-      removeTyping();
-      showOptions([
-        "Perfect — I’ll proceed with this.",
-        "Great, I’ll move ahead now.",
-        "Sounds good, taking this forward.",
-        "All set."
-      ]);
-    }, 15000);
+    const msg4 = "Client said okay that works";
+    addMessage(msg4, "user");
 
-    setTimeout(() => {
-      addMessage("Perfect — I’ll proceed with this.", "user");
-      addMessage("Client confirmed. Deal closed.", "system");
-    }, 16000);
+    await wait(readTime(msg4));
+
+    showTyping();
+    await wait(thinkTime());
+    removeTyping();
+
+    const opt4 = [
+      "Perfect — I’ll proceed with this.",
+      "Great, I’ll move ahead now.",
+      "Sounds good, taking this forward.",
+      "All set."
+    ];
+
+    showOptions(opt4);
+
+    await wait(readTime(opt4[0]));
+    selectOption(0);
+
+    await wait(1400);
+    addMessage("Outcome achieved.", "system");
 
     /* ===== LOOP ===== */
-    setTimeout(runDemo, 18000);
+    await wait(3200);
+    runDemo();
   }
 
   /* =========================
