@@ -1,5 +1,5 @@
 /* ===============================
-   OUTFLOW FINAL DEMO (ADAPTIVE)
+   OUTFLOW FINAL DEMO (TRUE FINAL)
    =============================== */
 
 const chatBox = document.getElementById("chatBox");
@@ -9,11 +9,15 @@ const clientsUI = document.querySelectorAll(".client");
 if (chatBox) {
 
   let activeClient = 0;
+
   const progress = [0, 0];
+  const toneMemory = ["balanced", "balanced"];
+  const outcomeScore = [50, 50];
 
   const clients = [
     {
       outcome: "won",
+      personality: "fast",
       stages: [
         {
           label: "Analyzing situation...",
@@ -22,7 +26,6 @@ if (chatBox) {
           options: [
             { text: "Hey — just checking in, still interested?", type: "best", confidence: "high", reason: "Direct, low-pressure re-engagement" },
             { text: "Quick follow-up — want me to share next steps?", type: "safe", confidence: "medium", reason: "Adds value while following up" },
-            { text: "Should I send a short outline?", type: "safe", confidence: "medium", reason: "Soft entry into discussion" },
             { text: "Let me know if this is still relevant.", type: "fallback", confidence: "low", reason: "Passive, low engagement trigger" }
           ]
         },
@@ -31,32 +34,29 @@ if (chatBox) {
           system: "Client: 'Yes, just been busy.'",
           next: 2,
           options: [
-            { text: "No worries — I’ll keep this simple.", type: "best", confidence: "high", reason: "Reduces friction immediately" },
-            { text: "Totally understand, here’s the next step.", type: "safe", confidence: "medium", reason: "Moves forward with clarity" },
-            { text: "Let’s move forward when you're ready.", type: "safe", confidence: "medium", reason: "Keeps control but flexible" },
-            { text: "Here’s a quick breakdown.", type: "fallback", confidence: "low", reason: "Less personalized" }
+            { text: "No worries — I’ll keep this simple.", type: "best", confidence: "high", reason: "Reduces friction" },
+            { text: "Totally understand, here’s the next step.", type: "safe", confidence: "medium", reason: "Moves forward" },
+            { text: "Let’s move forward when you're ready.", type: "fallback", confidence: "low", reason: "Passive control" }
           ]
         },
         {
           label: "Plan shared",
-          system: "You shared a quick plan with the client.",
+          system: "You shared a quick plan.",
           next: 3,
           options: [
-            { text: "Here’s a simple plan to get started.", type: "best", confidence: "high", reason: "Clear and actionable" },
-            { text: "Sharing a quick outline for you.", type: "safe", confidence: "medium", reason: "Neutral delivery" },
-            { text: "Let me know your thoughts on this.", type: "safe", confidence: "medium", reason: "Invites feedback" },
-            { text: "This is a rough idea we can refine.", type: "fallback", confidence: "low", reason: "Less confidence signal" }
+            { text: "Here’s a simple plan to get started.", type: "best", confidence: "high", reason: "Clear direction" },
+            { text: "Sharing a quick outline for you.", type: "safe", confidence: "medium", reason: "Neutral tone" },
+            { text: "Let me know your thoughts.", type: "fallback", confidence: "low", reason: "Less control" }
           ]
         },
         {
           label: "Waiting for response",
-          system: "Client hasn’t responded after seeing the plan.",
-          next: [3, 4], // 🔁 loop or continue
+          system: "Client hasn’t responded.",
+          next: [3, 4],
           options: [
-            { text: "Just checking — had a chance to look at the plan?", type: "best", confidence: "high", reason: "Direct but polite follow-up" },
-            { text: "Let me know if you want me to adjust anything.", type: "safe", confidence: "medium", reason: "Shows flexibility" },
-            { text: "Happy to clarify anything if needed.", type: "safe", confidence: "medium", reason: "Supportive tone" },
-            { text: "Following up on the plan I shared.", type: "fallback", confidence: "low", reason: "Generic follow-up" }
+            { text: "Just checking — had a chance to look?", type: "best", confidence: "high", reason: "Direct follow-up" },
+            { text: "Happy to adjust anything if needed.", type: "safe", confidence: "medium", reason: "Flexible" },
+            { text: "Following up on the plan.", type: "fallback", confidence: "low", reason: "Generic" }
           ]
         },
         {
@@ -64,10 +64,8 @@ if (chatBox) {
           system: "Client: 'Looks good, let’s proceed.'",
           next: "end",
           options: [
-            { text: "Great — I’ll finalize and get started.", type: "best", confidence: "high", reason: "Confident close" },
-            { text: "Perfect, I’ll move ahead with this.", type: "safe", confidence: "medium", reason: "Smooth transition" },
-            { text: "Let’s lock this in and proceed.", type: "safe", confidence: "medium", reason: "Strong direction" },
-            { text: "Sounds good, moving forward.", type: "fallback", confidence: "low", reason: "Less decisive" }
+            { text: "Great — I’ll finalize and start.", type: "best", confidence: "high", reason: "Strong close" },
+            { text: "Perfect, I’ll move ahead.", type: "safe", confidence: "medium", reason: "Smooth" }
           ]
         }
       ],
@@ -76,49 +74,43 @@ if (chatBox) {
 
     {
       outcome: "lost",
+      personality: "hesitant",
       stages: [
         {
           label: "Analyzing situation...",
           system: "Client showed interest but went silent.",
           next: 1,
           options: [
-            { text: "Hey — just following up, still interested?", type: "best", confidence: "high", reason: "Clear re-engagement" },
-            { text: "Should I share a quick outline?", type: "safe", confidence: "medium", reason: "Value-first approach" },
-            { text: "Let me know if timing works.", type: "safe", confidence: "medium", reason: "Flexible approach" },
-            { text: "Happy to reconnect if needed.", type: "fallback", confidence: "low", reason: "Low urgency" }
+            { text: "Hey — just following up, still interested?", type: "best", confidence: "high", reason: "Re-engagement" },
+            { text: "Should I share a quick outline?", type: "safe", confidence: "medium", reason: "Value-first" },
+            { text: "Let me know if timing works.", type: "fallback", confidence: "low", reason: "Passive" }
           ]
         },
         {
           label: "Client responded",
-          system: "Client: 'Yes, you can share details.'",
+          system: "Client: 'Yes, share details.'",
           next: 2,
           options: [
-            { text: "Great — I’ll share a simple plan.", type: "best", confidence: "high", reason: "Moves forward efficiently" },
-            { text: "Perfect, sending an outline now.", type: "safe", confidence: "medium", reason: "Clear progression" },
-            { text: "I’ll keep it clear and quick for you.", type: "safe", confidence: "medium", reason: "Reduces friction" },
-            { text: "Sharing initial thoughts.", type: "fallback", confidence: "low", reason: "Less structured" }
+            { text: "Great — I’ll share a simple plan.", type: "best", confidence: "high", reason: "Forward motion" },
+            { text: "Sending outline now.", type: "safe", confidence: "medium", reason: "Clear" }
           ]
         },
         {
           label: "Plan shared",
-          system: "You shared a plan with the client.",
-          next: [2, 3], // 🔁 loop or move
+          system: "You shared a plan.",
+          next: [2, 3],
           options: [
-            { text: "Here’s the plan — let me know what you think.", type: "best", confidence: "high", reason: "Invites response" },
-            { text: "Sharing this for your review.", type: "safe", confidence: "medium", reason: "Neutral tone" },
-            { text: "Happy to tweak this based on your needs.", type: "safe", confidence: "medium", reason: "Flexible approach" },
-            { text: "Let me know if this works.", type: "fallback", confidence: "low", reason: "Passive" }
+            { text: "Here’s the plan — let me know.", type: "best", confidence: "high", reason: "Invites response" },
+            { text: "Happy to tweak this.", type: "safe", confidence: "medium", reason: "Flexible" }
           ]
         },
         {
           label: "Client response",
-          system: "Client: 'We decided to go with another option.'",
+          system: "Client: 'We chose another option.'",
           next: "end",
           options: [
-            { text: "Got it — appreciate you letting me know.", type: "best", confidence: "high", reason: "Professional closure" },
-            { text: "No problem at all, thanks for the update.", type: "safe", confidence: "medium", reason: "Maintains relationship" },
-            { text: "Totally understand, wishing you the best.", type: "safe", confidence: "medium", reason: "Positive exit" },
-            { text: "Thanks for considering.", type: "fallback", confidence: "low", reason: "Minimal response" }
+            { text: "Got it — appreciate the update.", type: "best", confidence: "high", reason: "Professional close" },
+            { text: "No problem, thanks for letting me know.", type: "safe", confidence: "medium", reason: "Respectful" }
           ]
         }
       ],
@@ -127,19 +119,25 @@ if (chatBox) {
   ];
 
   function showTyping() {
-    const typing = document.createElement("div");
-    typing.className = "typing";
+    const el = document.createElement("div");
+    el.className = "typing";
     for (let i = 0; i < 3; i++) {
       const dot = document.createElement("div");
       dot.className = "dot";
-      typing.appendChild(dot);
+      el.appendChild(dot);
     }
-    chatBox.appendChild(typing);
-    return typing;
+    chatBox.appendChild(el);
+    return el;
   }
 
   function removeTyping(el) {
     if (el) el.remove();
+  }
+
+  function getToneReason(tone) {
+    if (tone === "direct") return "Prioritizing decisive responses based on your choices.";
+    if (tone === "balanced") return "Maintaining balanced communication.";
+    if (tone === "passive") return "Using low-pressure responses.";
   }
 
   function showStage() {
@@ -147,6 +145,18 @@ if (chatBox) {
 
     const stage = clients[activeClient].stages[progress[activeClient]];
     narration.textContent = stage.label;
+
+    const prob = document.createElement("div");
+    prob.className = "prob-box";
+    prob.textContent = `Win Probability: ${outcomeScore[activeClient]}%`;
+    chatBox.appendChild(prob);
+
+    const tone = toneMemory[activeClient];
+
+    const toneBox = document.createElement("div");
+    toneBox.className = "tone-box";
+    toneBox.textContent = getToneReason(tone);
+    chatBox.appendChild(toneBox);
 
     const typing = showTyping();
 
@@ -158,59 +168,44 @@ if (chatBox) {
       msg.textContent = stage.system;
       chatBox.appendChild(msg);
 
-      setTimeout(() => {
-        const container = document.createElement("div");
-        container.className = "response-options";
+      const container = document.createElement("div");
+      container.className = "response-options";
 
-        stage.options.forEach(opt => {
-          const pill = document.createElement("div");
-          pill.className = "response-pill";
+      let sorted = [...stage.options];
 
-          const text = document.createElement("div");
-          text.textContent = opt.text;
+      if (tone === "direct") sorted.sort((a,b)=>a.type==="best"?-1:1);
+      if (tone === "passive") sorted.sort((a,b)=>a.type==="fallback"?-1:1);
 
-          const meta = document.createElement("div");
-          meta.className = "response-meta";
+      sorted.forEach(opt => {
+        const pill = document.createElement("div");
+        pill.className = "response-pill";
+        pill.innerHTML = `${opt.text}<div class="reason">${opt.reason}</div>`;
+        pill.onclick = () => handleSelection(opt);
+        container.appendChild(pill);
+      });
 
-          const badge = document.createElement("span");
-          badge.className = `badge ${opt.type}`;
-          badge.textContent = opt.type.toUpperCase();
+      chatBox.appendChild(container);
 
-          const conf = document.createElement("span");
-          conf.className = `conf ${opt.confidence}`;
-          conf.textContent = opt.confidence;
-
-          const reason = document.createElement("div");
-          reason.className = "reason";
-          reason.textContent = opt.reason;
-
-          meta.appendChild(badge);
-          meta.appendChild(conf);
-
-          pill.appendChild(text);
-          pill.appendChild(meta);
-          pill.appendChild(reason);
-
-          pill.onclick = () => handleSelection(opt.text);
-
-          container.appendChild(pill);
-        });
-
-        chatBox.appendChild(container);
-      }, 600);
-
-    }, 900);
+    }, 800);
   }
 
-  function handleSelection(text) {
+  function handleSelection(opt) {
     chatBox.innerHTML = "";
 
     const userMsg = document.createElement("div");
     userMsg.className = "message user";
-    userMsg.textContent = text;
+    userMsg.textContent = opt.text;
     chatBox.appendChild(userMsg);
 
-    narration.textContent = "Thinking...";
+    if (opt.type === "best") toneMemory[activeClient] = "direct";
+    if (opt.type === "safe") toneMemory[activeClient] = "balanced";
+    if (opt.type === "fallback") toneMemory[activeClient] = "passive";
+
+    if (opt.type === "best") outcomeScore[activeClient] += 10;
+    if (opt.type === "safe") outcomeScore[activeClient] += 4;
+    if (opt.type === "fallback") outcomeScore[activeClient] -= 6;
+
+    outcomeScore[activeClient] = Math.max(0, Math.min(100, outcomeScore[activeClient]));
 
     const typing = showTyping();
 
@@ -219,9 +214,15 @@ if (chatBox) {
 
       const stage = clients[activeClient].stages[progress[activeClient]];
 
+      if (!stage.loopCount) stage.loopCount = 0;
+
       if (Array.isArray(stage.next)) {
-        progress[activeClient] =
-          stage.next[Math.floor(Math.random() * stage.next.length)];
+        if (stage.loopCount < (clients[activeClient].personality === "hesitant" ? 2 : 1)) {
+          progress[activeClient] = stage.next[0];
+          stage.loopCount++;
+        } else {
+          progress[activeClient] = stage.next[1];
+        }
       } else if (stage.next === "end") {
         progress[activeClient] = "end";
       } else {
@@ -229,54 +230,26 @@ if (chatBox) {
       }
 
       if (progress[activeClient] === "end") {
-
         chatBox.innerHTML = "";
-        const finalTyping = showTyping();
-
-        setTimeout(() => {
-          removeTyping(finalTyping);
-
-          const finalMsg = document.createElement("div");
-          finalMsg.className = "message system";
-          finalMsg.textContent = clients[activeClient].final;
-
-          chatBox.appendChild(finalMsg);
-
-          narration.textContent =
-            clients[activeClient].outcome === "won"
-              ? "Outcome: Success"
-              : "Outcome: Closed (External)";
-
-          setTimeout(() => {
-            activeClient = activeClient === 0 ? 1 : 0;
-            progress[activeClient] = 0;
-            updateClientUI();
-            showStage();
-          }, 4000);
-
-        }, 1000);
-
-      } else {
-        showStage();
+        const msg = document.createElement("div");
+        msg.className = "message system";
+        msg.textContent = clients[activeClient].final;
+        chatBox.appendChild(msg);
+        narration.textContent = "Outcome reached";
+        return;
       }
+
+      showStage();
 
     }, 1000);
   }
 
-  function updateClientUI() {
-    clientsUI.forEach((c, i) => {
-      c.classList.toggle("active", i === activeClient);
-    });
-  }
-
-  clientsUI.forEach((btn, index) => {
+  clientsUI.forEach((btn, i) => {
     btn.onclick = () => {
-      activeClient = index;
-      updateClientUI();
+      activeClient = i;
       showStage();
     };
   });
 
-  updateClientUI();
   showStage();
 }
