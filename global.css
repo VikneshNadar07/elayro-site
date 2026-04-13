@@ -405,6 +405,310 @@ section p {
   margin: 30px auto;
   opacity: 0.8;
 }
+
+/* ===============================
+   GLOBAL MOTION SYSTEM
+   =============================== */
+
+* {
+  transition: background 0.25s ease,
+              color 0.25s ease,
+              border 0.25s ease,
+              transform 0.2s ease,
+              box-shadow 0.25s ease;
+}
+
+/* ===============================
+   GLASS + DEPTH SYSTEM
+   =============================== */
+
+.demo-container,
+.chat-area,
+section {
+  backdrop-filter: blur(10px);
+}
+
+/* ===============================
+   SECTION CARD FEEL
+   =============================== */
+
+section {
+  padding: 20px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.015);
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+/* subtle hover lift */
+section:hover {
+  background: rgba(255,255,255,0.03);
+  transform: translateY(-2px);
+}
+
+/* ===============================
+   HERO ENHANCEMENT
+   =============================== */
+
+header h1 {
+  letter-spacing: -1px;
+}
+
+header:hover h1 {
+  transform: scale(1.02);
+}
+
+/* ===============================
+   PREMIUM DIVIDER
+   =============================== */
+
+.section-divider {
+  opacity: 0.7;
+}
+
+.section-divider::after {
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.4),
+    transparent
+  );
+}
+
+/* ===============================
+   BUTTON SYSTEM (ELITE)
+   =============================== */
+
+.index-links a,
+.nav-minimal a,
+.reset-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+/* glow layer */
+.index-links a::before,
+.nav-minimal a::before,
+.reset-btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background: radial-gradient(circle, rgba(255,255,255,0.15), transparent 70%);
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.index-links a:hover::before,
+.nav-minimal a:hover::before,
+.reset-btn:hover::before {
+  opacity: 1;
+}
+
+/* press feel */
+.index-links a:active,
+.nav-minimal a:active,
+.reset-btn:active {
+  transform: scale(0.94);
+}
+
+/* ===============================
+   RESPONSE PILLS (INSANE FEEL)
+   =============================== */
+
+.response-pill {
+  position: relative;
+  overflow: hidden;
+}
+
+/* hover lift + glow */
+.response-pill:hover {
+  transform: translateY(-3px) scale(1.01);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.5);
+}
+
+/* inner glow */
+.response-pill::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 12px;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.1), transparent 70%);
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.response-pill:hover::after {
+  opacity: 1;
+}
+
+/* ===============================
+   CLIENT TABS UPGRADE
+   =============================== */
+
+.client {
+  transition: all 0.25s ease;
+}
+
+.client:hover {
+  transform: translateY(-1px);
+  background: rgba(255,255,255,0.15);
+}
+
+.client.active {
+  box-shadow: 0 4px 14px rgba(255,255,255,0.2);
+}
+
+/* ===============================
+   CHAT SCROLL FEEL
+   =============================== */
+
+.chat-box {
+  scroll-behavior: smooth;
+}
+
+/* ===============================
+   FOOTER POLISH
+   =============================== */
+
+.footer-global {
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
+/* ===============================
+   MICRO INTERACTION (SUBTLE LIFE)
+   =============================== */
+
+@keyframes floatSubtle {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+
+.response-pill:hover {
+  animation: floatSubtle 2s ease infinite;
+}
+
+/* ===============================
+   MOBILE POLISH
+   =============================== */
+
+@media (max-width: 480px) {
+  section {
+    padding: 16px;
+  }
+
+  .response-pill {
+    font-size: 14px;
+  }
+}
+
+/* ===============================
+   CURSOR GLOW SYSTEM
+   =============================== */
+
+.cursor-glow {
+  position: fixed;
+  width: 220px;
+  height: 220px;
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255,255,255,0.12), transparent 70%);
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  mix-blend-mode: screen;
+  opacity: 0.6;
+}
+
+/* ===============================
+   PAGE TRANSITION (SMOOTH LOAD)
+   =============================== */
+
+body {
+  opacity: 0;
+  animation: pageFade 0.6s ease forwards;
+}
+
+@keyframes pageFade {
+  to { opacity: 1; }
+}
+
+/* ===============================
+   LINK TRANSITION FEEL
+   =============================== */
+
+a {
+  position: relative;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  width: 0%;
+  height: 1px;
+  background: rgba(255,255,255,0.4);
+  transition: 0.3s ease;
+  transform: translateX(-50%);
+}
+
+a:hover::after {
+  width: 60%;
+}
+
+/* ===============================
+   AI NARRATION EFFECT
+   =============================== */
+
+.narration {
+  letter-spacing: 0.3px;
+}
+
+/* subtle pulse */
+.narration::after {
+  content: "...";
+  animation: dots 1.5s infinite;
+}
+
+@keyframes dots {
+  0% { opacity: 0.2; }
+  50% { opacity: 1; }
+  100% { opacity: 0.2; }
+}
+
+/* ===============================
+   CHAT SYSTEM FEEL
+   =============================== */
+
+.message.system {
+  animation: fadeSlideUp 0.4s ease;
+}
+
+.response-pill {
+  animation: fadeSlideUp 0.4s ease;
+}
+
+/* ===============================
+   BUTTON HOVER INTENSITY BOOST
+   =============================== */
+
+.index-links a:hover,
+.nav-minimal a:hover,
+.reset-btn:hover {
+  box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+}
+
+/* ===============================
+   SUBTLE GLOBAL GLOW
+   =============================== */
+
+body::after {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle at center, rgba(255,255,255,0.03), transparent 70%);
+  pointer-events: none;
+  z-index: -1;
+}
 /* ===============================
    MOBILE
    =============================== */
