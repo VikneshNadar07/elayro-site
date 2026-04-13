@@ -15,6 +15,7 @@ body {
   flex-direction: column;
   align-items: center;
   min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
 }
 
 /* ===============================
@@ -43,6 +44,7 @@ header h1 {
   font-weight: 600;
   letter-spacing: -0.8px;
   margin-bottom: 10px;
+  line-height: 1.1;
 }
 
 .punch { font-size: 18px; opacity: 0.9; }
@@ -59,25 +61,26 @@ header h1 {
 }
 
 /* ===============================
-   SECTIONS (NO BOXES)
+   SECTIONS
    =============================== */
 
 section {
   width: 100%;
-  margin: clamp(70px, 10vh, 110px) 0;
+  margin: clamp(80px, 11vh, 130px) 0;
   text-align: center;
 }
 
 section h2 {
   font-size: clamp(22px, 2.5vw, 28px);
-  margin-bottom: 14px;
+  font-weight: 500;
+  margin-bottom: 16px;
 }
 
 section p {
   font-size: 16px;
-  line-height: 1.7;
-  max-width: 560px;
-  margin: 10px auto;
+  line-height: 1.75;
+  max-width: 540px;
+  margin: 12px auto;
   opacity: 0.85;
 }
 
@@ -90,24 +93,11 @@ section p {
   max-width: 520px;
   height: 1px;
   margin: 40px auto;
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255,255,255,0.2),
-    transparent
-  );
-}
-
-.hero-divider {
-  margin-top: 40px;
-}
-
-.faq-divider {
-  margin: 30px auto;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
 }
 
 /* ===============================
-   DEMO (ONLY BOX)
+   DEMO CONTAINER
    =============================== */
 
 .demo-container {
@@ -115,19 +105,20 @@ section p {
   margin: 40px auto;
   padding: 18px;
   border-radius: 14px;
-  background: #0f0f10;
-  border: 1px solid rgba(255,255,255,0.06);
+  background: #0e0e0f;
+  border: 1px solid rgba(255,255,255,0.05);
+  transition: 0.3s ease;
 }
 
 /* ===============================
-   CLIENTS
+   CLIENT TABS
    =============================== */
 
 .clients {
   display: flex;
   gap: 8px;
   justify-content: center;
-  margin-bottom: 16px;
+  margin-bottom: 18px;
 }
 
 .client {
@@ -136,141 +127,180 @@ section p {
   background: rgba(255,255,255,0.05);
   font-size: 13px;
   border: 1px solid rgba(255,255,255,0.08);
-  cursor: pointer;
+  opacity: 0.7;
 }
 
 .client.active {
   background: #fff;
   color: #000;
+  opacity: 1;
+  transform: scale(1.05);
 }
 
 /* ===============================
-   CHAT
+   CHAT AREA
    =============================== */
 
 .chat-area {
+  position: relative;
+  z-index: 1;
   padding: 14px;
   border-radius: 12px;
-  background: #121213;
+  background: #101012;
   border: 1px solid rgba(255,255,255,0.06);
+  min-height: 380px;
+  display: flex;
+  flex-direction: column;
 }
 
-.narration {
-  font-size: 12px;
-  opacity: 0.6;
-  margin-bottom: 14px;
+.chat-area.dimmed {
+  opacity: 0.35;
 }
+
+/* ===============================
+   CHAT BOX
+   =============================== */
 
 .chat-box {
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  max-height: 320px;
+  gap: 10px;
+  min-height: 280px;
+  max-height: 340px;
   overflow-y: auto;
+  scroll-behavior: smooth;
+  contain: layout paint;
 }
 
 /* ===============================
    MESSAGE
    =============================== */
 
-.message.system {
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: #1a1a1a;
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-/* ===============================
-   RESPONSE PILLS
-   =============================== */
-
-.response-pill {
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
-  font-size: 13px;
+.message {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: 14px;
+  font-size: 14px;
   line-height: 1.5;
-  cursor: pointer;
 }
 
-.response-pill:hover {
-  background: rgba(255,255,255,0.08);
+.message.system {
+  align-self: flex-start;
+  background: #1a1a1a;
+  border: 1px solid rgba(255,255,255,0.06);
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #fff;
+  color: #000;
 }
 
 /* ===============================
-   RESET BUTTON
+   ANIMATION
    =============================== */
 
-.demo-footer {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 16px;
+.fade-in-up {
+  animation: slideUpUltra 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.reset-btn {
-  padding: 6px 12px;
-  font-size: 12px;
-  border-radius: 999px;
+@keyframes slideUpUltra {
+  from { opacity: 0; transform: translateY(18px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===============================
+   OPTIONS PANEL (FIXED 🔥)
+   =============================== */
+
+.options-panel {
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 640px;
+
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+
+  padding: 10px;
+  border-radius: 16px;
+
+  background: rgba(20,20,20,0.55);
+  backdrop-filter: blur(18px);
+
+  border: 1px solid rgba(255,255,255,0.08);
+  z-index: 20;
+}
+
+/* mobile fix */
+@media (max-width: 480px) {
+  .options-panel {
+    width: calc(100% - 20px);
+    bottom: 12px;
+  }
+}
+
+/* ===============================
+   OPTION BUTTON
+   =============================== */
+
+.option-btn {
+  padding: 14px 16px;
+  border-radius: 12px;
+  text-align: left;
+
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.08);
-  color: #aaa;
-  cursor: pointer;
+
+  transition: all 0.25s ease;
 }
 
-.reset-btn:hover {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-}
-
-/* ===============================
-   NAV (FIXED NO LINE ISSUE)
-   =============================== */
-
-.nav-minimal {
-  margin-top: 60px;
-  display: flex;
-  gap: 10px;
-  justify-content: center;
-}
-
-.nav-minimal a {
-  padding: 6px 14px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.05);
-  border: none; /* 🔥 FIX LINE ISSUE */
-  text-decoration: none;
-  color: #aaa;
-  font-size: 13px;
-}
-
-.nav-minimal a:hover {
-  background: rgba(255,255,255,0.1);
-  color: #fff;
+.option-btn.selected {
+  background: #fff;
+  color: #000;
+  transform: scale(0.97);
 }
 
 /* ===============================
-   INDEX BUTTONS
+   GHOST CURSOR
    =============================== */
 
-.index-links {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-top: 20px;
+.ghost-cursor {
+  position: fixed;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+  transition: 
+    opacity 0.25s ease,
+    transform 0.15s ease,
+    left 0.25s ease,
+    top 0.25s ease;
+  z-index: 999;
 }
 
-.index-links a {
-  padding: 10px 18px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
+/* ===============================
+   SCROLL BUTTON
+   =============================== */
+
+.scroll-btn {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.1);
   color: #fff;
-  text-decoration: none;
-}
-
-.index-links a:hover {
-  background: rgba(255,255,255,0.12);
+  border: none;
+  opacity: 0;
+  backdrop-filter: blur(6px);
 }
 
 /* ===============================
@@ -283,763 +313,4 @@ section p {
   text-align: center;
   font-size: 13px;
   opacity: 0.6;
-  border-top: none; /* 🔥 removes unwanted line */
-}
-
-/* ===============================
-   TYPOGRAPHY SYSTEM (ELITE)
-   =============================== */
-
-/* HEADINGS */
-
-header h1 {
-  font-weight: 600;
-  letter-spacing: -1px;
-  line-height: 1.1;
-}
-
-section h2 {
-  font-weight: 500;
-  letter-spacing: -0.4px;
-  line-height: 1.3;
-  margin-bottom: 16px;
-}
-
-/* PARAGRAPHS */
-
-section p {
-  font-size: 16px;
-  line-height: 1.75;
-  letter-spacing: -0.1px;
-  margin: 12px auto;
-  max-width: 540px;
-  opacity: 0.85;
-}
-
-/* tighter spacing for stacked paragraphs */
-section p + p {
-  margin-top: 6px;
-}
-
-/* ===============================
-   SPACING SYSTEM (BALANCED AIR)
-   =============================== */
-
-section {
-  margin: clamp(80px, 11vh, 130px) 0;
-}
-
-/* tighter for feature blocks */
-.feature-list {
-  margin-top: 20px;
-}
-
-/* ===============================
-   FEATURE ITEMS (CLEAN GRID)
-   =============================== */
-
-.feature-list {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 14px;
-  max-width: 520px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.feature-item {
-  display: flex;
-  justify-content: space-between;
-  font-size: 14px;
-  opacity: 0.85;
-}
-
-.feature-title {
-  font-weight: 500;
-}
-
-.feature-desc {
-  opacity: 0.6;
-}
-
-/* ===============================
-   CHAT TYPOGRAPHY
-   =============================== */
-
-.message.system {
-  font-size: 14px;
-  line-height: 1.6;
-}
-
-.response-pill {
-  font-size: 13px;
-  line-height: 1.6;
-}
-
-/* ===============================
-   NAV SPACING FIX
-   =============================== */
-
-.nav-minimal {
-  margin-top: 70px;
-}
-
-/* ===============================
-   FOOTER TYPOGRAPHY
-   =============================== */
-
-.footer-global h3 {
-  font-weight: 500;
-  margin-bottom: 6px;
-}
-
-.footer-global p {
-  margin: 6px 0;
-}
-
-/* ===============================
-   MOBILE REFINEMENT
-   =============================== */
-
-@media (max-width: 480px) {
-
-  section {
-    margin: 60px 0;
-  }
-
-  section p {
-    font-size: 15px;
-  }
-
-  .feature-list {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* ===============================
-   COLOR SYSTEM (SUBTLE HIERARCHY)
-   =============================== */
-
-:root {
-  --text-primary: #f5f5f7;
-  --text-secondary: #a1a1aa;
-  --text-tertiary: #71717a;
-
-  --border-subtle: rgba(255,255,255,0.06);
-  --bg-subtle: rgba(255,255,255,0.04);
-}
-
-/* ===============================
-   TEXT HIERARCHY
-   =============================== */
-
-body {
-  color: var(--text-primary);
-}
-
-/* secondary text */
-.hook,
-section p,
-.feature-desc {
-  color: var(--text-secondary);
-}
-
-/* tertiary */
-.narration {
-  color: var(--text-tertiary);
-}
-
-/* ===============================
-   HEADINGS CONSISTENCY
-   =============================== */
-
-header h1,
-section h2 {
-  font-weight: 500;
-}
-
-/* ===============================
-   FEATURE GRID ALIGNMENT
-   =============================== */
-
-.feature-item {
-  padding: 6px 8px;
-  border-radius: 8px;
-}
-
-.feature-item:hover {
-  background: var(--bg-subtle);
-}
-
-/* ===============================
-   BUTTON CONSISTENCY
-   =============================== */
-
-.index-links a,
-.nav-minimal a,
-.reset-btn {
-  border: 1px solid var(--border-subtle);
-  background: rgba(255,255,255,0.03);
-  color: var(--text-secondary);
-}
-
-/* hover */
-.index-links a:hover,
-.nav-minimal a:hover,
-.reset-btn:hover {
-  background: rgba(255,255,255,0.08);
-  color: var(--text-primary);
-}
-
-/* ===============================
-   RESPONSE PILL BALANCE
-   =============================== */
-
-.response-pill {
-  border: 1px solid var(--border-subtle);
-  background: rgba(255,255,255,0.03);
-}
-
-.response-pill:hover {
-  background: rgba(255,255,255,0.07);
-}
-
-/* ===============================
-   CHAT CLEANUP
-   =============================== */
-
-.chat-area {
-  border: 1px solid var(--border-subtle);
-}
-
-.message.system {
-  border: 1px solid var(--border-subtle);
-}
-
-/* ===============================
-   LINK CLEANUP (REMOVE UNDERLINE EFFECT)
-   =============================== */
-
-a::after {
-  display: none !important;
-}
-
-/* ===============================
-   FOOTER CLEAN ALIGNMENT
-   =============================== */
-
-.footer-global {
-  color: var(--text-secondary);
-}
-
-.footer-global a {
-  color: var(--text-secondary);
-}
-
-.footer-global a:hover {
-  color: var(--text-primary);
-}
-
-/* ===============================
-   FINAL MICRO SPACING FIXES
-   =============================== */
-
-.clients {
-  margin-bottom: 18px;
-}
-
-.demo-footer {
-  margin-top: 18px;
-}
-
-.section-divider {
-  opacity: 0.6;
-}
-
-/* ===============================
-   RESPONSE PILLS (UPGRADED)
-   =============================== */
-
-.response-pill {
-  position: relative;
-  padding: 14px 16px;
-  border-radius: 12px;
-
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.06);
-
-  cursor: pointer;
-}
-
-/* hover */
-.response-pill:hover {
-  background: rgba(255,255,255,0.08);
-}
-
-/* ===============================
-   TEXT (BIG + CLEAR)
-   =============================== */
-
-.pill-text {
-  font-size: 14px;
-  line-height: 1.6;
-  text-align: left;
-}
-
-/* ===============================
-   LABEL (TOP RIGHT)
-   =============================== */
-
-.pill-label {
-  position: absolute;
-  top: 8px;
-  right: 10px;
-
-  font-size: 10px;
-  opacity: 0.6;
-  letter-spacing: 0.5px;
-}
-
-/* subtle color hints */
-
-.pill-label.best {
-  color: #6eff6e;
-}
-
-.pill-label.strong {
-  color: #ffd66e;
-}
-
-.pill-label.safe {
-  color: #aaa;
-}
-
-.pill-label.casual {
-  color: #888;
-}
-
-.input-area {
-  display: flex;
-  gap: 8px;
-  margin-top: 14px;
-}
-
-.input-area input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 8px;
-  background: #0f0f10;
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #fff;
-}
-
-.input-area button {
-  padding: 10px 14px;
-  border-radius: 8px;
-  background: rgba(255,255,255,0.08);
-  border: none;
-  color: #fff;
-  cursor: pointer;
-}
-
-.input-area button:hover {
-  background: rgba(255,255,255,0.15);
-}
-/* ===============================
-   REAL CHAT CONVERSATION FIX
-   =============================== */
-
-.chat-box {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  max-height: 340px;
-  overflow-y: auto;
-}
-
-/* base message */
-.message {
-  max-width: 75%;
-  padding: 10px 14px;
-  border-radius: 14px;
-  font-size: 14px;
-  line-height: 1.5;
-  word-wrap: break-word;
-}
-
-/* CLIENT (LEFT) */
-.message.system {
-  align-self: flex-start;
-  background: #1a1a1a;
-  border: 1px solid rgba(255,255,255,0.06);
-  border-top-left-radius: 6px;
-  font-style: italic;
-  opacity: 0.9;
-}
-
-/* USER (RIGHT) */
-.message.user {
-  align-self: flex-end;
-  background: #ffffff;
-  color: #000;
-  border-top-right-radius: 6px;
-}
-
-/* spacing between messages */
-.message + .message {
-  margin-top: 4px;
-}
-
-/* response pills stay full width */
-.response-pill {
-  align-self: stretch;
-}
-/* ===============================
-   DEMO MODE (FINAL LOCK)
-   =============================== */
-
-/* disable all interaction */
-.input-area,
-.response-pill,
-.client {
-  pointer-events: none !important;
-  cursor: default !important;
-}
-
-/* remove hover effects completely */
-.response-pill:hover,
-.client:hover,
-.reset-btn:hover {
-  background: inherit !important;
-  color: inherit !important;
-}
-
-/* slightly dim response options (non-clickable feel) */
-.response-pill {
-  opacity: 0.85;
-}
-
-/* narration more subtle (feels like system thinking) */
-.narration {
-  opacity: 0.5;
-}
-
-/* hide reset button completely */
-#resetDemo {
-  display: none !important;
-}
-
-/* remove input visually (demo mode) */
-.input-area {
-  display: none !important;
-}
-
-/* soften client tabs (no click feel) */
-.client {
-  opacity: 0.7;
-}
-
-.client.active {
-  opacity: 1;
-}
-
-/* ===============================
-   DEMO FOCUS (CINEMATIC FEEL)
-   =============================== */
-
-.demo-container {
-  border: 1px solid rgba(255,255,255,0.05);
-  background: #0e0e0f;
-}
-
-/* subtle fade feel */
-.chat-area {
-  background: #101012;
-}
-
-/* typing animation more subtle */
-.typing span {
-  background: #666;
-}
-/* ===============================
-   FINAL DEMO STABILITY FIX
-   =============================== */
-
-/* prevent chat collapse completely */
-.chat-box {
-  min-height: 280px;
-  max-height: 340px;
-  overflow-y: auto;
-}
-
-/* keep full chat UI stable */
-.chat-area {
-  min-height: 380px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-}
-
-/* ===============================
-   MESSAGE ANIMATION (SMOOTH)
-   =============================== */
-
-.fade-in-up {
-  animation: slideUpSmooth 0.5s ease;
-}
-
-@keyframes slideUpSmooth {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===============================
-   OPTION STAGGER (READABLE)
-   =============================== */
-
-.response-pill {
-  opacity: 0;
-  animation: fadeOption 0.4s ease forwards;
-}
-
-@keyframes fadeOption {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 0.85;
-    transform: translateY(0);
-  }
-}
-
-/* ===============================
-   SELECTED OPTION (CLEAR FEEDBACK)
-   =============================== */
-
-.response-pill.selected {
-  background: #fff !important;
-  color: #000 !important;
-  transform: scale(0.98);
-  opacity: 1;
-}
-
-/* ===============================
-   TYPING (SLOW + CALM)
-   =============================== */
-
-.typing span {
-  width: 6px;
-  height: 6px;
-  background: #777;
-  border-radius: 50%;
-  display: inline-block;
-  margin-right: 4px;
-  animation: blinkSlow 1.6s infinite;
-}
-
-@keyframes blinkSlow {
-  0%, 80%, 100% { opacity: 0.2; }
-  40% { opacity: 1; }
-}
-
-/* ===============================
-   SCROLL SMOOTHNESS
-   =============================== */
-
-.chat-box {
-  scroll-behavior: smooth;
-}
-
-/* ===============================
-   EMPTY STATE STABILITY
-   =============================== */
-
-.chat-box:empty::before {
-  content: "Conversation will appear here...";
-  opacity: 0.25;
-  font-size: 13px;
-  text-align: center;
-}
-
-/* ===============================
-   FINAL POLISH
-   =============================== */
-
-/* slight spacing balance */
-.message {
-  animation: slideUpSmooth 0.5s ease;
-}
-
-/* remove jitter on fast updates */
-.response-pill,
-.message {
-  will-change: transform, opacity;
-}
-/* ===============================
-   FINAL 1% POLISH (CINEMATIC FEEL)
-   =============================== */
-
-/* smoother + slower message entry */
-.fade-in-up {
-  animation: slideUpUltra 0.6s cubic-bezier(0.22, 1, 0.36, 1);
-}
-
-@keyframes slideUpUltra {
-  from {
-    opacity: 0;
-    transform: translateY(18px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===============================
-   OPTION FLOW (MORE READABLE)
-   =============================== */
-
-.response-pill {
-  opacity: 0;
-  animation: fadeOptionSoft 0.5s ease forwards;
-}
-
-@keyframes fadeOptionSoft {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 0.85;
-    transform: translateY(0);
-  }
-}
-
-/* add slight delay feel per option */
-.response-pill:nth-child(1) { animation-delay: 0.05s; }
-.response-pill:nth-child(2) { animation-delay: 0.12s; }
-.response-pill:nth-child(3) { animation-delay: 0.2s; }
-.response-pill:nth-child(4) { animation-delay: 0.28s; }
-
-/* ===============================
-   MESSAGE RHYTHM (IMPORTANT)
-   =============================== */
-
-.message {
-  transition: all 0.25s ease;
-}
-
-/* slight breathing space for readability */
-.message + .message {
-  margin-top: 6px;
-}
-
-/* ===============================
-   SELECTED RESPONSE (MORE NATURAL)
-   =============================== */
-
-.response-pill.selected {
-  transform: scale(0.97);
-  transition: all 0.25s ease;
-}
-
-/* ===============================
-   CHAT FLOW SMOOTHNESS
-   =============================== */
-
-.chat-box {
-  scroll-behavior: smooth;
-}
-
-/* soften scroll edges */
-.chat-box::-webkit-scrollbar {
-  width: 4px;
-}
-
-.chat-box::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.1);
-  border-radius: 10px;
-}
-
-/* ===============================
-   TYPING (MORE HUMAN)
-   =============================== */
-
-.typing span {
-  animation: blinkHuman 1.8s infinite;
-}
-
-@keyframes blinkHuman {
-  0%, 80%, 100% { opacity: 0.2; transform: translateY(0); }
-  40% { opacity: 1; transform: translateY(-2px); }
-}
-
-/* ===============================
-   NARRATION (LESS DISTRACTION)
-   =============================== */
-
-.narration {
-  transition: opacity 0.4s ease;
-  opacity: 0.45;
-}
-
-/* ===============================
-   CLIENT SWITCH SMOOTHNESS
-   =============================== */
-
-.client {
-  transition: all 0.2s ease;
-}
-
-.client.active {
-  transform: scale(1.05);
-}
-
-/* ===============================
-   DEMO IMMERSION (SUBTLE)
-   =============================== */
-
-.demo-container {
-  transition: all 0.3s ease;
-}
-
-/* slight focus effect */
-.demo-container:focus-within {
-  border-color: rgba(255,255,255,0.1);
-}
-
-/* ===============================
-   FINAL MICRO-POLISH
-   =============================== */
-
-/* prevent sudden jumps */
-* {
-  backface-visibility: hidden;
-  -webkit-font-smoothing: antialiased;
-}
-
-/* smoother perception overall */
-body {
-  -webkit-font-smoothing: antialiased;
-}
-.scroll-btn {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: none;
-  background: rgba(255,255,255,0.1);
-  color: #fff;
-  cursor: pointer;
-  opacity: 0;
-  transition: 0.3s;
 }
