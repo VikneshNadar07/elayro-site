@@ -70,7 +70,6 @@ header h1 {
   margin-bottom: 10px;
 }
 
-/* subtle depth */
 h1, h2 {
   text-shadow: 0 2px 10px rgba(0,0,0,0.4);
 }
@@ -298,14 +297,6 @@ a:hover::after,
   transform: scale(1.06);
 }
 
-.demo-container.camera-shift-left {
-  transform: scale(1.05) translateX(-14px);
-}
-
-.demo-container.camera-shift-right {
-  transform: scale(1.05) translateX(14px);
-}
-
 /* ===============================
    CHAT
    =============================== */
@@ -360,21 +351,8 @@ a:hover::after,
   pointer-events: none;
 }
 
-.input-area input {
-  flex: 1;
-  padding: 10px;
-  border-radius: 10px;
-  border: none;
-}
-
-.input-area button {
-  padding: 10px 16px;
-  border-radius: 10px;
-  border: none;
-}
-
 /* ===============================
-   CURSOR (FINAL CLEAN VERSION)
+   CURSOR (FINAL LOCKED)
    =============================== */
 
 #fakeCursor {
@@ -392,16 +370,14 @@ a:hover::after,
   transition: opacity 0.2s ease, transform 0.12s ease;
 }
 
-#fakeCursor.active {
-  opacity: 1;
-}
+#fakeCursor.active { opacity: 1; }
 
 #fakeCursor.clicking {
   transform: scale(0.75);
 }
 
 /* ===============================
-   CLIENT PILLS (RESTORE)
+   CLIENT PILLS (LOCKED)
    =============================== */
 
 .clients {
@@ -419,7 +395,6 @@ a:hover::after,
   border: 1px solid rgba(255,255,255,0.1);
 
   cursor: default;
-  transition: all 0.2s ease;
 }
 
 .client.active {
@@ -429,4 +404,21 @@ a:hover::after,
 
 .client.add {
   opacity: 0.6;
+}
+
+/* ===============================
+   CINEMATIC (FINAL POLISH)
+   =============================== */
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeUp 0.4s ease forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
