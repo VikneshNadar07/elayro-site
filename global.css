@@ -91,7 +91,6 @@ header h1 {
   max-width: 720px;
   padding: 0 16px;
   margin: 0 auto;
-
   flex: 1;
   display: flex;
   flex-direction: column;
@@ -145,9 +144,54 @@ section p {
   color: rgba(255,255,255,0.6);
   text-decoration: none;
   font-size: 13px;
+  transition: 0.2s ease;
 }
 
-.nav-minimal a:hover { color: #fff; }
+.nav-minimal a:hover { color: #fff; transform: translateY(-1px); }
+
+.nav-minimal a.active {
+  color: #fff;
+  position: relative;
+}
+
+.nav-minimal a.active::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 1px;
+  background: #fff;
+  opacity: 0.6;
+}
+
+.nav-minimal a.hide {
+  opacity: 0;
+  transform: translateY(-6px);
+  pointer-events: none;
+}
+
+/* ===============================
+   INDEX BUTTON LINKS
+   =============================== */
+
+.index-links a {
+  display: inline-block;
+  margin-top: 12px;
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.08);
+  color: #fff;
+  text-decoration: none;
+  font-size: 13px;
+  background: rgba(255,255,255,0.04);
+  transition: all 0.2s ease;
+}
+
+.index-links a:hover {
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-2px);
+}
 
 /* ===============================
    DEMO CONTAINER
@@ -163,7 +207,7 @@ section p {
 }
 
 /* ===============================
-   CLIENT TABS (FIXED)
+   CLIENT TABS
    =============================== */
 
 .clients {
@@ -180,7 +224,6 @@ section p {
   background: rgba(255,255,255,0.06);
   font-size: 12px;
   border: 1px solid rgba(255,255,255,0.1);
-  white-space: nowrap;
 }
 
 .client.active {
@@ -199,10 +242,8 @@ section p {
   backdrop-filter: blur(12px);
   border-radius: 12px;
   padding: 12px;
-
   height: 400px;
   overflow: hidden;
-
   border: 1px solid rgba(255,255,255,0.06);
 
   pointer-events: none;
@@ -217,9 +258,8 @@ section p {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   overflow-y: auto;
-  padding-right: 4px;
 }
 
 /* ===============================
@@ -228,9 +268,9 @@ section p {
 
 .message {
   max-width: 75%;
-  padding: 10px 12px;
+  padding: 10px 14px;
   border-radius: 14px;
-  font-size: 13.5px;
+  font-size: 14px;
   line-height: 1.5;
 }
 
@@ -243,6 +283,53 @@ section p {
 .message.system {
   align-self: flex-start;
   background: #1a1a1a;
+}
+
+.msg-label {
+  font-size: 10px;
+  opacity: 0.5;
+  margin-bottom: 4px;
+}
+
+/* ===============================
+   OPTIONS (FINAL FIX)
+   =============================== */
+
+.options-panel {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.option-btn {
+  width: 100%;
+  padding: 12px 14px;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.08);
+  font-size: 13px;
+  text-align: left;
+
+  opacity: 0;
+  transform: translateY(10px);
+  transition: all 0.25s ease;
+}
+
+.option-btn.show {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.option-btn:hover {
+  background: rgba(255,255,255,0.1);
+  transform: translateY(-1px);
+}
+
+.option-btn.selected {
+  background: #fff;
+  color: #000;
 }
 
 /* ===============================
@@ -262,7 +349,6 @@ section p {
   background: rgba(255,255,255,0.03);
   border: 1px solid rgba(255,255,255,0.08);
   color: #fff;
-  font-size: 13px;
 }
 
 .input-area button {
@@ -270,26 +356,16 @@ section p {
   border-radius: 10px;
   background: #fff;
   color: #000;
-  font-size: 13px;
 }
 
 /* ===============================
-   MOBILE OPTIMIZATION
+   MOBILE
    =============================== */
 
 @media (max-width: 600px) {
 
-  .chat-area {
-    height: 340px;
-  }
-
-  .message {
-    max-width: 90%;
-  }
-
-  header {
-    margin-top: 60px;
-  }
+  .chat-area { height: 340px; }
+  .message { max-width: 90%; }
 
 }
 
@@ -307,128 +383,7 @@ section p {
   opacity: 1;
   transform: translateY(0);
 }
-/* ===============================
-   RESTORE INDEX + CHAT DETAILS
-   =============================== */
 
-/* NAV ACTIVE + HIDE */
-
-.nav-minimal a.active {
-  color: #fff;
-  position: relative;
-}
-
-.nav-minimal a.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 100%;
-  height: 1px;
-  background: #fff;
-  opacity: 0.6;
-}
-
-.nav-minimal a.hide {
-  opacity: 0;
-  transform: translateY(-6px);
-  pointer-events: none;
-}
-
-/* INDEX BUTTON LINKS */
-
-.index-links a {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #fff;
-  text-decoration: none;
-  font-size: 13px;
-  background: rgba(255,255,255,0.04);
-  transition: all 0.2s ease;
-}
-
-.index-links a:hover {
-  background: rgba(255,255,255,0.08);
-  transform: translateY(-2px);
-}
-
-/* CHAT LABEL (OUTFLOW TAG) */
-
-.msg-label {
-  font-size: 10px;
-  opacity: 0.5;
-  margin-bottom: 4px;
-}
-
-/* OPTION HOVER FEEL */
-
-.option-btn:hover {
-  transform: translateY(-2px);
-}
-/* ===============================
-   RESTORE INDEX + CHAT DETAILS
-   =============================== */
-
-/* NAV ACTIVE + HIDE */
-
-.nav-minimal a.active {
-  color: #fff;
-  position: relative;
-}
-
-.nav-minimal a.active::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-  width: 100%;
-  height: 1px;
-  background: #fff;
-  opacity: 0.6;
-}
-
-.nav-minimal a.hide {
-  opacity: 0;
-  transform: translateY(-6px);
-  pointer-events: none;
-}
-
-/* INDEX BUTTON LINKS */
-
-.index-links a {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #fff;
-  text-decoration: none;
-  font-size: 13px;
-  background: rgba(255,255,255,0.04);
-  transition: all 0.2s ease;
-}
-
-.index-links a:hover {
-  background: rgba(255,255,255,0.08);
-  transform: translateY(-2px);
-}
-
-/* CHAT LABEL (OUTFLOW TAG) */
-
-.msg-label {
-  font-size: 10px;
-  opacity: 0.5;
-  margin-bottom: 4px;
-}
-
-/* OPTION HOVER FEEL */
-
-.option-btn:hover {
-  transform: translateY(-2px);
-}
 /* ===============================
    FOOTER
    =============================== */
