@@ -344,3 +344,96 @@ body.fade-out {
   background: white;
   color: black;
 }
+/* 🔥 DEMO CONTAINER (MAIN FRAME) */
+.demo-container {
+  max-width: 700px;
+  margin: 40px auto;
+  padding: 20px;
+  border-radius: 16px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+}
+
+/* 🔥 CLIENT TABS CENTERED */
+.clients {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+/* 🔥 CHAT AREA (IMPORTANT) */
+.chat-area {
+  display: flex;
+  flex-direction: column;
+  height: 420px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.05);
+  padding: 14px;
+  background: rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+/* 🔥 CHAT BOX SCROLLABLE */
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  overflow-y: auto;
+  flex: 1;
+  padding-right: 6px;
+}
+
+/* 🔥 BUBBLES */
+.message {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #0a84ff;
+  color: white;
+}
+
+.message.system {
+  align-self: flex-start;
+  background: rgba(255,255,255,0.06);
+  color: white;
+}
+
+/* 🔥 OPTIONS INSIDE CHAT */
+.options-panel {
+  margin-top: 10px;
+}
+
+.option-btn {
+  padding: 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.05);
+  margin-bottom: 8px;
+  cursor: pointer;
+}
+
+/* 🔥 INPUT FIXED INSIDE BOX */
+.input-area {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 10px;
+  border-radius: 10px;
+  border: none;
+}
+
+.input-area button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+}
