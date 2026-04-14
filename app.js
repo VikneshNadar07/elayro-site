@@ -1,4 +1,5 @@
-// 🔥 SAFETY FIX (prevents black screen, does NOT affect UI)
+
+// 🔥 SAFETY FIX (prevents black screen)
 document.documentElement.classList.add("loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,11 +35,11 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     CHAT SYSTEM (UNCHANGED)
+     CHAT SYSTEM (FIXED SELECTORS)
      ========================= */
 
   const chatBox = document.getElementById("chatBox");
-  const clientTabs = document.querySelectorAll(".client");
+  const clientTabs = document.querySelectorAll(".clients .client"); // 🔥 FIX
   const optionsPanel = document.getElementById("optionsPanel");
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
@@ -117,10 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
       behavior: "smooth"
     });
   }
-
-  /* =========================
-     INPUT SIMULATION
-     ========================= */
 
   async function typeInput(text) {
     input.classList.add("ai-active");
@@ -304,7 +301,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   runDemo();
-
 });
 
 /* =========================
