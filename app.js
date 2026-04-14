@@ -155,28 +155,49 @@ document.addEventListener("DOMContentLoaded", () => {
      OPTIONS
      ========================= */
 
- async function showOptions(list) {
+/* =========================
+   OPTIONS (UPDATED UI)
+   ========================= */
+
+async function showOptions(list) {
 
   optionsPanel.innerHTML = "";
 
   const buttons = [];
 
-  list.forEach(text => {
+  const tags = ["Best", "Strong", "Safe", "Casual"];
+
+  list.forEach((text, i) => {
+
     const btn = document.createElement("div");
     btn.className = "option-btn";
-    btn.innerText = text;
+
+    const leftTag = document.createElement("span");
+    leftTag.className = "option-tag left";
+    leftTag.innerText = tags[i % tags.length];
+
+    const content = document.createElement("div");
+    content.className = "option-text";
+    content.innerText = text;
+
+    const rightTag = document.createElement("span");
+    rightTag.className = "option-tag right";
+    rightTag.innerText = tags[(i + 1) % tags.length];
+
+    btn.appendChild(leftTag);
+    btn.appendChild(content);
+    btn.appendChild(rightTag);
 
     optionsPanel.appendChild(btn);
     buttons.push(btn);
   });
 
-  /* 🔥 safe animation (no invisibility risk) */
+  /* animation */
   for (let i = 0; i < buttons.length; i++) {
     await wait(120);
     buttons[i].classList.add("show");
   }
 
-  /* wait before auto select */
   await wait(2000 + Math.random() * 1000);
 
   if (!buttons.length) return;
@@ -189,7 +210,10 @@ document.addEventListener("DOMContentLoaded", () => {
   await wait(400);
 
   optionsPanel.innerHTML = "";
-  addMessage(selected.innerText, "system");
+
+  const selectedText = selected.querySelector(".option-text").innerText;
+
+  addMessage(selectedText, "system");
 }
 
   /* =========================
