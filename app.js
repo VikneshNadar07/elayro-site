@@ -392,7 +392,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
 });
 /* =========================
-   NOTIFY SYSTEM (FINAL)
+   NOTIFY SYSTEM
    ========================= */
 
 const notifyBtn = document.getElementById("notifyBtn");
@@ -402,6 +402,8 @@ const notifySuccess = document.getElementById("notifySuccess");
 if (notifyBtn && notifyEmail) {
 
   notifyBtn.addEventListener("click", async () => {
+    console.log("clicked");
+
     const email = notifyEmail.value.trim();
 
     if (!email || !email.includes("@")) return;
@@ -418,6 +420,8 @@ if (notifyBtn && notifyEmail) {
         body: JSON.stringify({ email })
       });
 
+      console.log("response", res);
+
       if (!res.ok) throw new Error();
 
       notifySuccess.classList.add("show");
@@ -425,6 +429,7 @@ if (notifyBtn && notifyEmail) {
       notifyBtn.innerText = "Added";
 
     } catch (err) {
+      console.log("error", err);
       notifyBtn.innerText = "Retry";
       notifyBtn.disabled = false;
     }
