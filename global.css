@@ -22,11 +22,7 @@ body {
   transition: all 0.4s ease;
 }
 
-body.loaded {
-  opacity: 1;
-  transform: translateY(0);
-}
-
+body.loaded { opacity: 1; }
 body:not(.loaded) {
   opacity: 0;
   transform: translateY(6px);
@@ -84,7 +80,7 @@ header h1 {
 }
 
 /* ===============================
-   CONTENT (FIXED)
+   CONTENT
    =============================== */
 
 .content {
@@ -92,10 +88,7 @@ header h1 {
   max-width: 720px;
   padding: 0 16px;
   margin: 0 auto;
-
-  flex: 1 0 auto;
-  display: flex;
-  flex-direction: column;
+  flex: 1;
 }
 
 /* ===============================
@@ -107,15 +100,11 @@ section {
   text-align: center;
 }
 
-section:first-of-type { margin-top: 50px; }
-section:last-of-type { margin-bottom: 0; }
-
 section p {
   opacity: 0.85;
   line-height: 1.7;
   max-width: 560px;
   margin: 12px auto;
-  font-size: clamp(14px, 3.5vw, 15px);
 }
 
 /* ===============================
@@ -146,59 +135,17 @@ section p {
   color: rgba(255,255,255,0.6);
   text-decoration: none;
   font-size: 13px;
-  transition: 0.2s ease;
 }
 
 .nav-minimal a:hover {
   color: #fff;
-  transform: translateY(-1px);
 }
 
 /* ===============================
-   INDEX BUTTON LINKS
+   LINK EFFECT
    =============================== */
 
-.index-links a {
-  display: inline-block;
-  margin-top: 12px;
-  padding: 10px 16px;
-  border-radius: 8px;
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #fff;
-  text-decoration: none;
-  font-size: 13px;
-  background: rgba(255,255,255,0.04);
-  transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
-}
-
-.index-links a:hover {
-  background: rgba(255,255,255,0.08);
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 6px 18px rgba(255,255,255,0.08);
-}
-
-/* ===============================
-   SCROLL REVEAL
-   =============================== */
-
-.reveal {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: all 0.8s cubic-bezier(0.22,1,0.36,1);
-}
-
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-/* ===============================
-   LINK HOVER EFFECT
-   =============================== */
-
-a {
-  position: relative;
-}
+a { position: relative; }
 
 a::after {
   content: "";
@@ -212,22 +159,10 @@ a::after {
   transition: width 0.3s ease;
 }
 
-a:hover::after {
-  width: 100%;
-}
+a:hover::after { width: 100%; }
 
 /* ===============================
-   PAGE TRANSITION
-   =============================== */
-
-body.fade-out {
-  opacity: 0;
-  transform: translateY(4px);
-  transition: all 0.35s ease;
-}
-
-/* ===============================
-   FOOTER (FIXED)
+   FOOTER
    =============================== */
 
 .footer-global {
@@ -235,38 +170,40 @@ body.fade-out {
   padding: 30px 16px;
   text-align: center;
   opacity: 0.6;
-  flex-shrink: 0;
 }
 
 /* ===============================
-   OPTION BUTTON (SAFE FIX)
+   OPTION BUTTON (FINAL)
    =============================== */
 
 .option-btn {
-  display: block;   /* 🔥 KEEP ORIGINAL */
+  display: block;
   width: 100%;
-
-  padding: 14px 16px;
+  padding: 14px 60px;
   border-radius: 12px;
-
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
-
   font-size: 13.5px;
-  line-height: 1.5;
   text-align: left;
-
   position: relative;
-
   transition: all 0.25s ease;
 }
 
-/* TAGS (ABSOLUTE — NO LAYOUT BREAK) */
+.option-btn:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-1px);
+}
+
+.option-btn.selected {
+  background: #fff;
+  color: #000;
+}
+
+/* TAGS */
 .option-btn .tag {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-
   font-size: 10px;
   padding: 3px 6px;
   border-radius: 999px;
@@ -283,70 +220,12 @@ body.fade-out {
   background: rgba(255,255,255,0.12);
 }
 
-/* push text center visually */
-.option-btn {
-  padding-left: 60px;
-  padding-right: 60px;
-}
+/* ===============================
+   OUTFLOW (FINAL STABLE)
+   =============================== */
 
-/* hover */
-.option-btn:hover {
-  background: rgba(255,255,255,0.12);
-  transform: translateY(-1px);
-}
-
-/* selected */
-.option-btn.selected {
-  background: #fff;
-  color: #000;
-}
-/* 🔥 FORCE CHAT UI FIX */
-
-.chat-box {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.message {
-  max-width: 70%;
-  padding: 10px 14px;
-  border-radius: 16px;
-  font-size: 14px;
-}
-
-.message.user {
-  align-self: flex-end;
-  background: #007aff;
-  color: white;
-}
-
-.message.system {
-  align-self: flex-start;
-  background: #1c1c1e;
-  color: white;
-}
-
-.clients {
-  display: flex;
-  gap: 8px;
-  margin-bottom: 10px;
-}
-
-.client {
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.1);
-  cursor: pointer;
-}
-
-.client.active {
-  background: white;
-  color: black;
-}
-/* 🔥 DEMO CONTAINER (MAIN FRAME) */
 .demo-container {
-  max-width: 700px;
+  max-width: 720px;
   margin: 40px auto;
   padding: 20px;
   border-radius: 16px;
@@ -354,42 +233,46 @@ body.fade-out {
   background: rgba(255,255,255,0.02);
 }
 
-/* 🔥 CLIENT TABS CENTERED */
 .clients {
   display: flex;
   justify-content: center;
   gap: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
-/* 🔥 CHAT AREA (IMPORTANT) */
+.client {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+}
+
+.client.active {
+  background: #fff;
+  color: #000;
+}
+
 .chat-area {
   display: flex;
   flex-direction: column;
   height: 420px;
   border-radius: 14px;
-  border: 1px solid rgba(255,255,255,0.05);
-  padding: 14px;
-  background: rgba(0,0,0,0.2);
-  overflow: hidden;
+  border: 1px solid rgba(255,255,255,0.06);
+  padding: 12px;
+  background: rgba(0,0,0,0.25);
 }
 
-/* 🔥 CHAT BOX SCROLLABLE */
 .chat-box {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 10px;
   overflow-y: auto;
-  flex: 1;
-  padding-right: 6px;
 }
 
-/* 🔥 BUBBLES */
 .message {
   max-width: 70%;
   padding: 10px 14px;
   border-radius: 16px;
-  font-size: 14px;
 }
 
 .message.user {
@@ -404,20 +287,10 @@ body.fade-out {
   color: white;
 }
 
-/* 🔥 OPTIONS INSIDE CHAT */
 .options-panel {
   margin-top: 10px;
 }
 
-.option-btn {
-  padding: 12px;
-  border-radius: 12px;
-  background: rgba(255,255,255,0.05);
-  margin-bottom: 8px;
-  cursor: pointer;
-}
-
-/* 🔥 INPUT FIXED INSIDE BOX */
 .input-area {
   display: flex;
   gap: 8px;
@@ -435,5 +308,4 @@ body.fade-out {
   padding: 10px 16px;
   border-radius: 10px;
   border: none;
-  cursor: pointer;
 }
