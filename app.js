@@ -119,14 +119,16 @@ document.addEventListener("DOMContentLoaded", () => {
   initCursorPosition();
   animateCursor();
 
-  function moveCursorTo(el) {
-    const r = el.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
+  function moveCursorTo(el){
+  const rect = el.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
 
-    // exact center relative to the demo container
-    tx = r.left - containerRect.left + r.width / 2;
-    ty = r.top - containerRect.top + r.height / 2;
-  }
+  const cursorSize = 12;
+
+  // 🎯 TRUE center (no transform hacks)
+  tx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
+  ty = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
+}
 
   async function lookAt(el) {
     moveCursorTo(el);
