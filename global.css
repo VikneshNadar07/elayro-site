@@ -70,6 +70,11 @@ header h1 {
   margin-bottom: 10px;
 }
 
+/* 🔥 subtle depth (added, safe) */
+h1, h2 {
+  text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
 .punch { opacity: 0.9; }
 
 .hook {
@@ -94,7 +99,7 @@ header h1 {
 }
 
 /* ===============================
-   SECTIONS
+   SECTIONS (UNCHANGED)
    =============================== */
 
 section {
@@ -182,7 +187,6 @@ section p {
   transform: translateY(-1px);
 }
 
-/* active */
 .nav-minimal a.active {
   color: #fff;
   font-weight: 500;
@@ -209,7 +213,7 @@ section p {
 }
 
 /* ===============================
-   LINK EFFECT
+   LINK EFFECT (UNCHANGED + ENHANCED)
    =============================== */
 
 a { position: relative; }
@@ -229,6 +233,11 @@ a::after {
 a:hover::after,
 .nav-minimal a.active::after {
   width: 100%;
+}
+
+/* 🔥 subtle lift only (no override) */
+.content a:hover {
+  transform: translateY(-1px);
 }
 
 /* ===============================
@@ -300,7 +309,6 @@ a:hover::after,
   transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
 }
 
-/* cinematic */
 .demo-container.camera-focus {
   transform: scale(1.06);
 }
@@ -311,24 +319,6 @@ a:hover::after,
 
 .demo-container.camera-shift-right {
   transform: scale(1.05) translateX(14px);
-}
-
-.clients {
-  display: flex;
-  justify-content: center;
-  gap: 10px;
-  margin-bottom: 16px;
-}
-
-.client {
-  padding: 6px 12px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.1);
-}
-
-.client.active {
-  background: #fff;
-  color: #000;
 }
 
 /* ===============================
@@ -373,20 +363,6 @@ a:hover::after,
   box-shadow: 0 4px 14px rgba(255,255,255,0.05);
 }
 
-/* animation */
-.fade-in-up {
-  opacity: 0;
-  transform: translateY(10px);
-  animation: messageIn 0.35s forwards;
-}
-
-@keyframes messageIn {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 /* ===============================
    INPUT
    =============================== */
@@ -413,7 +389,7 @@ a:hover::after,
 }
 
 /* ===============================
-   ADAPTIVE FAKE CURSOR
+   FAKE CURSOR (FIXED ONLY)
    =============================== */
 
 #fakeCursor {
@@ -421,16 +397,24 @@ a:hover::after,
   width: 14px;
   height: 14px;
   border-radius: 50%;
-  background: white;
-  z-index: 50;
+  background: #fff;
+
+  z-index: 999;
   pointer-events: none;
+
   transform: translate(-50%, -50%);
   opacity: 0;
-  transition: opacity 0.3s ease;
+
+  transition: opacity 0.2s ease, transform 0.15s ease;
+
+  /* 🔥 added glow */
+  box-shadow:
+    0 0 8px rgba(255,255,255,0.5),
+    0 0 18px rgba(255,255,255,0.15);
 }
 
 #fakeCursor.active { opacity: 1; }
-#fakeCursor.idle { opacity: 0.2; }
+#fakeCursor.idle { opacity: 0.25; }
 
 #fakeCursor.clicking {
   transform: translate(-50%, -50%) scale(0.7);
@@ -443,7 +427,7 @@ a:hover::after,
   border-radius: 50%;
   background: rgba(255,255,255,0.2);
   pointer-events: none;
-  z-index: 40;
+  z-index: 998;
   animation: fadeTrail 0.6s linear forwards;
 }
 
