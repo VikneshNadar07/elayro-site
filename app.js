@@ -383,3 +383,28 @@ document.querySelectorAll("a").forEach(link => {
     });
   }
 });
+/* =========================
+   SAFE PAGE TRANSITION
+   ========================= */
+
+document.querySelectorAll("a").forEach(link => {
+  if (!link.href) return;
+
+  const isInternal = link.href.includes(window.location.origin);
+
+  if (!isInternal) return;
+
+  link.addEventListener("click", (e) => {
+    const href = link.getAttribute("href");
+
+    if (!href || href.startsWith("#") || href.startsWith("mailto")) return;
+
+    e.preventDefault();
+
+    document.body.classList.add("fade-out");
+
+    setTimeout(() => {
+      window.location.href = href;
+    }, 250);
+  });
+});
