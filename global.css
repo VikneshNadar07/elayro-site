@@ -437,3 +437,10 @@ a:hover::after,
     transform: scale(0.5);
   }
 }
+.input-area {
+  opacity: 0.4;
+  pointer-events: none;
+}
+.demo-container {
+  overflow: hidden;
+}
