@@ -100,8 +100,8 @@ document.addEventListener("DOMContentLoaded", () => {
     if(cursor && container){
       const rect = container.getBoundingClientRect();
 
-      cursor.style.left = (cx - rect.left) + "px";
-      cursor.style.top  = (cy - rect.top) + "px";
+     cursor.style.left = cx + "px";
+cursor.style.top  = cy + "px";
 
       if(Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5){
         cursor.classList.add("active");
@@ -118,12 +118,13 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 400);
 
   function moveCursorTo(el){
-    const r = el.getBoundingClientRect();
+  const rect = el.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
 
-    // 🎯 exact center targeting
-    tx = r.left + r.width / 2;
-    ty = r.top + r.height / 2;
-  }
+  // 🎯 convert to container-relative coordinates
+  tx = rect.left - containerRect.left + rect.width / 2;
+  ty = rect.top  - containerRect.top  + rect.height / 2;
+}
 
   async function lookAt(el){
     moveCursorTo(el);
