@@ -173,7 +173,7 @@ a:hover::after { width: 100%; }
 }
 
 /* ===============================
-   OPTION BUTTON (FINAL)
+   OPTION BUTTON
    =============================== */
 
 .option-btn {
@@ -199,7 +199,6 @@ a:hover::after { width: 100%; }
   color: #000;
 }
 
-/* TAGS */
 .option-btn .tag {
   position: absolute;
   top: 50%;
@@ -212,16 +211,14 @@ a:hover::after { width: 100%; }
 
 .option-btn .tag.left {
   left: 10px;
-  background: rgba(255,255,255,0.06);
 }
 
 .option-btn .tag.right {
   right: 10px;
-  background: rgba(255,255,255,0.12);
 }
 
 /* ===============================
-   OUTFLOW (FINAL STABLE)
+   OUTFLOW UI
    =============================== */
 
 .demo-container {
@@ -231,6 +228,8 @@ a:hover::after { width: 100%; }
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.02);
+
+  transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
 }
 
 .clients {
@@ -287,9 +286,25 @@ a:hover::after { width: 100%; }
   color: white;
 }
 
-.options-panel {
-  margin-top: 10px;
+/* animation */
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: messageIn 0.35s forwards;
 }
+
+@keyframes messageIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   INPUT + OPTIONS
+   =============================== */
+
+.options-panel { margin-top: 10px; }
 
 .input-area {
   display: flex;
@@ -308,4 +323,57 @@ a:hover::after { width: 100%; }
   padding: 10px 16px;
   border-radius: 10px;
   border: none;
+}
+
+/* ===============================
+   CURSOR + TRAIL
+   =============================== */
+
+#fakeCursor {
+  position: fixed;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: white;
+  z-index: 99999;
+  pointer-events: none;
+  transform: translate(-50%, -50%);
+}
+
+#fakeCursor.clicking {
+  transform: translate(-50%, -50%) scale(0.7);
+}
+
+.cursor-trail {
+  position: fixed;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.2);
+  pointer-events: none;
+  z-index: 99998;
+  animation: fadeTrail 0.6s linear forwards;
+}
+
+@keyframes fadeTrail {
+  to {
+    opacity: 0;
+    transform: scale(0.5);
+  }
+}
+
+/* ===============================
+   CINEMATIC CAMERA
+   =============================== */
+
+.demo-container.camera-focus {
+  transform: scale(1.03);
+}
+
+.demo-container.camera-shift-left {
+  transform: scale(1.02) translateX(-6px);
+}
+
+.demo-container.camera-shift-right {
+  transform: scale(1.02) translateX(6px);
 }
