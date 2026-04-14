@@ -390,7 +390,55 @@ section p {
   opacity: 1;
   transform: translateY(0);
 }
+/* ===============================
+   MICRO HOVER UPGRADE (SAFE)
+   =============================== */
 
+/* Link underline animation */
+a {
+  position: relative;
+}
+
+a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 1px;
+  background: #fff;
+  opacity: 0.5;
+  transition: width 0.3s ease;
+}
+
+a:hover::after {
+  width: 100%;
+}
+
+/* Button upgrade */
+.index-links a:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 18px rgba(255,255,255,0.08);
+}
+
+/* ===============================
+   SMOOTHER MOTION (SAFE OVERRIDE)
+   =============================== */
+
+.reveal {
+  transform: translateY(24px);
+  transition: all 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* ===============================
+   PAGE TRANSITION (SAFE)
+   =============================== */
+
+body.fade-out {
+  opacity: 0;
+  transform: translateY(4px);
+  transition: all 0.35s ease;
+}
 /* ===============================
    FOOTER
    =============================== */
