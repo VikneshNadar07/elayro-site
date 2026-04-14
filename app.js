@@ -90,20 +90,22 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let cx = 0, cy = 0, tx = 0, ty = 0;
 
-  function initCursorPosition() {
-    const rect = sendBtn.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const cursorSize = 12;
+function initCursorPosition() {
 
-    // 🎯 START EXACTLY AT SEND BUTTON
-    cx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
-    cy = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
+  const containerRect = container.getBoundingClientRect();
+  const inputRect = document.querySelector(".input-area").getBoundingClientRect();
 
-    tx = cx;
-    ty = cy;
+  const cursorSize = 12;
 
-    cursor.classList.add("active");
-  }
+  // 🎯 center of input-area (NOT just button)
+  cx = inputRect.left - containerRect.left + inputRect.width / 2 - cursorSize / 2;
+  cy = inputRect.top  - containerRect.top  + inputRect.height / 2 - cursorSize / 2;
+
+  tx = cx;
+  ty = cy;
+
+  cursor.classList.add("active");
+}
 
   function animateCursor() {
     cx += (tx - cx) * 0.2;
@@ -121,13 +123,26 @@ document.addEventListener("DOMContentLoaded", () => {
   }, 100);
 
   function moveCursorTo(el){
-    const rect = el.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const cursorSize = 12;
 
-    tx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
-    ty = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
+  const rect = el.getBoundingClientRect();
+  const containerRect = container.getBoundingClientRect();
+  const cursorSize = 12;
+
+  // 🎯 special handling for Send button
+  if(el.id === "sendBtn"){
+
+    const inputRect = document.querySelector(".input-area").getBoundingClientRect();
+
+    tx = inputRect.left - containerRect.left + inputRect.width / 2 - cursorSize / 2;
+    ty = inputRect.top  - containerRect.top  + inputRect.height / 2 - cursorSize / 2;
+
+    return;
   }
+
+  // normal elements
+  tx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
+  ty = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
+}
 
   async function lookAt(el) {
     moveCursorTo(el);
