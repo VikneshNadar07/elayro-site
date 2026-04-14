@@ -85,63 +85,26 @@ document.addEventListener("DOMContentLoaded", () => {
   sendBtn.addEventListener("click", e => e.preventDefault());
 
   /* =========================
-     HUMAN CURSOR SYSTEM
+     SYSTEM CURSOR (CLEAN)
      ========================= */
 
   let cx = window.innerWidth/2, cy = window.innerHeight/2;
   let tx = cx, ty = cy;
-  let vx = 0, vy = 0;
-
-  let cursorActiveTimeout;
-
-  function activateCursor(){
-    cursor?.classList.add("active");
-    cursor?.classList.remove("idle");
-
-    clearTimeout(cursorActiveTimeout);
-    cursorActiveTimeout = setTimeout(()=>{
-      cursor?.classList.add("idle");
-    }, 1200);
-  }
-
-  function spawnTrail(x,y){
-    const t = document.createElement("div");
-    t.className = "cursor-trail";
-    t.style.left = x+"px";
-    t.style.top = y+"px";
-    container.appendChild(t);
-    setTimeout(()=>t.remove(),500);
-  }
 
   function animateCursor(){
-    const dx = tx - cx;
-    const dy = ty - cy;
 
-    vx += dx * 0.06;
-    vy += dy * 0.06;
+    // 🎯 smooth direct movement (no physics noise)
+    cx += (tx - cx) * 0.18;
+    cy += (ty - cy) * 0.18;
 
-    vx *= 0.78;
-    vy *= 0.78;
+    if(cursor && container){
+      const rect = container.getBoundingClientRect();
 
-    cx += vx;
-    cy += vy;
+      cursor.style.left = (cx - rect.left) + "px";
+      cursor.style.top  = (cy - rect.top) + "px";
 
-    const rect = container.getBoundingClientRect();
-
-    if(cursor){
-      const x = cx - rect.left;
-      const y = cy - rect.top;
-
-      cursor.style.left = x + "px";
-      cursor.style.top = y + "px";
-
-      // 🔥 ADDED (stronger activation)
-      if(Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5){
-        activateCursor();
-      }
-
-      if(Math.random()<0.3){
-        spawnTrail(x, y);
+      if(Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5){
+        cursor.classList.add("active");
       }
     }
 
@@ -149,31 +112,31 @@ document.addEventListener("DOMContentLoaded", () => {
   }
   animateCursor();
 
-  // 🔥 ADDED (initial activation fix)
+  // initial activation
   setTimeout(() => {
     cursor?.classList.add("active");
-  }, 800);
+  }, 400);
 
   function moveCursorTo(el){
     const r = el.getBoundingClientRect();
 
-    tx = r.left + r.width*(0.4+Math.random()*0.3) + (Math.random()*20-10);
-    ty = r.top + r.height*(0.4+Math.random()*0.3) + (Math.random()*20-10);
+    // 🎯 exact center targeting
+    tx = r.left + r.width / 2;
+    ty = r.top + r.height / 2;
   }
 
   async function lookAt(el){
     moveCursorTo(el);
-    await wait(300+Math.random()*300);
-    moveCursorTo(el);
-    await wait(120);
+    await wait(180);
   }
 
   async function clickCursor(el){
-    await lookAt(el);
-    await wait(120+Math.random()*150);
+    moveCursorTo(el);
+
+    await wait(120);
 
     cursor?.classList.add("clicking");
-    await wait(120);
+    await wait(100);
     cursor?.classList.remove("clicking");
   }
 
@@ -216,7 +179,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     MEMORY + HUMAN OPTIONS
+     MEMORY + OPTIONS
      ========================= */
 
   function remember(msg){
@@ -224,87 +187,63 @@ document.addEventListener("DOMContentLoaded", () => {
     if(memory.length>6) memory.shift();
   }
 
-  function humanize(text){
-    if(Math.random()<0.2){
-      return text.split("—")[0];
-    }
-
-    if(Math.random()<0.15){
-      const fillers=["yeah,", "alright,", "okay,"];
-      return fillers[Math.floor(Math.random()*fillers.length)] + " " + text.toLowerCase();
-    }
-
-    return text;
-  }
-
-  function varyLength(arr){
-    const count = 3 + Math.floor(Math.random()*2);
-    return arr.slice(0,count);
-  }
-
   function generateOptions(msg){
     const context=(memory.join(" ")+" "+msg).toLowerCase();
 
     function pick(arr){
-      return varyLength(arr.sort(()=>Math.random()-0.5));
+      return arr.slice(0,4);
     }
 
     if(context.includes("busy")){
       return pick([
         "Got it — I’ll keep it short.",
         "All good, we can take this later.",
-        "No rush, just wanted to check in.",
-        "Cool, I’ll follow up next week.",
-        "Makes sense — I’ll keep this light."
+        "No rush, just checking in.",
+        "Cool, I’ll follow up next week."
       ]);
     }
 
     if(context.includes("pricing")){
       return pick([
-        "Yeah, I can break it down quickly.",
-        "Let me give you a rough idea first.",
-        "We can adjust this based on what you need.",
-        "Depends a bit on scope, but here’s a range.",
-        "I’ll keep it simple — here’s how it works."
+        "I’ll break it down simply.",
+        "Here’s a quick overview.",
+        "We can adjust based on your needs.",
+        "Here’s a rough range."
       ]);
     }
 
     if(context.includes("flex")){
       return pick([
-        "Yeah, we can adjust it.",
-        "There’s some flexibility there.",
-        "We can shape it around your needs.",
-        "Not fixed — we can tweak it.",
-        "We’ll make it work."
+        "We can adjust it.",
+        "There’s flexibility there.",
+        "We’ll shape it around your needs.",
+        "We can tweak it."
       ]);
     }
 
     if(context.includes("start")||context.includes("proceed")){
       return pick([
         "Alright, let’s do it.",
-        "Cool, I’ll get this moving.",
-        "Sounds good — I’ll start on this.",
-        "Nice, let’s go ahead.",
-        "Perfect, I’ll handle it."
+        "I’ll get this moving.",
+        "Sounds good — starting now.",
+        "Let’s go ahead."
       ]);
     }
 
     if(context.includes("stop")){
       return pick([
         "I’ll check back later.",
-        "Leaving this here for now.",
-        "No worries, we can revisit.",
-        "I’ll follow up in a bit.",
-        "All good — we’ll circle back."
+        "We can revisit this.",
+        "I’ll follow up soon.",
+        "Let’s circle back."
       ]);
     }
 
     return pick([
       "Got it.",
-      "Alright, makes sense.",
-      "Yeah, let’s move on that.",
-      "Okay, I’ll handle it.",
-      "Cool, continuing from here."
+      "Makes sense.",
+      "Let’s move on that.",
+      "I’ll handle it."
     ]);
   }
 
@@ -320,12 +259,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     for(let i=0;i<text.length;i++){
       input.value+=text[i];
-      await wait(25+Math.random()*60);
+      await wait(25);
     }
   }
 
   async function simulateUser(text){
-    await wait(300+Math.random()*400);
+    await wait(250);
 
     remember(text);
     await typeInput(text);
@@ -350,25 +289,21 @@ document.addEventListener("DOMContentLoaded", () => {
     list.forEach(t=>{
       const b=document.createElement("div");
       b.className="option-btn";
-      b.innerText=humanize(t);
+      b.innerText=t;
       optionsPanel.appendChild(b);
       buttons.push(b);
     });
 
-    cameraFocus(Math.random()<0.5?"camera-shift-left":"camera-shift-right");
+    cameraFocus("camera-focus");
 
-    await wait(800+Math.random()*600);
+    await wait(500);
 
-    for(let i=0;i<2;i++){
-      await lookAt(buttons[Math.floor(Math.random()*buttons.length)]);
-    }
-
-    const selected=buttons[Math.floor(Math.random()*buttons.length)];
+    const selected=buttons[0]; // 🎯 deterministic
 
     await clickCursor(selected);
     selected.classList.add("selected");
 
-    await wait(400);
+    await wait(300);
 
     optionsPanel.innerHTML="";
     addMessage(selected.innerText,"system");
