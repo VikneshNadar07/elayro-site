@@ -129,19 +129,30 @@ document.addEventListener("DOMContentLoaded", () => {
     const rect = container.getBoundingClientRect();
 
     if(cursor){
-      cursor.style.left = (cx - rect.left) + "px";
-      cursor.style.top = (cy - rect.top) + "px";
+      const x = cx - rect.left;
+      const y = cy - rect.top;
 
-      if(Math.abs(dx)>1 || Math.abs(dy)>1) activateCursor();
+      cursor.style.left = x + "px";
+      cursor.style.top = y + "px";
+
+      // 🔥 ADDED (stronger activation)
+      if(Math.abs(dx) > 0.5 || Math.abs(dy) > 0.5){
+        activateCursor();
+      }
 
       if(Math.random()<0.3){
-        spawnTrail(cx-rect.left, cy-rect.top);
+        spawnTrail(x, y);
       }
     }
 
     requestAnimationFrame(animateCursor);
   }
   animateCursor();
+
+  // 🔥 ADDED (initial activation fix)
+  setTimeout(() => {
+    cursor?.classList.add("active");
+  }, 800);
 
   function moveCursorTo(el){
     const r = el.getBoundingClientRect();
