@@ -530,3 +530,6 @@ a:hover::after,
 .notify-success.show {
   opacity: 1;
 }
+.notify-success {
+  opacity: 0;
+}
