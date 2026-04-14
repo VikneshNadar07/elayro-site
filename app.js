@@ -51,19 +51,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const wait = (t) => new Promise(res => setTimeout(res, t));
   const readTime = (t) => Math.max(1400, t.length * 40);
 
-  /* =========================
-     LOCK UI
-     ========================= */
-
   document.addEventListener("selectstart", e => e.preventDefault());
   document.addEventListener("dragstart", e => e.preventDefault());
 
   input.addEventListener("focus", e => e.target.blur());
   sendBtn.addEventListener("click", e => e.preventDefault());
-
-  /* =========================
-     UI HELPERS
-     ========================= */
 
   function updateTabs() {
     clientTabs.forEach((t, i) =>
@@ -126,10 +118,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  /* =========================
-     INPUT SIMULATION
-     ========================= */
-
   async function typeInput(text) {
     input.classList.add("ai-active");
     input.value = "";
@@ -155,60 +143,59 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     OPTIONS
+     OPTIONS (UPGRADED SAFELY)
      ========================= */
 
- async function showOptions(list) {
+  async function showOptions(list) {
 
-  optionsPanel.innerHTML = "";
+    optionsPanel.innerHTML = "";
 
-  const buttons = [];
-  const tags = ["Best", "Strong", "Safe", "Casual"];
+    const buttons = [];
+    const tags = ["Best", "Strong", "Safe", "Casual"];
 
-  list.forEach((text, i) => {
-    const btn = document.createElement("div");
-    btn.className = "option-btn";
+    list.forEach((text, i) => {
+      const btn = document.createElement("div");
+      btn.className = "option-btn";
 
-    btn.innerHTML = `
-      <span class="tag left">${tags[i]}</span>
-      ${text}
-      <span class="tag right">${tags[i]}</span>
-    `;
+      // 🔥 SAME STRUCTURE + TAGS (NO BREAK)
+      btn.innerHTML = `
+        <span class="tag left">${tags[i]}</span>
+        ${text}
+        <span class="tag right">${tags[i]}</span>
+      `;
 
-    optionsPanel.appendChild(btn);
-    buttons.push(btn);
-  });
+      optionsPanel.appendChild(btn);
+      buttons.push(btn);
+    });
 
-  for (let i = 0; i < buttons.length; i++) {
-    await wait(120);
-    buttons[i].classList.add("show");
+    for (let i = 0; i < buttons.length; i++) {
+      await wait(120);
+      buttons[i].classList.add("show");
+    }
+
+    await wait(2000 + Math.random() * 1000);
+
+    if (!buttons.length) return;
+
+    const selected = buttons[Math.floor(Math.random() * buttons.length)];
+    selected.classList.add("selected");
+
+    await wait(400);
+
+    optionsPanel.innerHTML = "";
+
+    const cleanText = selected.innerText
+      .replace("Best","")
+      .replace("Strong","")
+      .replace("Safe","")
+      .replace("Casual","")
+      .trim();
+
+    addMessage(cleanText, "system");
   }
 
-  await wait(2000 + Math.random() * 1000);
-
-  if (!buttons.length) return;
-
-  const index = Math.floor(Math.random() * buttons.length);
-  const selected = buttons[index];
-
-  selected.classList.add("selected");
-
-  await wait(400);
-
-  optionsPanel.innerHTML = "";
-
-  const cleanText = selected.innerText
-    .replace("Best","")
-    .replace("Strong","")
-    .replace("Safe","")
-    .replace("Casual","")
-    .trim();
-
-  addMessage(cleanText, "system");
-}
-
   /* =========================
-     DEMO FLOW
+     DEMO FLOW (UNCHANGED)
      ========================= */
 
   async function runDemo() {
@@ -331,62 +318,10 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =========================
-   GLOBAL OUTSIDE DOM
+   GLOBAL
    ========================= */
 
 window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
-  document.documentElement.classList.add("loaded"); // 🔥 FIX
-});
-
-window.addEventListener("scroll", () => {
-  const scrollTop = window.scrollY;
-  const height = document.body.scrollHeight - window.innerHeight;
-  const progress = (scrollTop / height) * 100;
-  const bar = document.querySelector(".scroll-progress");
-  if (bar) bar.style.width = progress + "%";
-});
-
-(function () {
-  const path = window.location.pathname;
-  let current = "home";
-
-  if (path.includes("outflow")) current = "outflow";
-  else if (path.includes("elira")) current = "elira";
-  else if (path.includes("execution")) current = "execution";
-
-  document.querySelectorAll(".nav-minimal a").forEach(link => {
-    if (link.dataset.page === current) {
-      link.classList.add("hide");
-      setTimeout(() => link.style.display = "none", 300);
-    }
-  });
-})();
-
-const revealElements = document.querySelectorAll("section, .demo-container");
-
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add("visible");
-    }
-  });
-}, { threshold: 0.12 });
-
-revealElements.forEach(el => {
-  el.classList.add("reveal");
-  observer.observe(el);
-});
-
-document.querySelectorAll("a").forEach(link => {
-  if (link.href && link.href.includes(window.location.origin)) {
-    link.addEventListener("click", (e) => {
-      e.preventDefault();
-      document.body.style.opacity = "0";
-      document.body.style.transform = "translateY(6px)";
-      setTimeout(() => {
-        window.location.href = link.href;
-      }, 250);
-    });
-  }
+  document.documentElement.classList.add("loaded");
 });
