@@ -85,27 +85,24 @@ document.addEventListener("DOMContentLoaded", () => {
   sendBtn.addEventListener("click", e => e.preventDefault());
 
   /* =========================
-     SYSTEM CURSOR (FINAL LOCKED)
+     SYSTEM CURSOR (FINAL)
      ========================= */
 
   let cx = 0, cy = 0, tx = 0, ty = 0;
 
-function initCursorPosition() {
+  function initCursorPosition() {
+    const rect = sendBtn.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const cursorSize = 12;
 
-  const containerRect = container.getBoundingClientRect();
-  const inputRect = document.querySelector(".input-area").getBoundingClientRect();
+    cx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
+    cy = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
 
-  const cursorSize = 12;
+    tx = cx;
+    ty = cy;
 
-  // 🎯 center of input-area (NOT just button)
-  cx = inputRect.left - containerRect.left + inputRect.width / 2 - cursorSize / 2;
-  cy = inputRect.top  - containerRect.top  + inputRect.height / 2 - cursorSize / 2;
-
-  tx = cx;
-  ty = cy;
-
-  cursor.classList.add("active");
-}
+    cursor.classList.add("active");
+  }
 
   function animateCursor() {
     cx += (tx - cx) * 0.2;
@@ -123,26 +120,13 @@ function initCursorPosition() {
   }, 100);
 
   function moveCursorTo(el){
+    const rect = el.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const cursorSize = 12;
 
-  const rect = el.getBoundingClientRect();
-  const containerRect = container.getBoundingClientRect();
-  const cursorSize = 12;
-
-  // 🎯 special handling for Send button
-  if(el.id === "sendBtn"){
-
-    const inputRect = document.querySelector(".input-area").getBoundingClientRect();
-
-    tx = inputRect.left - containerRect.left + inputRect.width / 2 - cursorSize / 2;
-    ty = inputRect.top  - containerRect.top  + inputRect.height / 2 - cursorSize / 2;
-
-    return;
+    tx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
+    ty = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
   }
-
-  // normal elements
-  tx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
-  ty = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
-}
 
   async function lookAt(el) {
     moveCursorTo(el);
@@ -163,7 +147,7 @@ function initCursorPosition() {
      ========================= */
 
   function cameraFocus(mode) {
-    container.classList.remove("camera-focus", "camera-shift-left", "camera-shift-right");
+    container.classList.remove("camera-focus");
     if (mode) container.classList.add(mode);
   }
 
@@ -208,9 +192,7 @@ function initCursorPosition() {
   function generateOptions(msg) {
     const context = (memory.join(" ") + " " + msg).toLowerCase();
 
-    function pick(arr) {
-      return arr.slice(0, 4);
-    }
+    const pick = (arr) => arr.slice(0, 4);
 
     if (context.includes("busy")) {
       return pick([
@@ -334,6 +316,7 @@ function initCursorPosition() {
 
   async function runDemo() {
     while (true) {
+
       chats = { 0: [], 1: [] };
 
       activeClient = 0;
