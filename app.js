@@ -85,20 +85,23 @@ document.addEventListener("DOMContentLoaded", () => {
   sendBtn.addEventListener("click", e => e.preventDefault());
 
   /* =========================
-     SYSTEM CURSOR (CLEAN)
+     SYSTEM CURSOR (FINAL LOCKED)
      ========================= */
 
-  let cx = 0;
-  let cy = 0;
-  let tx = 0;
-  let ty = 0;
+  let cx = 0, cy = 0, tx = 0, ty = 0;
 
   function initCursorPosition() {
-    const rect = container.getBoundingClientRect();
-    cx = rect.width / 2;
-    cy = rect.height / 2;
+    const rect = sendBtn.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const cursorSize = 12;
+
+    // 🎯 START EXACTLY AT SEND BUTTON
+    cx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
+    cy = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
+
     tx = cx;
     ty = cy;
+
     cursor.classList.add("active");
   }
 
@@ -107,28 +110,24 @@ document.addEventListener("DOMContentLoaded", () => {
     cy += (ty - cy) * 0.2;
 
     cursor.style.left = cx + "px";
-    cursor.style.top = cy + "px";
-
-    if (Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) {
-      cursor.classList.add("active");
-    }
+    cursor.style.top  = cy + "px";
 
     requestAnimationFrame(animateCursor);
   }
 
-  initCursorPosition();
-  animateCursor();
+  setTimeout(() => {
+    initCursorPosition();
+    animateCursor();
+  }, 100);
 
   function moveCursorTo(el){
-  const rect = el.getBoundingClientRect();
-  const containerRect = container.getBoundingClientRect();
+    const rect = el.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    const cursorSize = 12;
 
-  const cursorSize = 12;
-
-  // 🎯 TRUE center (no transform hacks)
-  tx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
-  ty = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
-}
+    tx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
+    ty = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
+  }
 
   async function lookAt(el) {
     moveCursorTo(el);
@@ -382,7 +381,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       addMessage("Conversation ended.", "system");
 
-      await wait(4000);
+      await wait(3500);
       chatBox.innerHTML = "";
       optionsPanel.innerHTML = "";
     }
