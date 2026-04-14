@@ -1,11 +1,10 @@
-
-// 🔥 SAFETY FIX (prevents black screen)
+// 🔥 SAFETY FIX
 document.documentElement.classList.add("loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
-     GLOBAL: DYNAMIC HOOK
+     GLOBAL HOOK
      ========================= */
 
   const hookEl = document.getElementById("dynamicHook");
@@ -35,14 +34,15 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     CHAT SYSTEM (FIXED SELECTORS)
+     ELEMENTS
      ========================= */
 
   const chatBox = document.getElementById("chatBox");
-  const clientTabs = document.querySelectorAll(".clients .client"); // 🔥 FIX
+  const clientTabs = document.querySelectorAll(".clients .client");
   const optionsPanel = document.getElementById("optionsPanel");
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
+  const cursor = document.getElementById("fakeCursor");
 
   if (!chatBox || !optionsPanel || !input || !sendBtn) return;
 
@@ -51,261 +51,208 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const wait = (t) => new Promise(res => setTimeout(res, t));
   const readTime = (t) => Math.max(1400, t.length * 40);
+  const adaptiveDelay = (b=800)=> b + Math.random()*b*0.6;
 
   document.addEventListener("selectstart", e => e.preventDefault());
   document.addEventListener("dragstart", e => e.preventDefault());
-
   input.addEventListener("focus", e => e.target.blur());
   sendBtn.addEventListener("click", e => e.preventDefault());
 
-  function updateTabs() {
-    clientTabs.forEach((t, i) =>
-      t.classList.toggle("active", i === activeClient)
-    );
-  }
+  /* =========================
+     CURSOR SYSTEM
+     ========================= */
 
-  function renderChat(clientIndex) {
-    chatBox.innerHTML = "";
+  let cx = window.innerWidth/2, cy = window.innerHeight/2;
+  let tx = cx, ty = cy;
 
-    chats[clientIndex].forEach(msg => {
-      const div = document.createElement("div");
-      div.className = `message ${msg.type}`;
-
-      if (msg.type === "system") {
-        const label = document.createElement("div");
-        label.className = "msg-label";
-        label.innerText = "Outflow";
-
-        const content = document.createElement("div");
-        content.innerText = msg.text;
-
-        div.appendChild(label);
-        div.appendChild(content);
-      } else {
-        div.innerText = msg.text;
-      }
-
-      chatBox.appendChild(div);
-    });
-
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  function addMessage(text, type) {
-    chats[activeClient].push({ text, type });
-
-    const div = document.createElement("div");
-    div.className = `message ${type} fade-in-up`;
-
-    if (type === "system") {
-      const label = document.createElement("div");
-      label.className = "msg-label";
-      label.innerText = "Outflow";
-
-      const content = document.createElement("div");
-      content.innerText = text;
-
-      div.appendChild(label);
-      div.appendChild(content);
-    } else {
-      div.innerText = text;
+  function animateCursor(){
+    cx += (tx-cx)*0.1;
+    cy += (ty-cy)*0.1;
+    if(cursor){
+      cursor.style.left = cx+"px";
+      cursor.style.top = cy+"px";
     }
+    requestAnimationFrame(animateCursor);
+  }
+  animateCursor();
 
-    chatBox.appendChild(div);
-
-    chatBox.scrollTo({
-      top: chatBox.scrollHeight,
-      behavior: "smooth"
-    });
+  function moveCursorTo(el){
+    const r = el.getBoundingClientRect();
+    tx = r.left + r.width*(0.4+Math.random()*0.3);
+    ty = r.top + r.height*(0.4+Math.random()*0.3);
   }
 
-  async function typeInput(text) {
-    input.classList.add("ai-active");
-    input.value = "";
-
-    for (let i = 0; i < text.length; i++) {
-      input.value += text[i];
-      await wait(18 + Math.random() * 30);
-    }
-
-    await wait(200);
-    input.classList.remove("ai-active");
+  async function hoverCursor(el){
+    moveCursorTo(el);
+    await wait(150 + Math.random()*300);
   }
 
-  async function simulateUser(text) {
-    await typeInput(text);
-
-    sendBtn.classList.add("sending");
-    await wait(200);
-    sendBtn.classList.remove("sending");
-
-    input.value = "";
-    addMessage(text, "user");
+  async function clickCursor(el){
+    await hoverCursor(el);
+    cursor?.classList.add("clicking");
+    await wait(120);
+    cursor?.classList.remove("clicking");
   }
 
   /* =========================
-     OPTIONS (UNCHANGED)
+     CHAT RENDER
      ========================= */
 
-  async function showOptions(list) {
+  function updateTabs(){
+    clientTabs.forEach((t,i)=>t.classList.toggle("active",i===activeClient));
+  }
 
-    optionsPanel.innerHTML = "";
+  function renderChat(i){
+    chatBox.innerHTML="";
+    chats[i].forEach(m=>{
+      const d=document.createElement("div");
+      d.className=`message ${m.type} fade-in-up`;
+      d.innerText=m.text;
+      chatBox.appendChild(d);
+    });
+    chatBox.scrollTop=chatBox.scrollHeight;
+  }
 
-    const buttons = [];
+  function addMessage(text,type){
+    chats[activeClient].push({text,type});
+    const d=document.createElement("div");
+    d.className=`message ${type} fade-in-up`;
+    d.innerText=text;
+    chatBox.appendChild(d);
+    chatBox.scrollTo({top:chatBox.scrollHeight,behavior:"smooth"});
+  }
 
-    list.forEach(text => {
-      const btn = document.createElement("div");
-      btn.className = "option-btn";
-      btn.innerText = text;
+  /* =========================
+     HUMAN TYPING
+     ========================= */
 
-      optionsPanel.appendChild(btn);
-      buttons.push(btn);
+  async function typeInput(text){
+    await clickCursor(input);
+    input.value="";
+    for(let i=0;i<text.length;i++){
+      input.value+=text[i];
+      await wait(25+Math.random()*60);
+      if(Math.random()<0.08) await wait(200);
+    }
+  }
+
+  async function simulateUser(text){
+    await typeInput(text);
+    await clickCursor(sendBtn);
+    input.value="";
+    addMessage(text,"user");
+  }
+
+  /* =========================
+     OPTIONS
+     ========================= */
+
+  async function showOptions(list){
+
+    optionsPanel.innerHTML="";
+    const buttons=[];
+
+    list.sort(()=>Math.random()-0.5).forEach(t=>{
+      const b=document.createElement("div");
+      b.className="option-btn";
+      b.innerText=t;
+      optionsPanel.appendChild(b);
+      buttons.push(b);
     });
 
-    for (let i = 0; i < buttons.length; i++) {
-      await wait(120);
-      buttons[i].classList.add("show");
+    for(let b of buttons){
+      await wait(100);
+      b.classList.add("show");
     }
 
-    await wait(2000 + Math.random() * 1000);
+    await wait(1500+Math.random()*1000);
 
-    if (!buttons.length) return;
+    const selected=buttons[Math.floor(Math.random()*buttons.length)];
 
-    const selected = buttons[Math.floor(Math.random() * buttons.length)];
+    await clickCursor(selected);
     selected.classList.add("selected");
 
     await wait(400);
-
-    optionsPanel.innerHTML = "";
-    addMessage(selected.innerText, "system");
+    optionsPanel.innerHTML="";
+    addMessage(selected.innerText,"system");
   }
 
   /* =========================
-     DEMO FLOW (UNCHANGED)
+     SCENARIOS
      ========================= */
 
-  async function runDemo() {
+  const scenarios=[
+    ["Client is busy","Client maybe next week"],
+    ["Client reviewing","Client follow up later"],
+    ["Client interested","Client stopped replying"]
+  ];
 
-    chats = { 0: [], 1: [] };
+  function getScenario(){
+    return scenarios[Math.floor(Math.random()*scenarios.length)];
+  }
 
-    activeClient = 0;
-    updateTabs();
-    renderChat(activeClient);
+  /* =========================
+     DEMO LOOP
+     ========================= */
 
-    let msg;
+  async function runDemo(){
 
-    msg = "Client said they are busy this week";
-    await simulateUser(msg);
-    await wait(readTime(msg));
+    while(true){
 
-    await showOptions([
-      "No worries — I’ll keep this simple for you.",
-      "All good, I can summarize this quickly.",
-      "Following up when it works for you.",
-      "Let me know when this becomes a priority."
-    ]);
+      const s=getScenario();
 
-    await wait(2000);
+      chats={0:[],1:[]};
+      activeClient=0;
+      updateTabs();
+      renderChat(0);
 
-    msg = "Client said maybe next week";
-    await simulateUser(msg);
-    await wait(readTime(msg));
+      await simulateUser(s[0]);
+      await wait(adaptiveDelay());
 
-    await showOptions([
-      "Sure — I’ll follow up early next week.",
-      "Works — I’ll check back in then.",
-      "I’ll keep this ready for you.",
-      "Let me know if anything changes."
-    ]);
+      await showOptions([
+        "No worries — I’ll keep this simple.",
+        "All good — quick summary works.",
+        "Following up when it works.",
+        "Let me know when ready."
+      ]);
 
-    await wait(2000);
-    activeClient = 1;
-    updateTabs();
-    renderChat(activeClient);
+      await wait(adaptiveDelay());
 
-    msg = "Client asked about pricing";
-    await simulateUser(msg);
-    await wait(readTime(msg));
+      await simulateUser(s[1]);
+      await wait(adaptiveDelay());
 
-    await showOptions([
-      "Happy to break this down based on your needs.",
-      "I can share a quick cost overview.",
-      "Let me know if you want full details.",
-      "We can customize based on your budget."
-    ]);
+      await showOptions([
+        "Sure — I’ll follow up.",
+        "Works — I’ll check back.",
+        "Keeping this ready.",
+        "Let me know anytime."
+      ]);
 
-    await wait(2000);
-    activeClient = 0;
-    updateTabs();
-    renderChat(activeClient);
+      await wait(2000);
 
-    msg = "Client asked if this can start soon";
-    await simulateUser(msg);
-    await wait(readTime(msg));
+      activeClient=1;
+      await clickCursor(clientTabs[1]);
+      updateTabs();
+      renderChat(1);
 
-    await showOptions([
-      "Yes — we can begin immediately.",
-      "We can start as early as this week.",
-      "I’ll align everything and get started.",
-      "We’re ready to move forward anytime."
-    ]);
+      await simulateUser("Client asked about pricing");
+      await wait(adaptiveDelay());
 
-    await wait(2000);
+      await showOptions([
+        "Happy to break this down.",
+        "Quick cost overview.",
+        "Full details if needed.",
+        "We can customize."
+      ]);
 
-    msg = "Client said let's proceed";
-    await simulateUser(msg);
-    await wait(readTime(msg));
+      addMessage("Outcome achieved.","system");
 
-    await showOptions([
-      "Great — I’ll finalize everything.",
-      "Perfect — I’ll get started.",
-      "Moving ahead with this.",
-      "Let’s begin."
-    ]);
-
-    addMessage("Outcome achieved.", "system");
-
-    await wait(2000);
-    activeClient = 1;
-    updateTabs();
-    renderChat(activeClient);
-
-    msg = "Client said they need to think";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    await showOptions([
-      "No problem — take your time.",
-      "Happy to revisit when you're ready.",
-      "I’ll follow up later.",
-      "Let me know if you have questions."
-    ]);
-
-    await wait(2000);
-
-    msg = "Client stopped responding";
-    await simulateUser(msg);
-    await wait(readTime(msg));
-
-    await showOptions([
-      "I’ll close this for now.",
-      "Happy to reconnect later.",
-      "Leaving this open if needed.",
-      "Feel free to reach out anytime."
-    ]);
-
-    addMessage("Conversation ended.", "system");
-
-    await wait(6000);
-    runDemo();
+      await wait(5000);
+    }
   }
 
   runDemo();
 });
-
-/* =========================
-   GLOBAL
-   ========================= */
 
 window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
