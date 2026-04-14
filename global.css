@@ -300,3 +300,47 @@ body.fade-out {
   background: #fff;
   color: #000;
 }
+/* 🔥 FORCE CHAT UI FIX */
+
+.chat-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message {
+  max-width: 70%;
+  padding: 10px 14px;
+  border-radius: 16px;
+  font-size: 14px;
+}
+
+.message.user {
+  align-self: flex-end;
+  background: #007aff;
+  color: white;
+}
+
+.message.system {
+  align-self: flex-start;
+  background: #1c1c1e;
+  color: white;
+}
+
+.clients {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+
+.client {
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(255,255,255,0.1);
+  cursor: pointer;
+}
+
+.client.active {
+  background: white;
+  color: black;
+}
