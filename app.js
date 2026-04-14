@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
       link.style.display = "none";
     }
 
-    link.addEventListener("click", function(e){
+    link.addEventListener("click", function (e) {
       if (!href || href.startsWith("#")) return;
 
       e.preventDefault();
@@ -70,7 +70,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const cursor = document.getElementById("fakeCursor");
   const container = document.querySelector(".demo-container");
 
-  if (!chatBox || !optionsPanel || !input || !sendBtn || !container) return;
+  if (!chatBox || !optionsPanel || !input || !sendBtn || !container || !cursor) return;
 
   let activeClient = 0;
   let chats = { 0: [], 1: [] };
@@ -88,114 +88,115 @@ document.addEventListener("DOMContentLoaded", () => {
      SYSTEM CURSOR (CLEAN)
      ========================= */
 
-  let cx = window.innerWidth/2, cy = window.innerHeight/2;
-  let tx = cx, ty = cy;
+  let cx = 0;
+  let cy = 0;
+  let tx = 0;
+  let ty = 0;
 
-  function animateCursor(){
+  function initCursorPosition() {
+    const rect = container.getBoundingClientRect();
+    cx = rect.width / 2;
+    cy = rect.height / 2;
+    tx = cx;
+    ty = cy;
+    cursor.classList.add("active");
+  }
 
-    // 🎯 smooth direct movement (no physics noise)
-    cx += (tx - cx) * 0.18;
-    cy += (ty - cy) * 0.18;
+  function animateCursor() {
+    cx += (tx - cx) * 0.2;
+    cy += (ty - cy) * 0.2;
 
-    if(cursor && container){
-      const rect = container.getBoundingClientRect();
+    cursor.style.left = cx + "px";
+    cursor.style.top = cy + "px";
 
-     cursor.style.left = cx + "px";
-cursor.style.top  = cy + "px";
-
-      if(Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5){
-        cursor.classList.add("active");
-      }
+    if (Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) {
+      cursor.classList.add("active");
     }
 
     requestAnimationFrame(animateCursor);
   }
+
+  initCursorPosition();
   animateCursor();
 
-  // initial activation
-  setTimeout(() => {
-    cursor?.classList.add("active");
-  }, 400);
+  function moveCursorTo(el) {
+    const r = el.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
 
-  function moveCursorTo(el){
-  const rect = el.getBoundingClientRect();
-  const containerRect = container.getBoundingClientRect();
+    // exact center relative to the demo container
+    tx = r.left - containerRect.left + r.width / 2;
+    ty = r.top - containerRect.top + r.height / 2;
+  }
 
-  // 🎯 convert to container-relative coordinates
-  tx = rect.left - containerRect.left + rect.width / 2;
-  ty = rect.top  - containerRect.top  + rect.height / 2;
-}
-
-  async function lookAt(el){
+  async function lookAt(el) {
     moveCursorTo(el);
     await wait(180);
   }
 
-  async function clickCursor(el){
+  async function clickCursor(el) {
     moveCursorTo(el);
-
     await wait(120);
 
-    cursor?.classList.add("clicking");
+    cursor.classList.add("clicking");
     await wait(100);
-    cursor?.classList.remove("clicking");
+    cursor.classList.remove("clicking");
   }
 
   /* =========================
      CAMERA
      ========================= */
 
-  function cameraFocus(mode){
-    container.classList.remove("camera-focus","camera-shift-left","camera-shift-right");
-    if(mode) container.classList.add(mode);
+  function cameraFocus(mode) {
+    container.classList.remove("camera-focus", "camera-shift-left", "camera-shift-right");
+    if (mode) container.classList.add(mode);
   }
 
   /* =========================
      CHAT
      ========================= */
 
-  function updateTabs(){
-    clientTabs.forEach((t,i)=>t.classList.toggle("active",i===activeClient));
+  function updateTabs() {
+    clientTabs.forEach((t, i) => t.classList.toggle("active", i === activeClient));
   }
 
-  function renderChat(i){
-    chatBox.innerHTML="";
-    chats[i].forEach(m=>{
-      const d=document.createElement("div");
-      d.className=`message ${m.type} fade-in-up`;
-      d.innerText=m.text;
+  function renderChat(i) {
+    chatBox.innerHTML = "";
+    chats[i].forEach(m => {
+      const d = document.createElement("div");
+      d.className = `message ${m.type} fade-in-up`;
+      d.innerText = m.text;
       chatBox.appendChild(d);
     });
   }
 
-  function addMessage(text,type){
-    chats[activeClient].push({text,type});
+  function addMessage(text, type) {
+    chats[activeClient].push({ text, type });
 
-    const d=document.createElement("div");
-    d.className=`message ${type} fade-in-up`;
-    d.innerText=text;
+    const d = document.createElement("div");
+    d.className = `message ${type} fade-in-up`;
+    d.innerText = text;
 
     chatBox.appendChild(d);
-    chatBox.scrollTo({top:chatBox.scrollHeight,behavior:"smooth"});
+    chatBox.scrollTo({ top: chatBox.scrollHeight, behavior: "smooth" });
   }
 
   /* =========================
      MEMORY + OPTIONS
      ========================= */
 
-  function remember(msg){
+  function remember(msg) {
     memory.push(msg.toLowerCase());
-    if(memory.length>6) memory.shift();
+    if (memory.length > 6) memory.shift();
   }
 
-  function generateOptions(msg){
-    const context=(memory.join(" ")+" "+msg).toLowerCase();
+  function generateOptions(msg) {
+    const context = (memory.join(" ") + " " + msg).toLowerCase();
 
-    function pick(arr){
-      return arr.slice(0,4);
+    function pick(arr) {
+      return arr.slice(0, 4);
     }
 
-    if(context.includes("busy")){
+    if (context.includes("busy")) {
       return pick([
         "Got it — I’ll keep it short.",
         "All good, we can take this later.",
@@ -204,7 +205,7 @@ cursor.style.top  = cy + "px";
       ]);
     }
 
-    if(context.includes("pricing")){
+    if (context.includes("pricing")) {
       return pick([
         "I’ll break it down simply.",
         "Here’s a quick overview.",
@@ -213,7 +214,7 @@ cursor.style.top  = cy + "px";
       ]);
     }
 
-    if(context.includes("flex")){
+    if (context.includes("flex")) {
       return pick([
         "We can adjust it.",
         "There’s flexibility there.",
@@ -222,7 +223,7 @@ cursor.style.top  = cy + "px";
       ]);
     }
 
-    if(context.includes("start")||context.includes("proceed")){
+    if (context.includes("start") || context.includes("proceed")) {
       return pick([
         "Alright, let’s do it.",
         "I’ll get this moving.",
@@ -231,7 +232,7 @@ cursor.style.top  = cy + "px";
       ]);
     }
 
-    if(context.includes("stop")){
+    if (context.includes("stop")) {
       return pick([
         "I’ll check back later.",
         "We can revisit this.",
@@ -252,19 +253,19 @@ cursor.style.top  = cy + "px";
      INPUT SIMULATION
      ========================= */
 
-  async function typeInput(text){
+  async function typeInput(text) {
     cameraFocus("camera-focus");
 
     await lookAt(input);
-    input.value="";
+    input.value = "";
 
-    for(let i=0;i<text.length;i++){
-      input.value+=text[i];
+    for (let i = 0; i < text.length; i++) {
+      input.value += text[i];
       await wait(25);
     }
   }
 
-  async function simulateUser(text){
+  async function simulateUser(text) {
     await wait(250);
 
     remember(text);
@@ -272,25 +273,24 @@ cursor.style.top  = cy + "px";
 
     await clickCursor(sendBtn);
 
-    input.value="";
-    addMessage(text,"user");
+    input.value = "";
+    addMessage(text, "user");
   }
 
   /* =========================
      OPTIONS
      ========================= */
 
-  async function showOptions(msg){
+  async function showOptions(msg) {
+    const list = generateOptions(msg);
 
-    const list=generateOptions(msg);
+    optionsPanel.innerHTML = "";
+    const buttons = [];
 
-    optionsPanel.innerHTML="";
-    const buttons=[];
-
-    list.forEach(t=>{
-      const b=document.createElement("div");
-      b.className="option-btn";
-      b.innerText=t;
+    list.forEach(t => {
+      const b = document.createElement("div");
+      b.className = "option-btn";
+      b.innerText = t;
       optionsPanel.appendChild(b);
       buttons.push(b);
     });
@@ -299,15 +299,15 @@ cursor.style.top  = cy + "px";
 
     await wait(500);
 
-    const selected=buttons[0]; // 🎯 deterministic
+    const selected = buttons[0];
 
     await clickCursor(selected);
     selected.classList.add("selected");
 
     await wait(300);
 
-    optionsPanel.innerHTML="";
-    addMessage(selected.innerText,"system");
+    optionsPanel.innerHTML = "";
+    addMessage(selected.innerText, "system");
 
     cameraFocus(null);
   }
@@ -316,54 +316,73 @@ cursor.style.top  = cy + "px";
      FLOW
      ========================= */
 
-  async function runDemo(){
+  async function runDemo() {
+    while (true) {
+      chats = { 0: [], 1: [] };
 
-    while(true){
-
-      chats={0:[],1:[]};
-
-      activeClient=0;
-      updateTabs(); renderChat(0);
+      activeClient = 0;
+      updateTabs();
+      renderChat(0);
 
       let msg;
 
-      msg="Client said they are busy this week";
-      await simulateUser(msg); await wait(readTime(msg)); await showOptions(msg);
+      msg = "Client said they are busy this week";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      msg="Client said maybe next week";
-      await simulateUser(msg); await wait(readTime(msg)); await showOptions(msg);
+      msg = "Client said maybe next week";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      activeClient=1;
-      await clickCursor(clientTabs[1]); updateTabs(); renderChat(1);
+      activeClient = 1;
+      await clickCursor(clientTabs[1]);
+      updateTabs();
+      renderChat(1);
 
-      msg="Client asked about pricing";
-      await simulateUser(msg); await wait(readTime(msg)); await showOptions(msg);
+      msg = "Client asked about pricing";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      msg="Client asked if flexible";
-      await simulateUser(msg); await wait(readTime(msg)); await showOptions(msg);
+      msg = "Client asked if flexible";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      activeClient=0;
-      await clickCursor(clientTabs[0]); updateTabs(); renderChat(0);
+      activeClient = 0;
+      await clickCursor(clientTabs[0]);
+      updateTabs();
+      renderChat(0);
 
-      msg="Client asked if we can start soon";
-      await simulateUser(msg); await wait(readTime(msg)); await showOptions(msg);
+      msg = "Client asked if we can start soon";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      msg="Client said let's proceed";
-      await simulateUser(msg); await wait(readTime(msg)); await showOptions(msg);
+      msg = "Client said let's proceed";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      addMessage("Outcome achieved.","system");
+      addMessage("Outcome achieved.", "system");
 
-      activeClient=1;
-      await clickCursor(clientTabs[1]); updateTabs(); renderChat(1);
+      activeClient = 1;
+      await clickCursor(clientTabs[1]);
+      updateTabs();
+      renderChat(1);
 
-      msg="Client stopped responding";
-      await simulateUser(msg); await wait(readTime(msg)); await showOptions(msg);
+      msg = "Client stopped responding";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      addMessage("Conversation ended.","system");
+      addMessage("Conversation ended.", "system");
 
       await wait(4000);
-      chatBox.innerHTML="";
-      optionsPanel.innerHTML="";
+      chatBox.innerHTML = "";
+      optionsPanel.innerHTML = "";
     }
   }
 
