@@ -4,36 +4,6 @@ document.documentElement.classList.add("loaded");
 document.addEventListener("DOMContentLoaded", () => {
 
   /* =========================
-     GLOBAL HOOK
-     ========================= */
-
-  const hookEl = document.getElementById("dynamicHook");
-
-  if (hookEl) {
-    const hooks = [
-      "From uncertainty to outcome.",
-      "Execution removes hesitation.",
-      "Every message should move forward.",
-      "Clarity creates momentum.",
-      "Structure turns intent into results."
-    ];
-
-    let i = 0;
-
-    function rotateHook() {
-      hookEl.style.opacity = 0;
-      setTimeout(() => {
-        hookEl.innerText = hooks[i];
-        hookEl.style.opacity = 0.6;
-        i = (i + 1) % hooks.length;
-      }, 300);
-    }
-
-    rotateHook();
-    setInterval(rotateHook, 4000);
-  }
-
-  /* =========================
      ELEMENTS
      ========================= */
 
@@ -48,10 +18,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let activeClient = 0;
   let chats = { 0: [], 1: [] };
+  let memory = [];
 
   const wait = (t) => new Promise(res => setTimeout(res, t));
   const readTime = (t) => Math.max(1400, t.length * 40);
-  const adaptiveDelay = (b=800)=> b + Math.random()*b*0.6;
 
   document.addEventListener("selectstart", e => e.preventDefault());
   document.addEventListener("dragstart", e => e.preventDefault());
@@ -68,10 +38,12 @@ document.addEventListener("DOMContentLoaded", () => {
   function animateCursor(){
     cx += (tx-cx)*0.1;
     cy += (ty-cy)*0.1;
+
     if(cursor){
       cursor.style.left = cx+"px";
       cursor.style.top = cy+"px";
     }
+
     requestAnimationFrame(animateCursor);
   }
   animateCursor();
@@ -82,20 +54,28 @@ document.addEventListener("DOMContentLoaded", () => {
     ty = r.top + r.height*(0.4+Math.random()*0.3);
   }
 
-  async function hoverCursor(el){
-    moveCursorTo(el);
-    await wait(150 + Math.random()*300);
-  }
-
   async function clickCursor(el){
-    await hoverCursor(el);
+    moveCursorTo(el);
+    await wait(200);
     cursor?.classList.add("clicking");
     await wait(120);
     cursor?.classList.remove("clicking");
   }
 
   /* =========================
-     CHAT RENDER
+     CAMERA
+     ========================= */
+
+  function cameraFocus(mode){
+    const c = document.querySelector(".demo-container");
+    if(!c) return;
+
+    c.classList.remove("camera-focus","camera-shift-left","camera-shift-right");
+    if(mode) c.classList.add(mode);
+  }
+
+  /* =========================
+     CHAT
      ========================= */
 
   function updateTabs(){
@@ -115,30 +95,97 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function addMessage(text,type){
     chats[activeClient].push({text,type});
+
     const d=document.createElement("div");
     d.className=`message ${type} fade-in-up`;
     d.innerText=text;
+
     chatBox.appendChild(d);
     chatBox.scrollTo({top:chatBox.scrollHeight,behavior:"smooth"});
   }
 
   /* =========================
-     HUMAN TYPING
+     MEMORY + AI OPTIONS
+     ========================= */
+
+  function remember(msg){
+    memory.push(msg.toLowerCase());
+    if(memory.length > 6) memory.shift();
+  }
+
+  function generateOptions(msg){
+    const context = (memory.join(" ") + " " + msg).toLowerCase();
+
+    if(context.includes("busy")){
+      return [
+        "No worries — I’ll keep this simple.",
+        "All good — I’ll follow up later.",
+        "I’ll make this quick for you.",
+        "Let me know when it works better."
+      ];
+    }
+
+    if(context.includes("pricing")){
+      return [
+        "Happy to break this down.",
+        "Quick overview for you.",
+        "Let’s tailor this.",
+        "We can adjust pricing."
+      ];
+    }
+
+    if(context.includes("start") || context.includes("proceed")){
+      return [
+        "Let’s begin.",
+        "Starting now.",
+        "Everything is aligned.",
+        "Moving forward."
+      ];
+    }
+
+    if(context.includes("stop")){
+      return [
+        "I’ll follow up later.",
+        "Leaving this open.",
+        "Happy to reconnect.",
+        "Closing for now."
+      ];
+    }
+
+    return [
+      "Continuing from here.",
+      "I’ll take the next step.",
+      "Moving forward.",
+      "Handled."
+    ];
+  }
+
+  /* =========================
+     HUMAN INPUT
      ========================= */
 
   async function typeInput(text){
+    cameraFocus("camera-focus");
+
     await clickCursor(input);
     input.value="";
+
     for(let i=0;i<text.length;i++){
       input.value+=text[i];
       await wait(25+Math.random()*60);
-      if(Math.random()<0.08) await wait(200);
+
+      if(Math.random()<0.08){
+        await wait(200);
+      }
     }
   }
 
   async function simulateUser(text){
+    remember(text);
+
     await typeInput(text);
     await clickCursor(sendBtn);
+
     input.value="";
     addMessage(text,"user");
   }
@@ -147,7 +194,9 @@ document.addEventListener("DOMContentLoaded", () => {
      OPTIONS
      ========================= */
 
-  async function showOptions(list){
+  async function showOptions(msg){
+
+    const list = generateOptions(msg);
 
     optionsPanel.innerHTML="";
     const buttons=[];
@@ -160,94 +209,111 @@ document.addEventListener("DOMContentLoaded", () => {
       buttons.push(b);
     });
 
-    for(let b of buttons){
-      await wait(100);
-      b.classList.add("show");
-    }
+    cameraFocus(Math.random()<0.5 ? "camera-shift-left" : "camera-shift-right");
 
-    await wait(1500+Math.random()*1000);
+    await wait(1500+Math.random()*800);
 
-    const selected=buttons[Math.floor(Math.random()*buttons.length)];
+    const selected = buttons[Math.floor(Math.random()*buttons.length)];
 
     await clickCursor(selected);
     selected.classList.add("selected");
 
     await wait(400);
+
     optionsPanel.innerHTML="";
     addMessage(selected.innerText,"system");
+
+    cameraFocus(null);
   }
 
   /* =========================
-     SCENARIOS
-     ========================= */
-
-  const scenarios=[
-    ["Client is busy","Client maybe next week"],
-    ["Client reviewing","Client follow up later"],
-    ["Client interested","Client stopped replying"]
-  ];
-
-  function getScenario(){
-    return scenarios[Math.floor(Math.random()*scenarios.length)];
-  }
-
-  /* =========================
-     DEMO LOOP
+     FINAL FLOW (FIXED)
      ========================= */
 
   async function runDemo(){
 
     while(true){
 
-      const s=getScenario();
-
       chats={0:[],1:[]};
+
+      /* CLIENT 1 */
+
       activeClient=0;
       updateTabs();
       renderChat(0);
 
-      await simulateUser(s[0]);
-      await wait(adaptiveDelay());
+      let msg;
 
-      await showOptions([
-        "No worries — I’ll keep this simple.",
-        "All good — quick summary works.",
-        "Following up when it works.",
-        "Let me know when ready."
-      ]);
+      msg="Client said they are busy this week";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      await wait(adaptiveDelay());
+      msg="Client said maybe next week";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      await simulateUser(s[1]);
-      await wait(adaptiveDelay());
-
-      await showOptions([
-        "Sure — I’ll follow up.",
-        "Works — I’ll check back.",
-        "Keeping this ready.",
-        "Let me know anytime."
-      ]);
-
-      await wait(2000);
+      /* CLIENT 2 FULL */
 
       activeClient=1;
       await clickCursor(clientTabs[1]);
       updateTabs();
       renderChat(1);
 
-      await simulateUser("Client asked about pricing");
-      await wait(adaptiveDelay());
+      msg="Client asked about pricing";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
-      await showOptions([
-        "Happy to break this down.",
-        "Quick cost overview.",
-        "Full details if needed.",
-        "We can customize."
-      ]);
+      msg="Client asked if flexible";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      msg="Client will confirm soon";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      /* BACK CLIENT 1 */
+
+      activeClient=0;
+      await clickCursor(clientTabs[0]);
+      updateTabs();
+      renderChat(0);
+
+      msg="Client asked if we can start soon";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      msg="Client said let's proceed";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
 
       addMessage("Outcome achieved.","system");
 
-      await wait(5000);
+      /* CLIENT 2 END */
+
+      activeClient=1;
+      await clickCursor(clientTabs[1]);
+      updateTabs();
+      renderChat(1);
+
+      msg="Client stopped responding";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      addMessage("Conversation ended.","system");
+
+      /* RESET */
+
+      await wait(4000);
+      chatBox.innerHTML="";
+      optionsPanel.innerHTML="";
     }
   }
 
