@@ -89,6 +89,8 @@ header h1 {
   padding: 0 16px;
   margin: 0 auto;
   flex: 1;
+
+  scroll-snap-type: y proximity;
 }
 
 /* ===============================
@@ -98,6 +100,17 @@ header h1 {
 section {
   margin: clamp(70px, 10vh, 110px) 0;
   text-align: center;
+
+  scroll-snap-align: start;
+
+  opacity: 0;
+  transform: translateY(20px);
+  transition: all 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+
+section.visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 section p {
@@ -120,25 +133,79 @@ section p {
 }
 
 /* ===============================
-   NAV
+   FLOATING NAV
    =============================== */
 
 .nav-minimal {
+  position: sticky;
+  top: 16px;
+  z-index: 100;
+
   display: flex;
   justify-content: center;
   gap: 16px;
   flex-wrap: wrap;
-  margin: 30px 0;
+
+  backdrop-filter: blur(12px);
+  background: rgba(20,20,22,0.6);
+
+  padding: 10px 18px;
+  border-radius: 999px;
+
+  width: fit-content;
+  margin: 30px auto;
+
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+  transition: all 0.3s ease;
+}
+
+.nav-minimal.scrolled {
+  backdrop-filter: blur(16px);
+  background: rgba(20,20,22,0.8);
+  transform: translateY(-2px);
 }
 
 .nav-minimal a {
   color: rgba(255,255,255,0.6);
   text-decoration: none;
   font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: all 0.2s ease;
 }
 
 .nav-minimal a:hover {
   color: #fff;
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-1px);
+}
+
+/* active */
+.nav-minimal a.active {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* HOME DOMINANT */
+.nav-minimal a[data-page="home"] {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.nav-minimal a[data-page="home"]:hover {
+  background: #fff;
+  color: #000;
+}
+
+.nav-minimal a[data-page="home"].active {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 6px 20px rgba(255,255,255,0.15);
 }
 
 /* ===============================
@@ -159,7 +226,10 @@ a::after {
   transition: width 0.3s ease;
 }
 
-a:hover::after { width: 100%; }
+a:hover::after,
+.nav-minimal a.active::after {
+  width: 100%;
+}
 
 /* ===============================
    FOOTER
@@ -209,19 +279,15 @@ a:hover::after { width: 100%; }
   opacity: 0.6;
 }
 
-.option-btn .tag.left {
-  left: 10px;
-}
-
-.option-btn .tag.right {
-  right: 10px;
-}
+.option-btn .tag.left { left: 10px; }
+.option-btn .tag.right { right: 10px; }
 
 /* ===============================
-   OUTFLOW UI
+   DEMO UI
    =============================== */
 
 .demo-container {
+  position: relative;
   max-width: 720px;
   margin: 40px auto;
   padding: 20px;
@@ -229,7 +295,22 @@ a:hover::after { width: 100%; }
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.02);
 
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+
   transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
+}
+
+/* cinematic */
+.demo-container.camera-focus {
+  transform: scale(1.06);
+}
+
+.demo-container.camera-shift-left {
+  transform: scale(1.05) translateX(-14px);
+}
+
+.demo-container.camera-shift-right {
+  transform: scale(1.05) translateX(14px);
 }
 
 .clients {
@@ -249,6 +330,10 @@ a:hover::after { width: 100%; }
   background: #fff;
   color: #000;
 }
+
+/* ===============================
+   CHAT
+   =============================== */
 
 .chat-area {
   display: flex;
@@ -278,12 +363,14 @@ a:hover::after { width: 100%; }
   align-self: flex-end;
   background: #0a84ff;
   color: white;
+  box-shadow: 0 6px 20px rgba(10,132,255,0.2);
 }
 
 .message.system {
   align-self: flex-start;
   background: rgba(255,255,255,0.06);
   color: white;
+  box-shadow: 0 4px 14px rgba(255,255,255,0.05);
 }
 
 /* animation */
@@ -301,7 +388,7 @@ a:hover::after { width: 100%; }
 }
 
 /* ===============================
-   INPUT + OPTIONS
+   INPUT
    =============================== */
 
 .options-panel { margin-top: 10px; }
@@ -326,32 +413,37 @@ a:hover::after { width: 100%; }
 }
 
 /* ===============================
-   CURSOR + TRAIL
+   ADAPTIVE FAKE CURSOR
    =============================== */
 
 #fakeCursor {
-  position: fixed;
+  position: absolute;
   width: 14px;
   height: 14px;
   border-radius: 50%;
   background: white;
-  z-index: 99999;
+  z-index: 50;
   pointer-events: none;
   transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
 }
+
+#fakeCursor.active { opacity: 1; }
+#fakeCursor.idle { opacity: 0.2; }
 
 #fakeCursor.clicking {
   transform: translate(-50%, -50%) scale(0.7);
 }
 
 .cursor-trail {
-  position: fixed;
+  position: absolute;
   width: 6px;
   height: 6px;
   border-radius: 50%;
   background: rgba(255,255,255,0.2);
   pointer-events: none;
-  z-index: 99998;
+  z-index: 40;
   animation: fadeTrail 0.6s linear forwards;
 }
 
@@ -360,20 +452,4 @@ a:hover::after { width: 100%; }
     opacity: 0;
     transform: scale(0.5);
   }
-}
-
-/* ===============================
-   CINEMATIC CAMERA
-   =============================== */
-
-.demo-container.camera-focus {
-  transform: scale(1.03);
-}
-
-.demo-container.camera-shift-left {
-  transform: scale(1.02) translateX(-6px);
-}
-
-.demo-container.camera-shift-right {
-  transform: scale(1.02) translateX(6px);
 }
