@@ -398,3 +398,33 @@ a:hover::after,
 #fakeCursor.clicking {
   transform: translate(-50%, -50%) scale(0.75);
 }
+/* ===============================
+   CLIENT PILLS (RESTORE)
+   =============================== */
+
+.clients {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.client {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+
+  cursor: default;
+  transition: all 0.2s ease;
+}
+
+.client.active {
+  background: #fff;
+  color: #000;
+}
+
+.client.add {
+  opacity: 0.6;
+}
