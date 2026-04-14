@@ -155,31 +155,42 @@ document.addEventListener("DOMContentLoaded", () => {
      OPTIONS
      ========================= */
 
-  async function showOptions(list) {
+ async function showOptions(list) {
 
-    optionsPanel.innerHTML = "";
+  optionsPanel.innerHTML = "";
 
-    list.forEach(text => {
-      const btn = document.createElement("div");
-      btn.className = "option-btn";
-      btn.innerText = text;
-      optionsPanel.appendChild(btn);
-    });
+  const buttons = [];
 
-    await wait(2500 + Math.random() * 1000);
+  list.forEach(text => {
+    const btn = document.createElement("div");
+    btn.className = "option-btn";
+    btn.innerText = text;
 
-    if (!optionsPanel.children.length) return;
+    optionsPanel.appendChild(btn);
+    buttons.push(btn);
+  });
 
-    const randomIndex = Math.floor(Math.random() * optionsPanel.children.length);
-    const selected = optionsPanel.children[randomIndex];
-
-    selected.classList.add("selected");
-
-    await wait(400);
-
-    optionsPanel.innerHTML = "";
-    addMessage(selected.innerText, "system");
+  /* 🔥 safe animation (no invisibility risk) */
+  for (let i = 0; i < buttons.length; i++) {
+    await wait(120);
+    buttons[i].classList.add("show");
   }
+
+  /* wait before auto select */
+  await wait(2000 + Math.random() * 1000);
+
+  if (!buttons.length) return;
+
+  const index = Math.floor(Math.random() * buttons.length);
+  const selected = buttons[index];
+
+  selected.classList.add("selected");
+
+  await wait(400);
+
+  optionsPanel.innerHTML = "";
+  addMessage(selected.innerText, "system");
+}
 
   /* =========================
      DEMO FLOW
