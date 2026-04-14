@@ -387,17 +387,19 @@ a:hover::after,
   z-index: 999;
   pointer-events: none;
 
-  transform: translate(-50%, -50%);
   opacity: 0;
 
   transition: opacity 0.2s ease, transform 0.12s ease;
 }
 
-#fakeCursor.active { opacity: 1; }
+#fakeCursor.active {
+  opacity: 1;
+}
 
 #fakeCursor.clicking {
-  transform: translate(-50%, -50%) scale(0.75);
+  transform: scale(0.75);
 }
+
 /* ===============================
    CLIENT PILLS (RESTORE)
    =============================== */
