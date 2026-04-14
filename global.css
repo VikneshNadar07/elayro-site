@@ -291,47 +291,34 @@ section p {
   margin-bottom: 4px;
 }
 
-\/* ===============================
-   OPTION BUTTON (SAFE + ANIMATED)
+/* ===============================
+   OPTION BUTTON (FINAL FIX)
    =============================== */
 
 .option-btn {
+  display: block;              /* 🔥 important */
   width: 100%;
-  padding: 12px 14px;
-  border-radius: 10px;
 
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.08);
+  padding: 14px 16px;
+  margin: 0;
 
-  font-size: 13px;
+  border-radius: 12px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+
+  font-size: 13.5px;
+  line-height: 1.5;
   text-align: left;
 
-  /* 🔥 ALWAYS visible */
-  opacity: 1;
-  transform: translateY(0);
+  cursor: default;
 
   transition: all 0.25s ease;
 }
 
-/* animation trigger (optional enhancement) */
-.option-btn.show {
-  animation: optionFade 0.3s ease forwards;
-}
-
-@keyframes optionFade {
-  from {
-    opacity: 0.6;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* hover */
+/* hover feel */
 .option-btn:hover {
-  background: rgba(255,255,255,0.1);
+  background: rgba(255,255,255,0.12);
   transform: translateY(-1px);
 }
 
@@ -340,7 +327,18 @@ section p {
   background: #fff;
   color: #000;
 }
+/* ===============================
+   OPTIONS PANEL (STACK FIX)
+   =============================== */
 
+.options-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  width: 100%;
+  margin-top: 12px;
+}
 /* ===============================
    INPUT
    =============================== */
