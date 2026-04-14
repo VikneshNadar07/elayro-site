@@ -392,7 +392,7 @@ window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
 });
 /* =========================
-   NOTIFY SYSTEM (FINAL)
+   NOTIFY SYSTEM (FINAL FIX)
    ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -401,13 +401,22 @@ document.addEventListener("DOMContentLoaded", () => {
   const notifyEmail = document.getElementById("notifyEmail");
   const notifySuccess = document.getElementById("notifySuccess");
 
-  if (!notifyBtn || !notifyEmail) return;
+  console.log("notify init");
+
+  if (!notifyBtn || !notifyEmail) {
+    console.log("notify elements missing");
+    return;
+  }
 
   notifyBtn.addEventListener("click", async () => {
+    console.log("clicked");
 
     const email = notifyEmail.value.trim();
 
-    if (!email || !email.includes("@")) return;
+    if (!email || !email.includes("@")) {
+      alert("Enter valid email");
+      return;
+    }
 
     notifyBtn.innerText = "Adding...";
     notifyBtn.disabled = true;
@@ -421,6 +430,9 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ email })
       });
 
+      const data = await res.json();
+      console.log("response:", data);
+
       if (!res.ok) throw new Error();
 
       notifySuccess.classList.add("show");
@@ -428,6 +440,7 @@ document.addEventListener("DOMContentLoaded", () => {
       notifyBtn.innerText = "Added";
 
     } catch (err) {
+      console.log("error:", err);
       notifyBtn.innerText = "Retry";
       notifyBtn.disabled = false;
     }
