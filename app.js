@@ -391,3 +391,43 @@ document.addEventListener("DOMContentLoaded", () => {
 window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
 });
+/* =========================
+   NOTIFY SYSTEM (FINAL)
+   ========================= */
+
+const notifyBtn = document.getElementById("notifyBtn");
+const notifyEmail = document.getElementById("notifyEmail");
+const notifySuccess = document.getElementById("notifySuccess");
+
+if (notifyBtn && notifyEmail) {
+
+  notifyBtn.addEventListener("click", async () => {
+    const email = notifyEmail.value.trim();
+
+    if (!email || !email.includes("@")) return;
+
+    notifyBtn.innerText = "Adding...";
+    notifyBtn.disabled = true;
+
+    try {
+      const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ email })
+      });
+
+      if (!res.ok) throw new Error();
+
+      notifySuccess.classList.add("show");
+      notifyEmail.value = "";
+      notifyBtn.innerText = "Added";
+
+    } catch (err) {
+      notifyBtn.innerText = "Retry";
+      notifyBtn.disabled = false;
+    }
+  });
+
+}
