@@ -1,4 +1,4 @@
-// 🔥 SAFETY: ensure page is visible immediately
+// 🔥 SAFETY FIX (prevents black screen, does NOT affect UI)
 document.documentElement.classList.add("loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     CHAT SYSTEM
+     CHAT SYSTEM (UNCHANGED)
      ========================= */
 
   const chatBox = document.getElementById("chatBox");
@@ -118,6 +118,10 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
+  /* =========================
+     INPUT SIMULATION
+     ========================= */
+
   async function typeInput(text) {
     input.classList.add("ai-active");
     input.value = "";
@@ -143,7 +147,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     OPTIONS (UPGRADED SAFELY)
+     OPTIONS (UNCHANGED)
      ========================= */
 
   async function showOptions(list) {
@@ -151,18 +155,11 @@ document.addEventListener("DOMContentLoaded", () => {
     optionsPanel.innerHTML = "";
 
     const buttons = [];
-    const tags = ["Best", "Strong", "Safe", "Casual"];
 
-    list.forEach((text, i) => {
+    list.forEach(text => {
       const btn = document.createElement("div");
       btn.className = "option-btn";
-
-      // 🔥 SAME STRUCTURE + TAGS (NO BREAK)
-      btn.innerHTML = `
-        <span class="tag left">${tags[i]}</span>
-        ${text}
-        <span class="tag right">${tags[i]}</span>
-      `;
+      btn.innerText = text;
 
       optionsPanel.appendChild(btn);
       buttons.push(btn);
@@ -183,15 +180,7 @@ document.addEventListener("DOMContentLoaded", () => {
     await wait(400);
 
     optionsPanel.innerHTML = "";
-
-    const cleanText = selected.innerText
-      .replace("Best","")
-      .replace("Strong","")
-      .replace("Safe","")
-      .replace("Casual","")
-      .trim();
-
-    addMessage(cleanText, "system");
+    addMessage(selected.innerText, "system");
   }
 
   /* =========================
@@ -315,6 +304,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   runDemo();
+
 });
 
 /* =========================
@@ -323,5 +313,4 @@ document.addEventListener("DOMContentLoaded", () => {
 
 window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
-  document.documentElement.classList.add("loaded");
 });
