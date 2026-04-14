@@ -155,16 +155,13 @@ document.addEventListener("DOMContentLoaded", () => {
      OPTIONS
      ========================= */
 
-/* =========================
-   OPTIONS (UPDATED UI)
-   ========================= */
+/* KEEP EVERYTHING SAME — ONLY FIXED OPTIONS */
 
 async function showOptions(list) {
 
   optionsPanel.innerHTML = "";
 
   const buttons = [];
-
   const tags = ["Best", "Strong", "Safe", "Casual"];
 
   list.forEach((text, i) => {
@@ -172,29 +169,46 @@ async function showOptions(list) {
     const btn = document.createElement("div");
     btn.className = "option-btn";
 
-    // LEFT TAG
-    const leftTag = document.createElement("span");
-    leftTag.className = "option-tag left";
-    leftTag.innerText = tags[i % tags.length];
-
-    // TEXT (same as before but wrapped)
-    const content = document.createElement("span");
-    content.className = "option-text";
-    content.innerText = text;
-
-    // RIGHT TAG (same as left)
-    const rightTag = document.createElement("span");
-    rightTag.className = "option-tag right";
-    rightTag.innerText = tags[i % tags.length];
-
-    // APPEND (same structure flow)
-    btn.appendChild(leftTag);
-    btn.appendChild(content);
-    btn.appendChild(rightTag);
+    // 🔥 KEEP ORIGINAL TEXT FLOW (IMPORTANT)
+    btn.innerHTML = `
+      <span class="tag left">${tags[i]}</span>
+      ${text}
+      <span class="tag right">${tags[i]}</span>
+    `;
 
     optionsPanel.appendChild(btn);
     buttons.push(btn);
   });
+
+  /* ORIGINAL ANIMATION (SAFE) */
+  for (let i = 0; i < buttons.length; i++) {
+    await wait(120);
+    buttons[i].classList.add("show");
+  }
+
+  await wait(2000 + Math.random() * 1000);
+
+  if (!buttons.length) return;
+
+  const index = Math.floor(Math.random() * buttons.length);
+  const selected = buttons[index];
+
+  selected.classList.add("selected");
+
+  await wait(400);
+
+  optionsPanel.innerHTML = "";
+
+  // 🔥 FIX: extract only text (remove tags)
+  const cleanText = selected.innerText
+    .replace("Best","")
+    .replace("Strong","")
+    .replace("Safe","")
+    .replace("Casual","")
+    .trim();
+
+  addMessage(cleanText, "system");
+}
 
   /* animation (UNCHANGED) */
   for (let i = 0; i < buttons.length; i++) {
