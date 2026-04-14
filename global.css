@@ -239,13 +239,12 @@ body.fade-out {
 }
 
 /* ===============================
-   OPTION UI (FINAL)
+   OPTION BUTTON (SAFE FIX)
    =============================== */
 
 .option-btn {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: block;   /* 🔥 KEEP ORIGINAL */
+  width: 100%;
 
   padding: 14px 16px;
   border-radius: 12px;
@@ -255,37 +254,48 @@ body.fade-out {
 
   font-size: 13.5px;
   line-height: 1.5;
+  text-align: left;
+
+  position: relative;
 
   transition: all 0.25s ease;
 }
 
-.option-text {
-  flex: 1;
-  text-align: center;
-  padding: 0 10px;
-}
+/* TAGS (ABSOLUTE — NO LAYOUT BREAK) */
+.option-btn .tag {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
 
-.option-tag {
   font-size: 10px;
-  padding: 4px 8px;
+  padding: 3px 6px;
   border-radius: 999px;
-  opacity: 0.7;
-  white-space: nowrap;
+  opacity: 0.6;
 }
 
-.option-tag.left {
+.option-btn .tag.left {
+  left: 10px;
   background: rgba(255,255,255,0.06);
 }
 
-.option-tag.right {
+.option-btn .tag.right {
+  right: 10px;
   background: rgba(255,255,255,0.12);
 }
 
+/* push text center visually */
+.option-btn {
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+/* hover */
 .option-btn:hover {
   background: rgba(255,255,255,0.12);
   transform: translateY(-1px);
 }
 
+/* selected */
 .option-btn.selected {
   background: #fff;
   color: #000;
