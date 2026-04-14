@@ -401,38 +401,62 @@ const notifySuccess = document.getElementById("notifySuccess");
 
 if (notifyBtn && notifyEmail) {
 
-  notifyBtn.addEventListener("click", async () => {
-    console.log("clicked");
+  export default {
+  async fetch(request, env) {
 
-    const email = notifyEmail.value.trim();
+    // ✅ Handle CORS (IMPORTANT)
+    if (request.method === "OPTIONS") {
+      return new Response(null, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Methods": "POST, OPTIONS",
+          "Access-Control-Allow-Headers": "Content-Type"
+        }
+      });
+    }
 
-    if (!email || !email.includes("@")) return;
-
-    notifyBtn.innerText = "Adding...";
-    notifyBtn.disabled = true;
+    if (request.method !== "POST") {
+      return new Response("Method not allowed", { status: 405 });
+    }
 
     try {
-      const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
+      const { email } = await request.json();
+
+      if (!email) {
+        return new Response(JSON.stringify({ error: "No email" }), {
+          status: 400
+        });
+      }
+
+      await fetch("https://api.brevo.com/v3/contacts", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
+          "api-key": env.BREVO_API_KEY
         },
-        body: JSON.stringify({ email })
+        body: JSON.stringify({
+          email: email,
+          listIds: [6],
+          updateEnabled: true
+        })
       });
 
-      console.log("response", res);
-
-      if (!res.ok) throw new Error();
-
-      notifySuccess.classList.add("show");
-      notifyEmail.value = "";
-      notifyBtn.innerText = "Added";
+      return new Response(JSON.stringify({ success: true }), {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*"
+        }
+      });
 
     } catch (err) {
-      console.log("error", err);
-      notifyBtn.innerText = "Retry";
-      notifyBtn.disabled = false;
+      return new Response(JSON.stringify({ error: "Failed" }), {
+        status: 500,
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+        }
+      });
     }
-  });
+  }
+};
 
 }
