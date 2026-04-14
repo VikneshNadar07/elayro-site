@@ -75,6 +75,7 @@ header h1 {
 }
 
 .punch { opacity: 0.9; }
+
 .hook {
   opacity: 0.6;
   max-width: 520px;
@@ -83,7 +84,7 @@ header h1 {
 }
 
 /* ===============================
-   CONTENT
+   CONTENT (FIXED)
    =============================== */
 
 .content {
@@ -91,7 +92,8 @@ header h1 {
   max-width: 720px;
   padding: 0 16px;
   margin: 0 auto;
-  flex: 1;
+
+  flex: 1 0 auto;  /* 🔥 FIX */
   display: flex;
   flex-direction: column;
 }
@@ -147,7 +149,10 @@ section p {
   transition: 0.2s ease;
 }
 
-.nav-minimal a:hover { color: #fff; transform: translateY(-1px); }
+.nav-minimal a:hover {
+  color: #fff;
+  transform: translateY(-1px);
+}
 
 .nav-minimal a.active {
   color: #fff;
@@ -165,12 +170,6 @@ section p {
   opacity: 0.6;
 }
 
-.nav-minimal a.hide {
-  opacity: 0;
-  transform: translateY(-6px);
-  pointer-events: none;
-}
-
 /* ===============================
    INDEX BUTTON LINKS
    =============================== */
@@ -185,195 +184,13 @@ section p {
   text-decoration: none;
   font-size: 13px;
   background: rgba(255,255,255,0.04);
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
 }
 
 .index-links a:hover {
   background: rgba(255,255,255,0.08);
-  transform: translateY(-2px);
-}
-
-/* ===============================
-   DEMO CONTAINER
-   =============================== */
-
-.demo-container {
-  margin-top: 30px;
-  padding: 14px;
-  border-radius: 14px;
-  background: rgba(20,20,22,0.65);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255,255,255,0.08);
-}
-
-/* ===============================
-   CLIENT TABS
-   =============================== */
-
-.clients {
-  display: flex;
-  gap: 8px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-bottom: 12px;
-}
-
-.client {
-  padding: 8px 14px;
-  border-radius: 999px;
-  background: rgba(255,255,255,0.06);
-  font-size: 12px;
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.client.active {
-  background: #fff;
-  color: #000;
-}
-
-/* ===============================
-   CHAT AREA
-   =============================== */
-
-.chat-area {
-  display: flex;
-  flex-direction: column;
-  background: rgba(20,20,22,0.65);
-  backdrop-filter: blur(12px);
-  border-radius: 12px;
-  padding: 12px;
-  height: 400px;
-  overflow: hidden;
-  border: 1px solid rgba(255,255,255,0.06);
-
-  pointer-events: none;
-  user-select: none;
-}
-
-/* ===============================
-   CHAT BOX
-   =============================== */
-
-.chat-box {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  overflow-y: auto;
-}
-
-/* ===============================
-   MESSAGE
-   =============================== */
-
-.message {
-  max-width: 75%;
-  padding: 10px 14px;
-  border-radius: 14px;
-  font-size: 14px;
-  line-height: 1.5;
-}
-
-.message.user {
-  align-self: flex-end;
-  background: #fff;
-  color: #000;
-}
-
-.message.system {
-  align-self: flex-start;
-  background: #1a1a1a;
-}
-
-.msg-label {
-  font-size: 10px;
-  opacity: 0.5;
-  margin-bottom: 4px;
-}
-
-/* ===============================
-   OPTION BUTTON (FINAL FIX)
-   =============================== */
-
-.option-btn {
-  display: block;              /* 🔥 important */
-  width: 100%;
-
-  padding: 14px 16px;
-  margin: 0;
-
-  border-radius: 12px;
-
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-
-  font-size: 13.5px;
-  line-height: 1.5;
-  text-align: left;
-
-  cursor: default;
-
-  transition: all 0.25s ease;
-}
-
-/* hover feel */
-.option-btn:hover {
-  background: rgba(255,255,255,0.12);
-  transform: translateY(-1px);
-}
-
-/* selected */
-.option-btn.selected {
-  background: #fff;
-  color: #000;
-}
-/* ===============================
-   OPTIONS PANEL (STACK FIX)
-   =============================== */
-
-.options-panel {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-
-  width: 100%;
-  margin-top: 12px;
-}
-/* ===============================
-   INPUT
-   =============================== */
-
-.input-area {
-  display: flex;
-  gap: 6px;
-  margin-top: 10px;
-}
-
-.input-area input {
-  flex: 1;
-  padding: 10px 12px;
-  border-radius: 10px;
-  background: rgba(255,255,255,0.03);
-  border: 1px solid rgba(255,255,255,0.08);
-  color: #fff;
-}
-
-.input-area button {
-  padding: 10px 14px;
-  border-radius: 10px;
-  background: #fff;
-  color: #000;
-}
-
-/* ===============================
-   MOBILE
-   =============================== */
-
-@media (max-width: 600px) {
-
-  .chat-area { height: 340px; }
-  .message { max-width: 90%; }
-
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 6px 18px rgba(255,255,255,0.08);
 }
 
 /* ===============================
@@ -382,19 +199,19 @@ section p {
 
 .reveal {
   opacity: 0;
-  transform: translateY(28px);
-  transition: all 0.8s ease;
+  transform: translateY(24px);
+  transition: all 0.8s cubic-bezier(0.22,1,0.36,1);
 }
 
 .reveal.visible {
   opacity: 1;
   transform: translateY(0);
 }
+
 /* ===============================
-   MICRO HOVER UPGRADE (SAFE)
+   LINK HOVER EFFECT
    =============================== */
 
-/* Link underline animation */
 a {
   position: relative;
 }
@@ -415,23 +232,8 @@ a:hover::after {
   width: 100%;
 }
 
-/* Button upgrade */
-.index-links a:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 6px 18px rgba(255,255,255,0.08);
-}
-
 /* ===============================
-   SMOOTHER MOTION (SAFE OVERRIDE)
-   =============================== */
-
-.reveal {
-  transform: translateY(24px);
-  transition: all 0.8s cubic-bezier(0.22,1,0.36,1);
-}
-
-/* ===============================
-   PAGE TRANSITION (SAFE)
+   PAGE TRANSITION
    =============================== */
 
 body.fade-out {
@@ -439,8 +241,9 @@ body.fade-out {
   transform: translateY(4px);
   transition: all 0.35s ease;
 }
+
 /* ===============================
-   FOOTER
+   FOOTER (FIXED)
    =============================== */
 
 .footer-global {
@@ -448,4 +251,6 @@ body.fade-out {
   padding: 30px 16px;
   text-align: center;
   opacity: 0.6;
+
+  flex-shrink: 0; /* 🔥 FIX */
 }
