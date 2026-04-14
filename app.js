@@ -392,71 +392,45 @@ window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
 });
 /* =========================
-   NOTIFY SYSTEM
+   NOTIFY SYSTEM (FINAL)
    ========================= */
 
-const notifyBtn = document.getElementById("notifyBtn");
-const notifyEmail = document.getElementById("notifyEmail");
-const notifySuccess = document.getElementById("notifySuccess");
+document.addEventListener("DOMContentLoaded", () => {
 
-if (notifyBtn && notifyEmail) {
+  const notifyBtn = document.getElementById("notifyBtn");
+  const notifyEmail = document.getElementById("notifyEmail");
+  const notifySuccess = document.getElementById("notifySuccess");
 
-  export default {
-  async fetch(request, env) {
+  if (!notifyBtn || !notifyEmail) return;
 
-    // ✅ Handle CORS (IMPORTANT)
-    if (request.method === "OPTIONS") {
-      return new Response(null, {
-        headers: {
-          "Access-Control-Allow-Origin": "*",
-          "Access-Control-Allow-Methods": "POST, OPTIONS",
-          "Access-Control-Allow-Headers": "Content-Type"
-        }
-      });
-    }
+  notifyBtn.addEventListener("click", async () => {
 
-    if (request.method !== "POST") {
-      return new Response("Method not allowed", { status: 405 });
-    }
+    const email = notifyEmail.value.trim();
+
+    if (!email || !email.includes("@")) return;
+
+    notifyBtn.innerText = "Adding...";
+    notifyBtn.disabled = true;
 
     try {
-      const { email } = await request.json();
-
-      if (!email) {
-        return new Response(JSON.stringify({ error: "No email" }), {
-          status: 400
-        });
-      }
-
-      await fetch("https://api.brevo.com/v3/contacts", {
+      const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
         method: "POST",
         headers: {
-          "Content-Type": "application/json",
-          "api-key": env.BREVO_API_KEY
+          "Content-Type": "application/json"
         },
-        body: JSON.stringify({
-          email: email,
-          listIds: [6],
-          updateEnabled: true
-        })
+        body: JSON.stringify({ email })
       });
 
-      return new Response(JSON.stringify({ success: true }), {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*"
-        }
-      });
+      if (!res.ok) throw new Error();
+
+      notifySuccess.classList.add("show");
+      notifyEmail.value = "";
+      notifyBtn.innerText = "Added";
 
     } catch (err) {
-      return new Response(JSON.stringify({ error: "Failed" }), {
-        status: 500,
-        headers: {
-          "Access-Control-Allow-Origin": "*"
-        }
-      });
+      notifyBtn.innerText = "Retry";
+      notifyBtn.disabled = false;
     }
-  }
-};
+  });
 
-}
+});
