@@ -291,42 +291,51 @@ section p {
   margin-bottom: 4px;
 }
 
-/* ===============================
-   OPTIONS (FINAL FIX)
+\/* ===============================
+   OPTION BUTTON (SAFE + ANIMATED)
    =============================== */
-
-.options-panel {
-  margin-top: 10px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 100%;
-}
 
 .option-btn {
   width: 100%;
   padding: 12px 14px;
   border-radius: 10px;
+
   background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.08);
+
   font-size: 13px;
   text-align: left;
 
-  opacity: 0;
-  transform: translateY(10px);
+  /* 🔥 ALWAYS visible */
+  opacity: 1;
+  transform: translateY(0);
+
   transition: all 0.25s ease;
 }
 
+/* animation trigger (optional enhancement) */
 .option-btn.show {
-  opacity: 1;
-  transform: translateY(0);
+  animation: optionFade 0.3s ease forwards;
 }
 
+@keyframes optionFade {
+  from {
+    opacity: 0.6;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* hover */
 .option-btn:hover {
   background: rgba(255,255,255,0.1);
   transform: translateY(-1px);
 }
 
+/* selected */
 .option-btn.selected {
   background: #fff;
   color: #000;
