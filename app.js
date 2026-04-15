@@ -1,10 +1,82 @@
+/* =========================
+   ELAYRO GLOBAL APP.JS
+   (ALL PAGES SAFE)
+========================= */
+
 document.addEventListener("DOMContentLoaded", () => {
 
-  /* =========================
-     GLOBAL
-     ========================= */
-
   const wait = (t) => new Promise(res => setTimeout(res, t));
+
+  /* =========================
+     GLOBAL NAV (ALL PAGES)
+  ========================= */
+
+  const navLinks = document.querySelectorAll(".nav-minimal a");
+
+  let currentPage = window.location.pathname.split("/").pop();
+  if (!currentPage) currentPage = "index.html";
+
+  navLinks.forEach(link => {
+    const href = link.getAttribute("href");
+
+    if (href === currentPage) link.style.opacity = "0.4";
+
+    link.addEventListener("click", (e) => {
+      if (!href || href.startsWith("#")) return;
+
+      e.preventDefault();
+      document.body.classList.add("fade-out");
+
+      setTimeout(() => {
+        window.location.href = href;
+      }, 300);
+    });
+  });
+
+  /* =========================
+     SCROLL PROGRESS (ALL)
+  ========================= */
+
+  const progressBar = document.querySelector(".scroll-progress");
+
+  window.addEventListener("scroll", () => {
+    const total = document.body.scrollHeight - window.innerHeight;
+    const progress = (window.scrollY / total) * 100;
+
+    if (progressBar) progressBar.style.width = progress + "%";
+  });
+
+  /* =========================
+     SECTION FADE-IN (ALL)
+  ========================= */
+
+  const sections = document.querySelectorAll("section");
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add("visible");
+    });
+  }, { threshold: 0.2 });
+
+  sections.forEach(s => observer.observe(s));
+
+  /* =========================
+     FOOTER FADE
+  ========================= */
+
+  const footer = document.querySelector(".footer-global");
+
+  if (footer) {
+    new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, { threshold: 0.2 }).observe(footer);
+  }
+
+  /* =========================
+     DEMO SYSTEM (ONLY IF EXISTS)
+  ========================= */
 
   const chatBox = document.getElementById("chatBox");
   const optionsPanel = document.getElementById("optionsPanel");
@@ -13,41 +85,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const clientTabs = document.querySelectorAll(".clients .client");
   const demoContainer = document.querySelector(".demo-container");
 
-  /* =========================
-     SAFETY (DON’T KILL PAGE)
-     ========================= */
-
   const demoEnabled = chatBox && optionsPanel && input && sendBtn;
-
-  /* =========================
-     NAV
-     ========================= */
-
-  const navLinks = document.querySelectorAll(".nav-minimal a");
-
-  let currentPage = window.location.pathname.split("/").pop();
-  if (!currentPage) currentPage = "index.html";
-
-  navLinks.forEach(link => {
-    if (link.getAttribute("href") === currentPage) {
-      link.style.display = "none";
-    }
-  });
-
-  /* =========================
-     SCROLL BAR
-     ========================= */
-
-  const progressBar = document.querySelector(".scroll-progress");
-
-  window.addEventListener("scroll", () => {
-    const p = window.scrollY / (document.body.scrollHeight - window.innerHeight);
-    if (progressBar) progressBar.style.width = (p * 100) + "%";
-  });
-
-  /* =========================
-     DEMO SYSTEM
-     ========================= */
 
   if (demoEnabled) {
 
@@ -55,7 +93,9 @@ document.addEventListener("DOMContentLoaded", () => {
     let chats = { 0: [], 1: [] };
 
     function updateTabs() {
-      clientTabs.forEach((t, i) => t.classList.toggle("active", i === activeClient));
+      clientTabs.forEach((t, i) =>
+        t.classList.toggle("active", i === activeClient)
+      );
     }
 
     function renderChat(i) {
@@ -87,7 +127,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     function setFocus(state) {
-      demoContainer.classList.toggle("focus-mode", state);
+      if (demoContainer) {
+        demoContainer.classList.toggle("focus-mode", state);
+      }
     }
 
     async function typeMessage(text) {
@@ -98,7 +140,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let i = 0; i < text.length; i++) {
         input.value += text[i];
-        await wait(25);
+        await wait(20 + Math.random() * 20);
       }
 
       sendBtn.classList.add("press");
@@ -115,7 +157,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getRandomStart() {
       const pool = ["pricing","scope","evaluating","engaged","delayed","ghosting"];
-      return pool[Math.floor(Math.random()*pool.length)];
+      return pool[Math.floor(Math.random() * pool.length)];
     }
 
     function getNextState(s) {
@@ -130,7 +172,7 @@ document.addEventListener("DOMContentLoaded", () => {
         closing:["won"]
       };
       const next = map[s] || ["evaluating"];
-      return next[Math.floor(Math.random()*next.length)];
+      return next[Math.floor(Math.random() * next.length)];
     }
 
     function getMsg(s) {
@@ -159,10 +201,9 @@ document.addEventListener("DOMContentLoaded", () => {
       }[s];
     }
 
-    function reason(h, r) {
-      const last = h.slice(-2).join(" ");
-      if (r==="win") return "Closed with alignment.";
-      if (r==="lost") return last.includes("ghosting") ? "Lost due to drop-off." : "Lost due to no momentum.";
+    function getReason(history, result) {
+      if (result === "win") return "Closed with strong alignment.";
+      if (result === "lost") return "Lost due to drop-off or delay.";
     }
 
     async function showOptions(state) {
@@ -210,7 +251,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           if (clients[active].done) continue;
 
-          const batch = 2 + Math.floor(Math.random()*2);
+          const batch = 2 + Math.floor(Math.random() * 2);
 
           for (let b = 0; b < batch; b++) {
 
@@ -229,16 +270,17 @@ document.addEventListener("DOMContentLoaded", () => {
             if (clients[active].steps >= clients[active].max) {
               const win = state === "closing" || state === "engaged";
               addMessage(win ? "Deal closed." : "Conversation lost.", "system");
-              addMessage(reason(clients[active].history, win ? "win":"lost"), "system");
+              addMessage(getReason(clients[active].history, win ? "win" : "lost"), "system");
               clients[active].done = true;
               break;
             }
 
             const next = getNextState(state);
+
             if (next === "won" || next === "lost") {
-              const type = next === "won" ? "win":"lost";
+              const type = next === "won" ? "win" : "lost";
               addMessage(type === "win" ? "Deal closed." : "Conversation lost.", "system");
-              addMessage(reason(clients[active].history, type), "system");
+              addMessage(getReason(clients[active].history, type), "system");
               clients[active].done = true;
               break;
             }
@@ -250,6 +292,7 @@ document.addEventListener("DOMContentLoaded", () => {
         await wait(2000);
         addMessage("Starting new conversations...", "system");
         await wait(2000);
+
         chatBox.innerHTML = "";
         optionsPanel.innerHTML = "";
       }
@@ -259,19 +302,20 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     NOTIFY SYSTEM
-     ========================= */
+     NOTIFY SYSTEM (ALL PAGES)
+  ========================= */
 
   const notifyBtn = document.getElementById("notifyBtn");
   const notifyEmail = document.getElementById("notifyEmail");
   const notifySuccess = document.getElementById("notifySuccess");
 
-  if (notifyBtn) {
+  if (notifyBtn && notifyEmail && notifySuccess) {
+
     notifyBtn.addEventListener("click", async () => {
 
       const email = notifyEmail.value.trim();
 
-      if (!email.includes("@")) {
+      if (!email || !email.includes("@")) {
         notifySuccess.innerText = "Invalid email address";
         notifySuccess.classList.add("show");
         return;
@@ -283,11 +327,11 @@ document.addEventListener("DOMContentLoaded", () => {
       try {
         const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
           method: "POST",
-          headers: {"Content-Type":"application/json"},
+          headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email })
         });
 
-        const data = await res.json().catch(()=>({}));
+        const data = await res.json().catch(() => ({}));
 
         notifySuccess.innerText =
           data.status === "exists" ? "Already registered" : "You’re in";
@@ -298,6 +342,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       } catch {
         notifySuccess.innerText = "Try again";
+        notifySuccess.classList.add("show");
         notifyBtn.innerText = "Retry";
         notifyBtn.disabled = false;
       }
