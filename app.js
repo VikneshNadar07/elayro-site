@@ -315,77 +315,119 @@ document.addEventListener("DOMContentLoaded", () => {
      ========================= */
 
   async function runDemo() {
-    while (true) {
+  while (true) {
 
-      chats = { 0: [], 1: [] };
+    chats = { 0: [], 1: [] };
 
-      activeClient = 0;
-      updateTabs();
-      renderChat(0);
+    activeClient = 0;
+    updateTabs();
+    renderChat(0);
 
-      let msg;
+    // 🔥 dynamic flows (no repetition)
+    const flow0Sets = [
+      [
+        "Client said they are busy this week",
+        "Client asked to follow up later",
+        "Client is now available to start",
+        "Client said let's proceed"
+      ],
+      [
+        "Client is tied up currently",
+        "Client requested a callback next week",
+        "Client showed interest again",
+        "Client confirmed to move forward"
+      ]
+    ];
 
-      msg = "Client said they are busy this week";
-      await simulateUser(msg);
-      await wait(readTime(msg));
-      await showOptions(msg);
+    const flow1Sets = [
+      [
+        "Client asked about pricing",
+        "Client asked if flexible",
+        "Client is comparing options",
+        "Client stopped responding"
+      ],
+      [
+        "Client wants cost breakdown",
+        "Client asked for discount",
+        "Client is evaluating alternatives",
+        "Client went silent"
+      ]
+    ];
 
-      msg = "Client said maybe next week";
-      await simulateUser(msg);
-      await wait(readTime(msg));
-      await showOptions(msg);
+    const flow0 = flow0Sets[Math.floor(Math.random() * flow0Sets.length)];
+    const flow1 = flow1Sets[Math.floor(Math.random() * flow1Sets.length)];
 
-      activeClient = 1;
-      await clickCursor(clientTabs[1]);
-      updateTabs();
-      renderChat(1);
+    let msg;
 
-      msg = "Client asked about pricing";
-      await simulateUser(msg);
-      await wait(readTime(msg));
-      await showOptions(msg);
+    // 🔹 CLIENT 1 FLOW
+    msg = flow0[0];
+    await simulateUser(msg);
+    await wait(readTime(msg));
+    await showOptions(msg);
 
-      msg = "Client asked if flexible";
-      await simulateUser(msg);
-      await wait(readTime(msg));
-      await showOptions(msg);
+    msg = flow0[1];
+    await simulateUser(msg);
+    await wait(readTime(msg));
+    await showOptions(msg);
 
-      activeClient = 0;
-      await clickCursor(clientTabs[0]);
-      updateTabs();
-      renderChat(0);
+    // 🔹 SWITCH CLIENT
+    activeClient = 1;
+    await clickCursor(clientTabs[1]);
+    updateTabs();
+    renderChat(1);
 
-      msg = "Client asked if we can start soon";
-      await simulateUser(msg);
-      await wait(readTime(msg));
-      await showOptions(msg);
+    msg = flow1[0];
+    await simulateUser(msg);
+    await wait(readTime(msg));
+    await showOptions(msg);
 
-      msg = "Client said let's proceed";
-      await simulateUser(msg);
-      await wait(readTime(msg));
-      await showOptions(msg);
+    msg = flow1[1];
+    await simulateUser(msg);
+    await wait(readTime(msg));
+    await showOptions(msg);
 
-      addMessage("Outcome achieved.", "system");
+    // 🔹 BACK TO CLIENT 1
+    activeClient = 0;
+    await clickCursor(clientTabs[0]);
+    updateTabs();
+    renderChat(0);
 
-      activeClient = 1;
-      await clickCursor(clientTabs[1]);
-      updateTabs();
-      renderChat(1);
+    msg = flow0[2];
+    await simulateUser(msg);
+    await wait(readTime(msg));
+    await showOptions(msg);
 
-      msg = "Client stopped responding";
-      await simulateUser(msg);
-      await wait(readTime(msg));
-      await showOptions(msg);
+    msg = flow0[3];
+    await simulateUser(msg);
+    await wait(readTime(msg));
+    await showOptions(msg);
 
-      addMessage("Conversation ended.", "system");
+    addMessage("Outcome achieved.", "system");
 
-      await wait(3500);
-      chatBox.innerHTML = "";
-      optionsPanel.innerHTML = "";
-    }
+    // 🔹 CLIENT 2 FINAL
+    activeClient = 1;
+    await clickCursor(clientTabs[1]);
+    updateTabs();
+    renderChat(1);
+
+    msg = flow1[2];
+    await simulateUser(msg);
+    await wait(readTime(msg));
+    await showOptions(msg);
+
+    msg = flow1[3];
+    await simulateUser(msg);
+    await wait(readTime(msg));
+    await showOptions(msg);
+
+    addMessage("Conversation ended.", "system");
+
+    await wait(3500);
+
+    chatBox.innerHTML = "";
+    optionsPanel.innerHTML = "";
   }
-
-  runDemo();
+}
 });
 
 window.addEventListener("DOMContentLoaded", () => {
