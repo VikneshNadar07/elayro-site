@@ -16,15 +16,7 @@ body {
   min-height: 100vh;
 
   -webkit-font-smoothing: antialiased;
-
-  opacity: 1;
-  transform: none;
   transition: all 0.4s ease;
-}
-
-body:not(.loaded) {
-  opacity: 1;
-  transform: none;
 }
 
 /* ===============================
@@ -40,12 +32,12 @@ body::before {
 }
 
 /* ===============================
-   CONTENT (WIDER + CENTERED)
+   CONTENT (CENTERED + WIDE)
    =============================== */
 
 .content {
   width: 100%;
-  max-width: 1100px; /* 🔥 increased */
+  max-width: 1100px;
   margin: 0 auto;
   padding: 0 24px;
 
@@ -126,13 +118,12 @@ section.visible {
 }
 
 /* ===============================
-   DEMO CONTAINER (FIXED WIDTH)
+   DEMO CONTAINER
    =============================== */
 
 .demo-container {
   width: 100%;
-  max-width: 1100px; /* 🔥 wider */
-
+  max-width: 1100px;
   margin: 60px auto;
 
   display: flex;
@@ -147,16 +138,21 @@ section.visible {
   box-shadow:
     0 40px 100px rgba(0,0,0,0.7),
     inset 0 1px 0 rgba(255,255,255,0.04);
+
+  transition: transform 0.4s ease;
 }
 
-/* 🔥 inner constraint */
+.demo-container.focus-mode {
+  transform: scale(1.015);
+}
+
 .demo-inner {
   width: 100%;
   max-width: 720px;
 }
 
 /* ===============================
-   CLIENT PILLS (FIXED)
+   CLIENT PILLS
    =============================== */
 
 .clients {
@@ -167,6 +163,8 @@ section.visible {
 }
 
 .client {
+  position: relative;
+
   padding: 6px 14px;
   border-radius: 999px;
   font-size: 14px;
@@ -174,26 +172,48 @@ section.visible {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.08);
 
-  transition: all 0.2s ease;
-}
+  opacity: 0.5;
+  transform: scale(0.96);
+  filter: blur(0.5px);
 
-.client:hover {
-  background: rgba(255,255,255,0.12);
+  transition: all 0.3s ease;
 }
 
 .client.active {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+
   background: #fff;
   color: #000;
 }
 
+.client.active::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,0.2);
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0; transform: scale(0.98); }
+  50% { opacity: 0.4; transform: scale(1.02); }
+  100% { opacity: 0; transform: scale(0.98); }
+}
+
 /* ===============================
-   CHAT
+   CHAT (FIXED + RECTANGLE)
    =============================== */
 
 .chat-area {
   display: flex;
   flex-direction: column;
-  height: 340px; /* 🔥 less tall */
+
+  height: 360px;
+  aspect-ratio: 5 / 4;
 
   border-radius: 18px;
   padding: 18px;
@@ -202,6 +222,8 @@ section.visible {
   border: 1px solid rgba(255,255,255,0.06);
 
   backdrop-filter: blur(20px);
+
+  overflow: hidden;
 }
 
 .chat-box {
@@ -209,7 +231,9 @@ section.visible {
   display: flex;
   flex-direction: column;
   gap: 10px;
+
   overflow-y: auto;
+  padding-right: 6px;
 }
 
 /* ===============================
@@ -220,6 +244,7 @@ section.visible {
   max-width: 70%;
   padding: 10px 14px;
   border-radius: 16px;
+  transition: all 0.25s ease;
 }
 
 .message.user {
@@ -234,7 +259,7 @@ section.visible {
 }
 
 /* ===============================
-   INPUT
+   INPUT (PREMIUM)
    =============================== */
 
 .input-area {
@@ -245,13 +270,45 @@ section.visible {
   padding: 6px;
   border-radius: 16px;
 
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.05);
   border: 1px solid rgba(255,255,255,0.1);
 
   backdrop-filter: blur(14px);
 
-  opacity: 0.6;
   pointer-events: none;
+}
+
+.input-area input {
+  flex: 1;
+  padding: 12px;
+  background: transparent;
+  border: none;
+  color: #fff;
+  font-size: 14px;
+}
+
+.input-area button {
+  padding: 10px 16px;
+  border-radius: 10px;
+  border: none;
+
+  background: linear-gradient(#fff, #dcdcdc);
+  color: #000;
+
+  box-shadow:
+    0 2px 8px rgba(255,255,255,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+
+  transition: all 0.2s ease;
+}
+
+.input-area button:active {
+  transform: scale(0.94);
+}
+
+.input-area.typing-active {
+  border-color: rgba(255,255,255,0.3);
+  box-shadow: 0 0 20px rgba(255,255,255,0.08);
 }
 
 /* ===============================
@@ -265,11 +322,58 @@ section.visible {
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
 
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeUp 0.4s ease forwards;
+
   transition: all 0.25s ease;
 }
 
 .option-btn:hover {
   transform: translateY(-2px);
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.best-glow {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.2),
+    0 0 20px rgba(255,255,255,0.15);
+}
+
+.tag {
+  font-size: 12px;
+  opacity: 0.5;
+  letter-spacing: 0.5px;
+}
+
+/* ===============================
+   THINKING
+   =============================== */
+
+.thinking {
+  height: 10px;
+  border-radius: 6px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.2),
+    rgba(255,255,255,0.05)
+  );
+
+  background-size: 200px 100%;
+  animation: shimmer 1.2s infinite linear;
+}
+
+@keyframes shimmer {
+  from { background-position: -200px; }
+  to { background-position: 200px; }
 }
 
 /* ===============================
@@ -306,12 +410,6 @@ section.visible {
   border: 1px solid rgba(255,255,255,0.1);
 
   backdrop-filter: blur(16px);
-
-  transition: all 0.25s ease;
-}
-
-.notify-box:focus-within {
-  background: rgba(255,255,255,0.1);
 }
 
 .notify-box input {
@@ -360,190 +458,4 @@ section.visible {
   width: 0%;
   z-index: 9999;
   background: #fff;
-}
-
-/* ===============================
-   CHAT LOCK (NO MOVEMENT)
-   =============================== */
-
-.chat-area {
-  height: 360px;
-  aspect-ratio: 5 / 4;
-  overflow: hidden;
-}
-
-.chat-box {
-  overflow-y: auto;
-  padding-right: 6px;
-}
-
-/* ===============================
-   PREMIUM INPUT + BUTTON
-   =============================== */
-
-.input-area {
-  opacity: 1;
-  pointer-events: none;
-
-  border-radius: 14px;
-  background: rgba(255,255,255,0.05);
-}
-
-.input-area input {
-  font-size: 14px;
-}
-
-.input-area button {
-  padding: 10px 16px;
-
-  border-radius: 10px;
-
-  background: linear-gradient(
-    180deg,
-    #ffffff,
-    #dcdcdc
-  );
-
-  color: #000;
-  font-weight: 500;
-
-  box-shadow:
-    0 2px 8px rgba(255,255,255,0.15),
-    inset 0 1px 0 rgba(255,255,255,0.6);
-
-  transition: all 0.2s ease;
-}
-
-.input-area button:active {
-  transform: scale(0.94);
-}
-
-/* ===============================
-   OPTION ANIMATION
-   =============================== */
-
-.option-btn {
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeUp 0.4s ease forwards;
-}
-
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* ===============================
-   BEST GLOW
-   =============================== */
-
-.best-glow {
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.2),
-    0 0 20px rgba(255,255,255,0.15);
-}
-
-/* ===============================
-   TAG STYLE
-   =============================== */
-
-.tag {
-  font-size: 12px;
-  opacity: 0.5;
-  letter-spacing: 0.5px;
-}
-
-/* ===============================
-   THINKING BAR
-   =============================== */
-
-.thinking {
-  height: 10px;
-  border-radius: 6px;
-
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,0.05),
-    rgba(255,255,255,0.2),
-    rgba(255,255,255,0.05)
-  );
-
-  background-size: 200px 100%;
-  animation: shimmer 1.2s infinite linear;
-}
-
-@keyframes shimmer {
-  from { background-position: -200px; }
-  to { background-position: 200px; }
-}
-
-/* ===============================
-   CLIENT FOCUS SYSTEM
-   =============================== */
-
-.client {
-  opacity: 0.5;
-  transform: scale(0.96);
-  filter: blur(0.5px);
-}
-
-.client.active {
-  opacity: 1;
-  transform: scale(1);
-  filter: blur(0);
-}
-
-.client.active::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: 999px;
-
-  border: 1px solid rgba(255,255,255,0.2);
-  opacity: 0;
-
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { opacity: 0; transform: scale(0.98); }
-  50% { opacity: 0.4; transform: scale(1.02); }
-  100% { opacity: 0; transform: scale(0.98); }
-}
-
-/* ===============================
-   FOCUS MODE
-   =============================== */
-
-.demo-container.focus-mode {
-  transform: scale(1.015);
-}
-
-.demo-container.focus-mode .clients {
-  opacity: 0.6;
-}
-
-.demo-container.focus-mode .option-btn {
-  opacity: 0.85;
-}
-
-/* ===============================
-   INPUT ACTIVE GLOW
-   =============================== */
-
-.input-area.typing-active {
-  border-color: rgba(255,255,255,0.3);
-  box-shadow: 0 0 20px rgba(255,255,255,0.08);
-}
-
-/* ===============================
-   SMOOTH UI
-   =============================== */
-
-.message,
-.option-btn,
-.chat-box {
-  transition: all 0.25s ease;
 }
