@@ -89,34 +89,39 @@
   <p style="opacity:0.6;">A continuous conversation guided toward outcome.</p>
 
   <div class="demo-container">
-<div id="fakeCursor"></div>
-    <!-- CLIENT TABS -->
-    <div class="clients">
-      <div class="client active" data-client="0">Client 1</div>
-      <div class="client" data-client="1">Client 2</div>
-      <div class="client add">+</div>
-    </div>
 
-    <!-- 🔥 CHAT WRAPPER (IMPORTANT) -->
-    <div class="chat-area">
+    <!-- 🔥 IMPORTANT WRAPPER (FIXES WIDTH) -->
+    <div class="demo-inner">
 
-      <div class="chat-box" id="chatBox"></div>
+      <!-- CLIENT TABS -->
+      <div class="clients">
+        <div class="client active" data-client="0">Client 1</div>
+        <div class="client" data-client="1">Client 2</div>
+        <div class="client add">+</div>
+      </div>
 
-      <div class="options-panel" id="optionsPanel"></div>
+      <!-- CHAT -->
+      <div class="chat-area">
 
-      <div class="input-area">
-        <input id="userInput" placeholder="What did the client say?" />
-        <button id="sendBtn">Send</button>
+        <div class="chat-box" id="chatBox"></div>
+
+        <div class="options-panel" id="optionsPanel"></div>
+
+        <div class="input-area">
+          <input id="userInput" placeholder="What did the client say?" />
+          <button id="sendBtn">Send</button>
+        </div>
+
       </div>
 
     </div>
-
   </div>
 
 </section>
 
-  <div class="section-divider"></div>
+<div class="section-divider"></div>
 
+<!-- NOTIFY -->
 <section class="notify-section">
 
   <div class="notify-wrapper">
@@ -135,13 +140,13 @@
       </button>
     </div>
 
-    <p id="notifySuccess" class="notify-success">
-      You're in.
-    </p>
+    <!-- 🔥 EMPTY (JS WILL FILL STATES) -->
+    <p id="notifySuccess" class="notify-success"></p>
 
   </div>
 
 </section>
+
 <!-- WHO -->
 <section>
   <h2>Built for people who rely on conversations</h2>
@@ -161,10 +166,10 @@
 
 <!-- NAV -->
 <nav class="nav-minimal">
-  <a href="index.html" data-page="home">Home</a>
-  <a href="outflow.html" data-page="outflow">Outflow</a>
-  <a href="elira.html" data-page="elira">Elira X</a>
-  <a href="execution.html" data-page="execution">Execution</a>
+  <a href="index.html">Home</a>
+  <a href="outflow.html">Outflow</a>
+  <a href="elira.html">Elira X</a>
+  <a href="execution.html">Execution</a>
 </nav>
 
 </main>
@@ -174,7 +179,7 @@
   <h3>Outflow — by Elayro<sup class="tm">™</sup></h3>
   <p>
     <a href="policies.html">Policies</a> | 
-    <a href="mailto:contact@elayro.com">contact@elayro.com</a>
+    <a href="mailto:contact@elayro.com">Contact</a>
   </p>
   <p>2026, all rights reserved.</p>
 </footer>
