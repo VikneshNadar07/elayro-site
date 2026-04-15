@@ -507,3 +507,28 @@ section.visible {
 #optionsPanel {
   transition: opacity 0.6s ease;
 }
+.option-bubble {
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.12);
+  max-width: 80%;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.option-bubble:hover {
+  transform: translateY(-2px);
+}
+
+.option-bubble.selected {
+  background: #0a84ff;
+  color: white;
+}
+
+.option-bubble .tag {
+  display: block;
+  font-size: 11px;
+  opacity: 0.5;
+  margin-bottom: 4px;
+}
