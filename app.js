@@ -1,6 +1,6 @@
 /* =========================
    ELAYRO FINAL APP.JS
-   FULL PROJECT (STABLE + HUMAN FLOW)
+   FULL PROJECT (ALL PAGES + DEMO + NOTIFY)
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navLinks.forEach(link => {
     const href = link.getAttribute("href");
+
     if (href === currentPage) link.style.opacity = "0.4";
 
     link.addEventListener("click", (e) => {
@@ -39,7 +40,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =========================
-     FADE
+     SECTION + FOOTER FADE
   ========================= */
 
   const observer = new IntersectionObserver(entries => {
@@ -49,6 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.2 });
 
   document.querySelectorAll("section").forEach(s => observer.observe(s));
+
   const footer = document.querySelector(".footer-global");
   if (footer) observer.observe(footer);
 
@@ -92,7 +94,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
       chatBox.appendChild(d);
 
-      // 🔥 SMOOTH AUTO SCROLL
       chatBox.scrollTo({
         top: chatBox.scrollHeight,
         behavior: "smooth"
@@ -103,7 +104,7 @@ document.addEventListener("DOMContentLoaded", () => {
       activeClient = i;
       updateTabs();
       renderChat(i);
-      await wait(800); // slower switch
+      await wait(900);
     }
 
     async function typeMessage(text) {
@@ -111,7 +112,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let i = 0; i < text.length; i++) {
         input.value += text[i];
-        await wait(30 + Math.random() * 40); // slower typing
+        await wait(35 + Math.random() * 40);
       }
 
       sendBtn.classList.add("press");
@@ -121,86 +122,114 @@ document.addEventListener("DOMContentLoaded", () => {
       addMessage(text, "user");
       input.value = "";
 
-      await wait(900);
+      await wait(1000);
     }
 
     /* =========================
-       CONVERSATIONS
+       CONVERSATION FLOWS
     ========================= */
 
     const flows = [
       {
+        result: "win",
         messages: [
           "Hey, can you share pricing?",
-          "Is there flexibility here?",
+          "What exactly is included in this?",
+          "Is there flexibility depending on what we need?",
           "That sounds good actually",
           "Let’s move ahead"
-        ],
-        result: "win"
+        ]
       },
       {
+        result: "lost",
         messages: [
-          "What’s included exactly?",
-          "Hmm seems a bit high",
-          "I’ll think about it",
+          "What all does this cover?",
+          "Hmm this feels a bit high for us",
+          "Let me think about it",
           null,
           null
-        ],
-        result: "lost"
+        ]
       }
     ];
+
+    /* =========================
+       RESPONSE ENGINE
+    ========================= */
 
     function getOptions(msg) {
 
       if (!msg) {
         return [
-          "Just checking in — does this still make sense?",
-          "Following up — happy to continue anytime.",
-          "Wanted to see if this is still relevant.",
-          "Hey — just circling back here."
+          "Just checking in — does this still make sense for you?",
+          "Following up here — happy to continue whenever you're ready.",
+          "Wanted to check if this is still something you're considering.",
+          "Hey — just circling back on this."
         ];
       }
 
-      if (msg.includes("pricing")) return [
-        "Here’s a clear breakdown so you know exactly what to expect.",
-        "Let me walk you through pricing clearly.",
-        "I’ll share details so it’s easier to decide.",
-        "I’ll explain it simply."
+      const m = msg.toLowerCase();
+
+      if (m.includes("pricing")) return [
+        "Here’s a clear breakdown so you know exactly what to expect and how it’s structured.",
+        "Let me walk you through pricing so it’s easy to understand.",
+        "I’ll share the pricing details clearly so you can evaluate properly.",
+        "I can quickly explain how pricing works here."
       ];
 
-      if (msg.includes("flex")) return [
-        "Yes — we can adjust this based on your needs.",
-        "We can definitely make this flexible.",
-        "There’s room to adapt this.",
-        "We can tweak it to fit better."
+      if (m.includes("included") || m.includes("cover")) return [
+        "Great question — I’ll break down exactly what’s included so everything is clear end-to-end.",
+        "Let me outline what’s included step by step so there’s no confusion.",
+        "I’ll walk you through everything that’s part of this so it’s clear.",
+        "Yeah — I’ll quickly explain what’s included so it’s easy to follow."
       ];
 
-      if (msg.includes("high")) return [
-        "We can optimize this to fit better.",
-        "Let’s refine this slightly.",
-        "We can adjust the scope to reduce cost.",
-        "There’s room to improve this."
+      if (m.includes("flex")) return [
+        "Yes — we can definitely adjust this based on what works best for you.",
+        "There’s flexibility here — we can tailor it to your needs.",
+        "We can adapt this depending on your priorities.",
+        "Yeah, we can tweak this a bit to fit better."
       ];
 
-      if (msg.includes("think")) return [
-        "Makes sense — take your time.",
-        "All good — I’m here when ready.",
-        "No rush — we can continue later.",
-        "Happy to reconnect anytime."
+      if (m.includes("high")) return [
+        "I understand — we can adjust the scope slightly to make this more comfortable.",
+        "That’s fair — let’s see where we can optimize without losing value.",
+        "We can definitely refine this to better match your budget.",
+        "Got it — we can tweak things a bit to bring it down."
+      ];
+
+      if (m.includes("think")) return [
+        "Makes sense — take your time, I’m here if anything comes up.",
+        "All good — happy to pick this up whenever you’re ready.",
+        "No rush — we can continue whenever it works for you.",
+        "Sure — we can reconnect later."
+      ];
+
+      if (m.includes("sounds good")) return [
+        "Perfect — I’ll take this forward and get everything aligned.",
+        "Great — I’ll move ahead with the next steps.",
+        "Nice — I’ll start putting this into action.",
+        "Awesome — let’s move forward with this."
+      ];
+
+      if (m.includes("move ahead")) return [
+        "Perfect — I’ll lock this in and get everything started right away.",
+        "Great, I’ll finalize this and move things forward.",
+        "We’re good to go — I’ll take it from here.",
+        "Nice — I’ll get everything set up."
       ];
 
       return [
-        "Got it — I’ll take this forward.",
-        "Understood — let’s proceed.",
-        "Makes sense — moving ahead.",
-        "Alright — continuing from here."
+        "Got it — I’ll take this forward clearly.",
+        "Understood — let’s continue from here.",
+        "Makes sense — I’ll guide this ahead.",
+        "Alright — we’ll move step by step."
       ];
     }
 
     async function showOptions(msg) {
 
       optionsPanel.innerHTML = '<div class="thinking"></div>';
-      await wait(1200); // slower thinking
+      await wait(1200);
 
       optionsPanel.innerHTML = "";
 
@@ -217,14 +246,14 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         optionsPanel.appendChild(d);
-        await wait(250);
+        await wait(280);
       }
 
-      await wait(1200);
+      await wait(1400);
 
       optionsPanel.innerHTML = "";
-      addMessage(options[0], "system");
 
+      addMessage(options[0], "system");
       await wait(900);
     }
 
@@ -248,7 +277,6 @@ document.addEventListener("DOMContentLoaded", () => {
             await switchClient(i);
 
             const flow = flows[i];
-
             const batch = 2 + Math.floor(Math.random() * 2);
 
             for (let b = 0; b < batch; b++) {
@@ -263,13 +291,22 @@ document.addEventListener("DOMContentLoaded", () => {
                   "system"
                 );
 
+                await wait(500);
+
+                addMessage(
+                  flow.result === "win"
+                    ? "Closed with clear intent and alignment."
+                    : "Conversation dropped due to low engagement.",
+                  "system"
+                );
+
                 break;
               }
 
               const msg = flow.messages[steps[i]];
 
               if (msg === null) {
-                await wait(2000);
+                await wait(2500);
               } else {
                 await typeMessage(msg);
               }
@@ -281,7 +318,7 @@ document.addEventListener("DOMContentLoaded", () => {
           }
         }
 
-        await wait(2500);
+        await wait(3000);
 
         chatBox.innerHTML = "";
         optionsPanel.innerHTML = "";
