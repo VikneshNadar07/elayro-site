@@ -459,3 +459,51 @@ section.visible {
   z-index: 9999;
   background: #fff;
 }
+/* ===============================
+   FINAL FIXES (LAYOUT + OPTIONS)
+   =============================== */
+
+/* 🔥 WIDER + BETTER CHAT BOX */
+.chat-area {
+  height: 440px !important;
+  max-width: 820px !important;
+  margin: 0 auto;
+}
+
+/* 🔥 MAKE DEMO WIDER */
+.demo-inner {
+  max-width: 820px !important;
+}
+
+/* 🔥 OPTIONS PANEL (CHATGPT STYLE) */
+#optionsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+
+  margin-top: 10px;
+
+  align-items: flex-start; /* critical */
+}
+
+/* 🔥 OPTIONS DON'T FILL SCREEN */
+.option-btn {
+  max-width: 85%;
+  width: auto;
+}
+
+/* 🔥 BETTER SPACING INSIDE CHAT */
+.chat-box {
+  gap: 12px;
+}
+
+/* 🔥 SMOOTH VISUAL BALANCE */
+.message {
+  line-height: 1.4;
+}
+
+/* 🔥 FADE SUPPORT FOR LOOP RESET */
+.chat-box,
+#optionsPanel {
+  transition: opacity 0.6s ease;
+}
