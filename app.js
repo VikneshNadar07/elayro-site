@@ -314,7 +314,7 @@ document.addEventListener("DOMContentLoaded", () => {
      FLOW
      ========================= */
 
-  async function runDemo() {
+ async function runDemo() {
   while (true) {
 
     chats = { 0: [], 1: [] };
@@ -323,43 +323,23 @@ document.addEventListener("DOMContentLoaded", () => {
     updateTabs();
     renderChat(0);
 
-    // 🔥 dynamic flows (no repetition)
-    const flow0Sets = [
-      [
-        "Client said they are busy this week",
-        "Client asked to follow up later",
-        "Client is now available to start",
-        "Client said let's proceed"
-      ],
-      [
-        "Client is tied up currently",
-        "Client requested a callback next week",
-        "Client showed interest again",
-        "Client confirmed to move forward"
-      ]
+    const flow0 = [
+      "Client said they are busy this week",
+      "Client asked to follow up later",
+      "Client is now available to start",
+      "Client said let's proceed"
     ];
 
-    const flow1Sets = [
-      [
-        "Client asked about pricing",
-        "Client asked if flexible",
-        "Client is comparing options",
-        "Client stopped responding"
-      ],
-      [
-        "Client wants cost breakdown",
-        "Client asked for discount",
-        "Client is evaluating alternatives",
-        "Client went silent"
-      ]
+    const flow1 = [
+      "Client asked about pricing",
+      "Client asked if flexible",
+      "Client is comparing options",
+      "Client stopped responding"
     ];
-
-    const flow0 = flow0Sets[Math.floor(Math.random() * flow0Sets.length)];
-    const flow1 = flow1Sets[Math.floor(Math.random() * flow1Sets.length)];
 
     let msg;
 
-    // 🔹 CLIENT 1 FLOW
+    // CLIENT 1
     msg = flow0[0];
     await simulateUser(msg);
     await wait(readTime(msg));
@@ -370,9 +350,8 @@ document.addEventListener("DOMContentLoaded", () => {
     await wait(readTime(msg));
     await showOptions(msg);
 
-    // 🔹 SWITCH CLIENT
+    // SWITCH CLIENT
     activeClient = 1;
-    await clickCursor(clientTabs[1]);
     updateTabs();
     renderChat(1);
 
@@ -386,9 +365,8 @@ document.addEventListener("DOMContentLoaded", () => {
     await wait(readTime(msg));
     await showOptions(msg);
 
-    // 🔹 BACK TO CLIENT 1
+    // BACK CLIENT 1
     activeClient = 0;
-    await clickCursor(clientTabs[0]);
     updateTabs();
     renderChat(0);
 
@@ -404,9 +382,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     addMessage("Outcome achieved.", "system");
 
-    // 🔹 CLIENT 2 FINAL
+    // CLIENT 2 FINAL
     activeClient = 1;
-    await clickCursor(clientTabs[1]);
     updateTabs();
     renderChat(1);
 
@@ -422,13 +399,12 @@ document.addEventListener("DOMContentLoaded", () => {
 
     addMessage("Conversation ended.", "system");
 
-    await wait(3500);
+    await wait(3000);
 
     chatBox.innerHTML = "";
     optionsPanel.innerHTML = "";
   }
 }
-});
 
 window.addEventListener("DOMContentLoaded", () => {
   document.body.classList.add("loaded");
