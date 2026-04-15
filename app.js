@@ -1,6 +1,6 @@
 /* =========================
-   ELAYRO GLOBAL APP.JS
-   (ALL PAGES SAFE)
+   ELAYRO FULL APP.JS
+   (ALL PAGES + DEMO + NOTIFY)
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const wait = (t) => new Promise(res => setTimeout(res, t));
 
   /* =========================
-     GLOBAL NAV (ALL PAGES)
+     NAV (ALL PAGES)
   ========================= */
 
   const navLinks = document.querySelectorAll(".nav-minimal a");
@@ -34,7 +34,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =========================
-     SCROLL PROGRESS (ALL)
+     SCROLL PROGRESS
   ========================= */
 
   const progressBar = document.querySelector(".scroll-progress");
@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =========================
-     SECTION FADE-IN (ALL)
+     SECTION FADE-IN
   ========================= */
 
   const sections = document.querySelectorAll("section");
@@ -75,7 +75,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     DEMO SYSTEM (ONLY IF EXISTS)
+     DEMO SYSTEM
   ========================= */
 
   const chatBox = document.getElementById("chatBox");
@@ -126,15 +126,7 @@ document.addEventListener("DOMContentLoaded", () => {
       await wait(400);
     }
 
-    function setFocus(state) {
-      if (demoContainer) {
-        demoContainer.classList.toggle("focus-mode", state);
-      }
-    }
-
     async function typeMessage(text) {
-      setFocus(true);
-
       input.value = "";
       input.classList.add("typing-active");
 
@@ -152,7 +144,7 @@ document.addEventListener("DOMContentLoaded", () => {
       input.value = "";
       input.classList.remove("typing-active");
 
-      await wait(500);
+      await wait(600);
     }
 
     function getRandomStart() {
@@ -179,10 +171,10 @@ document.addEventListener("DOMContentLoaded", () => {
       return {
         pricing:"Client asked about pricing",
         scope:"Client wants clarity on scope",
-        evaluating:"Client is evaluating options",
+        evaluating:"Client is comparing options",
         engaged:"Client is actively engaging",
         delayed:"Client said maybe later",
-        ghosting:"Client stopped replying",
+        ghosting:"Client hasn’t responded",
         followup:"Following up again",
         closing:"Client is ready to proceed"
       }[s];
@@ -190,44 +182,101 @@ document.addEventListener("DOMContentLoaded", () => {
 
     function getOptions(s) {
       return {
-        pricing:["Here’s a clear breakdown so you know exactly what to expect.","Let me outline pricing clearly.","I can share pricing.","I’ll explain it simply."],
-        scope:["Let me define scope clearly.","I’ll break it down.","We’ll go step by step.","I’ll simplify it."],
-        evaluating:["Take your time.","I’ll help compare.","Let’s simplify decision.","We’ll narrow it."],
-        engaged:["Great — let’s move forward.","We’re aligned.","Let’s continue.","Good progress."],
-        delayed:["No problem.","We’ll continue later.","I’ll follow up.","We’ll pick this up."],
-        ghosting:["Checking in.","Following up.","Happy to revisit.","Just checking."],
-        followup:["Circling back.","Following up again.","Reconnect here.","Checking again."],
-        closing:["Perfect — proceeding.","Finalizing.","We’re good.","Let’s start."]
+        pricing:[
+          "Here’s a simple breakdown so you know exactly what to expect.",
+          "Let me walk you through the pricing clearly.",
+          "I can share the details so it’s easier to decide.",
+          "I’ll explain it in a simple way."
+        ],
+        scope:[
+          "Let me define the scope clearly so everything is aligned.",
+          "I’ll break down exactly what’s included.",
+          "We can go step by step so nothing is unclear.",
+          "I’ll simplify it for you."
+        ],
+        evaluating:[
+          "Take your time — I can help you compare what fits best.",
+          "Happy to guide you through the options.",
+          "Let me simplify the decision for you.",
+          "We can narrow this down quickly."
+        ],
+        engaged:[
+          "Great — let’s keep this moving forward.",
+          "We’re aligned, I’ll take this ahead.",
+          "Let’s build on this momentum.",
+          "We’re progressing well here."
+        ],
+        delayed:[
+          "No problem — we can pick this up when you’re ready.",
+          "All good, I’ll follow up at a better time.",
+          "We’ll continue whenever it works for you.",
+          "I’ll check back in shortly."
+        ],
+        ghosting:[
+          "Just checking in — does this still make sense for you?",
+          "Following up to keep things moving.",
+          "Happy to revisit this whenever you're ready.",
+          "Hey — just wanted to check in."
+        ],
+        followup:[
+          "Circling back to keep this moving.",
+          "Following up again here.",
+          "Let’s reconnect on this.",
+          "Checking in once more."
+        ],
+        closing:[
+          "Perfect — I’ll lock this in and proceed.",
+          "Great, I’ll finalize everything now.",
+          "We’re good to go from here.",
+          "Let’s get this started."
+        ]
       }[s];
     }
 
-    function getReason(history, result) {
-      if (result === "win") return "Closed with strong alignment.";
-      if (result === "lost") return "Lost due to drop-off or delay.";
+    function getReason(result) {
+      return result === "win"
+        ? "Closed smoothly with clear alignment."
+        : "Lost due to drop in momentum.";
     }
 
     async function showOptions(state) {
-      optionsPanel.innerHTML = '<div class="thinking"></div>';
-      await wait(800);
 
-      const options = getOptions(state);
+      optionsPanel.innerHTML = '<div class="thinking"></div>';
+      await wait(900);
+
       optionsPanel.innerHTML = "";
 
-      for (let i = 0; i < options.length; i++) {
+      const options = getOptions(state);
+      const elements = [];
+
+      for (let i = 0; i < 4; i++) {
         const d = document.createElement("div");
-        d.className = "option-btn";
-        d.innerHTML = `<strong>${["Best","Strong","Safe","Casual"][i]}</strong><br>${options[i]}`;
+        d.className = "option-bubble";
+
+        d.innerHTML = `
+          <span class="tag">${["Best","Strong","Safe","Casual"][i]}</span>
+          ${options[i]}
+        `;
+
         optionsPanel.appendChild(d);
+        elements.push(d);
 
         await wait(200);
-
-        if (i === 0) {
-          await wait(600);
-          optionsPanel.innerHTML = "";
-          addMessage(options[i], "system");
-          break;
-        }
       }
+
+      await wait(1000);
+
+      elements[0].classList.add("best-glow");
+      await wait(400);
+
+      elements[0].classList.add("selected");
+      await wait(400);
+
+      optionsPanel.innerHTML = "";
+
+      addMessage(options[0], "system");
+
+      await wait(800);
     }
 
     async function runDemo() {
@@ -235,66 +284,56 @@ document.addEventListener("DOMContentLoaded", () => {
       while (true) {
 
         const clients = {
-          0:{state:getRandomStart(),done:false,steps:0,max:5,history:[]},
-          1:{state:getRandomStart(),done:false,steps:0,max:4,history:[]}
+          0:{state:getRandomStart(),done:false,steps:0,max:5},
+          1:{state:getRandomStart(),done:false,steps:0,max:4}
         };
 
         chats = {0:[],1:[]};
         chatBox.innerHTML = "";
         optionsPanel.innerHTML = "";
 
-        let active = 0;
-
         while (!clients[0].done || !clients[1].done) {
 
-          active = active === 0 ? 1 : 0;
+          for (let i = 0; i < 2; i++) {
 
-          if (clients[active].done) continue;
+            if (clients[i].done) continue;
 
-          const batch = 2 + Math.floor(Math.random() * 2);
+            await switchClient(i);
 
-          for (let b = 0; b < batch; b++) {
+            const batch = 2 + Math.floor(Math.random()*2);
 
-            if (clients[active].done) break;
+            for (let b = 0; b < batch; b++) {
 
-            await switchClient(active);
+              if (clients[i].done) break;
 
-            const state = clients[active].state;
-            clients[active].history.push(state);
+              const state = clients[i].state;
 
-            await typeMessage(getMsg(state));
-            await showOptions(state);
+              await typeMessage(getMsg(state));
+              await showOptions(state);
 
-            clients[active].steps++;
+              clients[i].steps++;
 
-            if (clients[active].steps >= clients[active].max) {
-              const win = state === "closing" || state === "engaged";
-              addMessage(win ? "Deal closed." : "Conversation lost.", "system");
-              addMessage(getReason(clients[active].history, win ? "win" : "lost"), "system");
-              clients[active].done = true;
-              break;
+              if (clients[i].steps >= clients[i].max) {
+                const win = state === "closing" || state === "engaged";
+
+                addMessage(win ? "Deal closed." : "Conversation lost.", "system");
+                addMessage(getReason(win ? "win":"lost"), "system");
+
+                clients[i].done = true;
+                break;
+              }
+
+              clients[i].state = getNextState(state);
             }
-
-            const next = getNextState(state);
-
-            if (next === "won" || next === "lost") {
-              const type = next === "won" ? "win" : "lost";
-              addMessage(type === "win" ? "Deal closed." : "Conversation lost.", "system");
-              addMessage(getReason(clients[active].history, type), "system");
-              clients[active].done = true;
-              break;
-            }
-
-            clients[active].state = next;
           }
         }
 
         await wait(2000);
-        addMessage("Starting new conversations...", "system");
-        await wait(2000);
 
         chatBox.innerHTML = "";
         optionsPanel.innerHTML = "";
+
+        await wait(800);
       }
     }
 
@@ -302,7 +341,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     NOTIFY SYSTEM (ALL PAGES)
+     NOTIFY SYSTEM
   ========================= */
 
   const notifyBtn = document.getElementById("notifyBtn");
