@@ -361,3 +361,189 @@ section.visible {
   z-index: 9999;
   background: #fff;
 }
+
+/* ===============================
+   CHAT LOCK (NO MOVEMENT)
+   =============================== */
+
+.chat-area {
+  height: 360px;
+  aspect-ratio: 5 / 4;
+  overflow: hidden;
+}
+
+.chat-box {
+  overflow-y: auto;
+  padding-right: 6px;
+}
+
+/* ===============================
+   PREMIUM INPUT + BUTTON
+   =============================== */
+
+.input-area {
+  opacity: 1;
+  pointer-events: none;
+
+  border-radius: 14px;
+  background: rgba(255,255,255,0.05);
+}
+
+.input-area input {
+  font-size: 14px;
+}
+
+.input-area button {
+  padding: 10px 16px;
+
+  border-radius: 10px;
+
+  background: linear-gradient(
+    180deg,
+    #ffffff,
+    #dcdcdc
+  );
+
+  color: #000;
+  font-weight: 500;
+
+  box-shadow:
+    0 2px 8px rgba(255,255,255,0.15),
+    inset 0 1px 0 rgba(255,255,255,0.6);
+
+  transition: all 0.2s ease;
+}
+
+.input-area button:active {
+  transform: scale(0.94);
+}
+
+/* ===============================
+   OPTION ANIMATION
+   =============================== */
+
+.option-btn {
+  opacity: 0;
+  transform: translateY(10px);
+  animation: fadeUp 0.4s ease forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===============================
+   BEST GLOW
+   =============================== */
+
+.best-glow {
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.2),
+    0 0 20px rgba(255,255,255,0.15);
+}
+
+/* ===============================
+   TAG STYLE
+   =============================== */
+
+.tag {
+  font-size: 12px;
+  opacity: 0.5;
+  letter-spacing: 0.5px;
+}
+
+/* ===============================
+   THINKING BAR
+   =============================== */
+
+.thinking {
+  height: 10px;
+  border-radius: 6px;
+
+  background: linear-gradient(
+    90deg,
+    rgba(255,255,255,0.05),
+    rgba(255,255,255,0.2),
+    rgba(255,255,255,0.05)
+  );
+
+  background-size: 200px 100%;
+  animation: shimmer 1.2s infinite linear;
+}
+
+@keyframes shimmer {
+  from { background-position: -200px; }
+  to { background-position: 200px; }
+}
+
+/* ===============================
+   CLIENT FOCUS SYSTEM
+   =============================== */
+
+.client {
+  opacity: 0.5;
+  transform: scale(0.96);
+  filter: blur(0.5px);
+}
+
+.client.active {
+  opacity: 1;
+  transform: scale(1);
+  filter: blur(0);
+}
+
+.client.active::after {
+  content: "";
+  position: absolute;
+  inset: -2px;
+  border-radius: 999px;
+
+  border: 1px solid rgba(255,255,255,0.2);
+  opacity: 0;
+
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 0; transform: scale(0.98); }
+  50% { opacity: 0.4; transform: scale(1.02); }
+  100% { opacity: 0; transform: scale(0.98); }
+}
+
+/* ===============================
+   FOCUS MODE
+   =============================== */
+
+.demo-container.focus-mode {
+  transform: scale(1.015);
+}
+
+.demo-container.focus-mode .clients {
+  opacity: 0.6;
+}
+
+.demo-container.focus-mode .option-btn {
+  opacity: 0.85;
+}
+
+/* ===============================
+   INPUT ACTIVE GLOW
+   =============================== */
+
+.input-area.typing-active {
+  border-color: rgba(255,255,255,0.3);
+  box-shadow: 0 0 20px rgba(255,255,255,0.08);
+}
+
+/* ===============================
+   SMOOTH UI
+   =============================== */
+
+.message,
+.option-btn,
+.chat-box {
+  transition: all 0.25s ease;
+}
