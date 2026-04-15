@@ -3,7 +3,6 @@ document.documentElement.classList.add("loaded");
 
 document.addEventListener("DOMContentLoaded", () => {
 
-  // ✅ FIX DARK SCREEN
   document.body.classList.add("loaded");
 
   /* =========================
@@ -35,16 +34,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =========================
-     NAV SCROLL EFFECT
+     SCROLL PROGRESS
      ========================= */
 
-  const nav = document.querySelector(".nav-minimal");
+  const progressBar = document.querySelector(".scroll-progress");
 
   window.addEventListener("scroll", () => {
-    if (!nav) return;
+    const scrollTop = window.scrollY;
+    const docHeight = document.body.scrollHeight - window.innerHeight;
+    const progress = (scrollTop / docHeight) * 100;
 
-    if (window.scrollY > 40) nav.classList.add("scrolled");
-    else nav.classList.remove("scrolled");
+    if (progressBar) progressBar.style.width = progress + "%";
   });
 
   /* =========================
@@ -62,7 +62,23 @@ document.addEventListener("DOMContentLoaded", () => {
   sections.forEach(section => observer.observe(section));
 
   /* =========================
-     DEMO ELEMENTS
+     FOOTER REVEAL
+     ========================= */
+
+  const footer = document.querySelector(".footer-global");
+
+  if (footer) {
+    const footerObserver = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add("visible");
+      });
+    }, { threshold: 0.2 });
+
+    footerObserver.observe(footer);
+  }
+
+  /* =========================
+     DEMO SYSTEM
      ========================= */
 
   const chatBox = document.getElementById("chatBox");
@@ -70,10 +86,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const optionsPanel = document.getElementById("optionsPanel");
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
-
-  /* =========================
-     DEMO ONLY IF PRESENT
-     ========================= */
 
   if (chatBox && optionsPanel && input && sendBtn) {
 
@@ -116,68 +128,69 @@ document.addEventListener("DOMContentLoaded", () => {
       setTimeout(() => btn.classList.remove("press"), 120);
     }
 
+    /* 🔥 HUMAN RESPONSES */
     function generateOptions(msg) {
       const lower = msg.toLowerCase();
 
       if (lower.includes("busy") || lower.includes("later")) {
         return [
-          "No worries — I’ll keep this quick.",
-          "All good, we can pick this up later.",
-          "Happy to follow up when you're free.",
-          "Cool, let’s reconnect later."
+          "Got it — I’ll keep this short so it’s easy to pick up later.",
+          "No problem, we can reconnect when you have more time.",
+          "All good, I’ll follow up at a better time.",
+          "Makes sense, we can continue this later."
         ];
       }
 
       if (lower.includes("pricing")) {
         return [
-          "I’ll break it down clearly.",
-          "Here’s a quick overview.",
-          "We can adjust based on scope.",
-          "I can share a rough range."
+          "I’ll break it down clearly so you know exactly what to expect.",
+          "Let me give you a simple overview of pricing.",
+          "We can adjust based on what you need.",
+          "I can share a quick range for clarity."
         ];
       }
 
       if (lower.includes("discount") || lower.includes("flex")) {
         return [
-          "We can make this work.",
-          "Let’s find something that fits.",
-          "There’s some flexibility.",
-          "We can tweak things."
+          "We can definitely adjust this to make it work for you.",
+          "Let’s find something that fits your range.",
+          "There’s flexibility depending on scope.",
+          "We can tweak this as needed."
         ];
       }
 
       if (lower.includes("unsure")) {
         return [
-          "Totally fair — what would help clarify?",
-          "Happy to walk you through it.",
-          "Let me simplify it.",
-          "Take your time."
+          "Totally fair — what would you like me to clarify?",
+          "Happy to walk you through anything unclear.",
+          "Let me simplify it for you.",
+          "Take your time — no pressure."
         ];
       }
 
-      if (lower.includes("proceed") || lower.includes("start")) {
+      if (lower.includes("proceed")) {
         return [
-          "Great — I’ll get started.",
-          "Perfect, moving ahead.",
-          "Sounds good, let’s begin.",
-          "Alright, let’s go."
+          "Great — I’ll get everything set up.",
+          "Perfect, I’ll move this forward.",
+          "Sounds good — let’s get started.",
+          "Alright, I’ll begin the process."
         ];
       }
 
-      if (lower.includes("stop") || lower.includes("silent")) {
+      if (lower.includes("silent")) {
         return [
-          "Just checking in.",
-          "Still relevant for you?",
-          "Happy to revisit.",
-          "No rush at all."
+          "Just checking in — does this still make sense?",
+          "Wanted to follow up in case this is still relevant.",
+          "Happy to revisit whenever you're ready.",
+          "No rush — just checking."
         ];
       }
 
       return [
-        "Got it.",
-        "Makes sense.",
-        "Let’s move ahead.",
-        "Noted."
+        "Got it — I’ll take this forward.",
+        "Makes sense, let’s move ahead.",
+        "Alright, we’ll continue from here.",
+        "Okay, I’ll handle the next step."
       ];
     }
 
@@ -197,10 +210,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       await wait(400);
 
-      const r = Math.random();
-      const index = r < 0.5 ? 0 : r < 0.75 ? 1 : r < 0.9 ? 2 : 3;
-
-      const selected = buttons[index];
+      const selected = buttons[Math.floor(Math.random() * buttons.length)];
       selected.classList.add("selected");
 
       await wait(250);
@@ -230,64 +240,20 @@ document.addEventListener("DOMContentLoaded", () => {
         updateTabs();
         renderChat(0);
 
-        const flow0Sets = [
-          ["Client is busy", "Follow up later", "Client unsure", "Client proceeds"],
-          ["Client tied up", "Reconnect later", "Needs clarity", "Client confirms"]
+        const flow = [
+          "Client asked about pricing",
+          "Client asked for flexibility",
+          "Client is evaluating options",
+          "Client went silent"
         ];
 
-        const flow1Sets = [
-          ["Asked pricing", "Asked discount", "Comparing options", "Stopped responding"],
-          ["Wants cost", "Flexible?", "Evaluating", "Went silent"]
-        ];
-
-        const flow0 = flow0Sets[Math.floor(Math.random() * flow0Sets.length)];
-        const flow1 = flow1Sets[Math.floor(Math.random() * flow1Sets.length)];
-
-        let msg;
-
-        for (let i = 0; i < 2; i++) {
-          msg = flow0[i];
-          await simulateUser(msg);
-          await wait(readTime(msg));
-          await showOptions(msg);
-        }
-
-        activeClient = 1;
-        updateTabs();
-        renderChat(1);
-
-        for (let i = 0; i < 2; i++) {
-          msg = flow1[i];
-          await simulateUser(msg);
-          await wait(readTime(msg));
-          await showOptions(msg);
-        }
-
-        activeClient = 0;
-        updateTabs();
-        renderChat(0);
-
-        for (let i = 2; i < 4; i++) {
-          msg = flow0[i];
+        for (let msg of flow) {
           await simulateUser(msg);
           await wait(readTime(msg));
           await showOptions(msg);
         }
 
         addMessage("Outcome achieved.", "system");
-
-        activeClient = 1;
-        updateTabs();
-        renderChat(1);
-
-        for (let i = 2; i < 4; i++) {
-          msg = flow1[i];
-          await simulateUser(msg);
-          await wait(readTime(msg));
-          await showOptions(msg);
-        }
-
-        addMessage("Conversation ended.", "system");
 
         await wait(3000);
 
@@ -302,7 +268,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 /* =========================
-   NOTIFY SYSTEM
+   NOTIFY SYSTEM (FIXED)
    ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -311,14 +277,15 @@ document.addEventListener("DOMContentLoaded", () => {
   const notifyEmail = document.getElementById("notifyEmail");
   const notifySuccess = document.getElementById("notifySuccess");
 
-  if (!notifyBtn || !notifyEmail) return;
+  if (!notifyBtn || !notifyEmail || !notifySuccess) return;
 
   notifyBtn.addEventListener("click", async () => {
 
     const email = notifyEmail.value.trim();
 
     if (!email || !email.includes("@")) {
-      alert("Enter valid email");
+      notifySuccess.innerText = "Invalid email address";
+      notifySuccess.classList.add("show");
       return;
     }
 
@@ -332,13 +299,22 @@ document.addEventListener("DOMContentLoaded", () => {
         body: JSON.stringify({ email })
       });
 
-      if (!res.ok) throw new Error();
+      const data = await res.json().catch(() => ({}));
+
+      if (data.status === "exists") {
+        notifySuccess.innerText = "Already registered";
+      } else {
+        notifySuccess.innerText = "You’re in";
+      }
 
       notifySuccess.classList.add("show");
       notifyEmail.value = "";
       notifyBtn.innerText = "Added";
 
     } catch {
+      notifySuccess.innerText = "Try again";
+      notifySuccess.classList.add("show");
+
       notifyBtn.innerText = "Retry";
       notifyBtn.disabled = false;
     }
