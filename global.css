@@ -22,7 +22,6 @@ body {
   transition: all 0.4s ease;
 }
 
-/* 🔥 no black screen */
 body:not(.loaded) {
   opacity: 1;
   transform: none;
@@ -41,14 +40,14 @@ body::before {
 }
 
 /* ===============================
-   CONTENT (PERFECT CENTERING)
+   CONTENT (WIDER)
    =============================== */
 
 .content {
   width: 100%;
-  max-width: 760px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 0 20px;
+  padding: 0 24px;
 
   display: flex;
   flex-direction: column;
@@ -56,7 +55,7 @@ body::before {
 }
 
 /* ===============================
-   HEADER (CENTER LOCK)
+   HEADER
    =============================== */
 
 header {
@@ -64,7 +63,7 @@ header {
   margin-top: clamp(80px, 12vh, 120px);
   padding: 0 20px;
 
-  max-width: 760px;
+  max-width: 980px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -75,12 +74,12 @@ header h1 {
 
 .hook {
   opacity: 0.6;
-  max-width: 520px;
+  max-width: 600px;
   margin: auto;
 }
 
 /* ===============================
-   SECTIONS (APPLE SPACING)
+   SECTION SPACING + REVEAL
    =============================== */
 
 section {
@@ -88,13 +87,19 @@ section {
   text-align: center;
 
   opacity: 0;
-  transform: translateY(20px);
-  transition: all 0.6s cubic-bezier(0.22,1,0.36,1);
+  transform: translateY(30px) scale(0.98);
+  filter: blur(6px);
+
+  transition:
+    opacity 0.8s cubic-bezier(0.22,1,0.36,1),
+    transform 0.8s cubic-bezier(0.22,1,0.36,1),
+    filter 0.8s ease;
 }
 
 section.visible {
   opacity: 1;
-  transform: translateY(0);
+  transform: translateY(0) scale(1);
+  filter: blur(0);
 }
 
 /* ===============================
@@ -126,40 +131,62 @@ section.visible {
 
 .demo-container {
   width: 100%;
-  max-width: 720px;
-  margin: 40px auto;
+  max-width: 900px;
+  margin: 50px auto;
 
-  padding: 20px;
-  border-radius: 20px;
+  padding: 24px;
+  border-radius: 22px;
 
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.02);
 
   box-shadow:
-    0 20px 60px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.03);
+    0 30px 80px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 /* ===============================
-   CHAT (APPLE STYLE)
+   CLIENT PILLS
+   =============================== */
+
+.clients {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.client {
+  padding: 6px 14px;
+  border-radius: 999px;
+  font-size: 14px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+
+  transition: all 0.2s ease;
+}
+
+.client.active {
+  background: #fff;
+  color: #000;
+}
+
+/* ===============================
+   CHAT
    =============================== */
 
 .chat-area {
   display: flex;
   flex-direction: column;
-  height: 420px;
+  height: 360px;
 
   border-radius: 18px;
-  padding: 14px;
+  padding: 18px;
 
   background: rgba(0,0,0,0.35);
   border: 1px solid rgba(255,255,255,0.06);
 
-  backdrop-filter: blur(18px);
-
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.6),
-    inset 0 1px 0 rgba(255,255,255,0.04);
+  backdrop-filter: blur(20px);
 }
 
 .chat-box {
@@ -192,7 +219,7 @@ section.visible {
 }
 
 /* ===============================
-   INPUT (PREMIUM)
+   INPUT
    =============================== */
 
 .input-area {
@@ -215,33 +242,18 @@ section.visible {
 .input-area input {
   flex: 1;
   padding: 12px 16px;
-
-  border-radius: 12px;
   border: none;
-
   background: transparent;
   color: #fff;
 }
 
 .input-area button {
   padding: 10px 18px;
-
   border-radius: 12px;
   border: none;
 
   background: #fff;
   color: #000;
-
-  font-weight: 500;
-  transition: all 0.2s ease;
-}
-
-.input-area button:hover {
-  transform: translateY(-1px);
-}
-
-.press {
-  transform: scale(0.92);
 }
 
 /* ===============================
@@ -259,8 +271,7 @@ section.visible {
 }
 
 .option-btn:hover {
-  transform: translateY(-1px);
-  background: rgba(255,255,255,0.12);
+  transform: translateY(-2px);
 }
 
 .option-btn.selected {
@@ -269,14 +280,25 @@ section.visible {
 }
 
 /* ===============================
-   EMAIL CAPTURE (MATCH SYSTEM)
+   DIVIDERS (APPLE)
    =============================== */
 
-.notify-wrapper {
-  max-width: 600px;
-  margin: 0 auto;
-  text-align: center;
+.section-divider {
+  width: 100%;
+  height: 1px;
+  margin: 60px 0;
+
+  background: linear-gradient(
+    to right,
+    transparent,
+    rgba(255,255,255,0.15),
+    transparent
+  );
 }
+
+/* ===============================
+   EMAIL
+   =============================== */
 
 .notify-box {
   margin-top: 24px;
@@ -291,15 +313,11 @@ section.visible {
   border: 1px solid rgba(255,255,255,0.1);
 
   backdrop-filter: blur(16px);
-
-  box-shadow:
-    0 10px 40px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
 .notify-box input {
   flex: 1;
-  padding: 14px 16px;
+  padding: 14px;
   background: transparent;
   border: none;
   color: #fff;
@@ -307,29 +325,47 @@ section.visible {
 
 .notify-box button {
   padding: 12px 20px;
-
   border-radius: 12px;
   border: none;
 
   background: #fff;
   color: #000;
-
-  font-weight: 500;
 }
 
 /* ===============================
-   FOOTER (CENTER FIX)
+   FOOTER
    =============================== */
 
 .footer-global {
   margin-top: auto;
-  padding: 40px 20px;
+  padding: 50px 20px;
 
   text-align: center;
 
-  max-width: 760px;
+  max-width: 980px;
   margin-left: auto;
   margin-right: auto;
 
-  opacity: 0.6;
+  opacity: 0.7;
+
+  transition: all 0.8s ease;
+}
+
+.footer-global.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ===============================
+   SCROLL PROGRESS
+   =============================== */
+
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  z-index: 9999;
+  background: #fff;
 }
