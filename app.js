@@ -67,89 +67,17 @@ document.addEventListener("DOMContentLoaded", () => {
   const optionsPanel = document.getElementById("optionsPanel");
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
-  const cursor = document.getElementById("fakeCursor");
-  const container = document.querySelector(".demo-container");
 
-  if (!chatBox || !optionsPanel || !input || !sendBtn || !container || !cursor) return;
+  if (!chatBox || !optionsPanel || !input || !sendBtn) return;
 
   let activeClient = 0;
   let chats = { 0: [], 1: [] };
-  let memory = [];
 
   const wait = (t) => new Promise(res => setTimeout(res, t));
   const readTime = (t) => Math.max(1400, t.length * 40);
 
-  document.addEventListener("selectstart", e => e.preventDefault());
-  document.addEventListener("dragstart", e => e.preventDefault());
   input.addEventListener("focus", e => e.target.blur());
   sendBtn.addEventListener("click", e => e.preventDefault());
-
-  /* =========================
-     SYSTEM CURSOR (FINAL)
-     ========================= */
-
-  let cx = 0, cy = 0, tx = 0, ty = 0;
-
-  function initCursorPosition() {
-    const rect = sendBtn.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const cursorSize = 12;
-
-    cx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
-    cy = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
-
-    tx = cx;
-    ty = cy;
-
-    cursor.classList.add("active");
-  }
-
-  function animateCursor() {
-    cx += (tx - cx) * 0.2;
-    cy += (ty - cy) * 0.2;
-
-    cursor.style.left = cx + "px";
-    cursor.style.top  = cy + "px";
-
-    requestAnimationFrame(animateCursor);
-  }
-
-  setTimeout(() => {
-    initCursorPosition();
-    animateCursor();
-  }, 100);
-
-  function moveCursorTo(el){
-    const rect = el.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    const cursorSize = 12;
-
-    tx = rect.left - containerRect.left + rect.width / 2 - cursorSize / 2;
-    ty = rect.top  - containerRect.top  + rect.height / 2 - cursorSize / 2;
-  }
-
-  async function lookAt(el) {
-    moveCursorTo(el);
-    await wait(180);
-  }
-
-  async function clickCursor(el) {
-    moveCursorTo(el);
-    await wait(120);
-
-    cursor.classList.add("clicking");
-    await wait(100);
-    cursor.classList.remove("clicking");
-  }
-
-  /* =========================
-     CAMERA
-     ========================= */
-
-  function cameraFocus(mode) {
-    container.classList.remove("camera-focus");
-    if (mode) container.classList.add(mode);
-  }
 
   /* =========================
      CHAT
@@ -181,103 +109,92 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     MEMORY + OPTIONS
+     BUTTON CLICK ANIMATION
      ========================= */
 
-  function remember(msg) {
-    memory.push(msg.toLowerCase());
-    if (memory.length > 6) memory.shift();
+  function clickButton(btn) {
+    btn.classList.add("press");
+    setTimeout(() => btn.classList.remove("press"), 120);
   }
+
+  /* =========================
+     OPTIONS (ORDERED + HUMAN)
+     ========================= */
 
   function generateOptions(msg) {
-    const context = (memory.join(" ") + " " + msg).toLowerCase();
 
-    const pick = (arr) => arr.slice(0, 4);
+    const lower = msg.toLowerCase();
 
-    if (context.includes("busy")) {
-      return pick([
-        "Got it — I’ll keep it short.",
-        "All good, we can take this later.",
-        "No rush, just checking in.",
-        "Cool, I’ll follow up next week."
-      ]);
+    if (lower.includes("busy") || lower.includes("later")) {
+      return [
+        "No worries — I’ll keep this quick and simple.",
+        "All good, we can pick this up when you're free.",
+        "Happy to follow up later if that works better.",
+        "Cool, let’s connect another time."
+      ];
     }
 
-    if (context.includes("pricing")) {
-      return pick([
-        "I’ll break it down simply.",
-        "Here’s a quick overview.",
-        "We can adjust based on your needs.",
-        "Here’s a rough range."
-      ]);
+    if (lower.includes("pricing") || lower.includes("cost")) {
+      return [
+        "I’ll break it down clearly so you can decide fast.",
+        "Let me give you a quick overview of how it works.",
+        "We can adjust it depending on what you need.",
+        "I can share a rough range if that helps."
+      ];
     }
 
-    if (context.includes("flex")) {
-      return pick([
-        "We can adjust it.",
-        "There’s flexibility there.",
-        "We’ll shape it around your needs.",
-        "We can tweak it."
-      ]);
+    if (lower.includes("discount") || lower.includes("flex")) {
+      return [
+        "We can definitely make this work within your range.",
+        "Let’s find a setup that fits what you’re comfortable with.",
+        "There’s some flexibility depending on scope.",
+        "We can tweak things if needed."
+      ];
     }
 
-    if (context.includes("start") || context.includes("proceed")) {
-      return pick([
-        "Alright, let’s do it.",
-        "I’ll get this moving.",
-        "Sounds good — starting now.",
-        "Let’s go ahead."
-      ]);
+    if (lower.includes("soon") || lower.includes("urgent")) {
+      return [
+        "Yes — we can get started right away.",
+        "We’re ready to move on this immediately.",
+        "We can begin as early as this week.",
+        "Shouldn’t be an issue to start soon."
+      ];
     }
 
-    if (context.includes("stop")) {
-      return pick([
-        "I’ll check back later.",
-        "We can revisit this.",
-        "I’ll follow up soon.",
-        "Let’s circle back."
-      ]);
+    if (lower.includes("unsure") || lower.includes("think")) {
+      return [
+        "Totally fair — what part would you like me to clarify?",
+        "Happy to walk you through anything that's unclear.",
+        "Let me simplify it for you.",
+        "Take your time, no pressure."
+      ];
     }
 
-    return pick([
-      "Got it.",
-      "Makes sense.",
-      "Let’s move on that.",
-      "I’ll handle it."
-    ]);
+    if (lower.includes("stop") || lower.includes("silent")) {
+      return [
+        "Just checking in — does this still make sense for you?",
+        "Wanted to follow up in case this is still relevant.",
+        "Happy to revisit whenever you're ready.",
+        "No rush at all — just thought I’d check."
+      ];
+    }
+
+    if (lower.includes("proceed") || lower.includes("start")) {
+      return [
+        "Great — I’ll get everything set up and started.",
+        "Perfect, I’ll move this forward from here.",
+        "Sounds good — let’s begin.",
+        "Alright, let’s get this going."
+      ];
+    }
+
+    return [
+      "Got it — I’ll take it forward.",
+      "Makes sense, let’s move ahead.",
+      "Alright, we can work with that.",
+      "Okay, noted."
+    ];
   }
-
-  /* =========================
-     INPUT SIMULATION
-     ========================= */
-
-  async function typeInput(text) {
-    cameraFocus("camera-focus");
-
-    await lookAt(input);
-    input.value = "";
-
-    for (let i = 0; i < text.length; i++) {
-      input.value += text[i];
-      await wait(25);
-    }
-  }
-
-  async function simulateUser(text) {
-    await wait(250);
-
-    remember(text);
-    await typeInput(text);
-
-    await clickCursor(sendBtn);
-
-    input.value = "";
-    addMessage(text, "user");
-  }
-
-  /* =========================
-     OPTIONS
-     ========================= */
 
   async function showOptions(msg) {
     const list = generateOptions(msg);
@@ -293,124 +210,121 @@ document.addEventListener("DOMContentLoaded", () => {
       buttons.push(b);
     });
 
-    cameraFocus("camera-focus");
-
     await wait(500);
 
-    const selected = buttons[0];
+    // 🎯 weighted random selection
+    const r = Math.random();
+    let index = r < 0.5 ? 0 : r < 0.75 ? 1 : r < 0.9 ? 2 : 3;
 
-    await clickCursor(selected);
+    const selected = buttons[index];
     selected.classList.add("selected");
 
     await wait(300);
 
     optionsPanel.innerHTML = "";
     addMessage(selected.innerText, "system");
-
-    cameraFocus(null);
   }
 
   /* =========================
-     FLOW
+     SIMULATION
      ========================= */
 
- async function runDemo() {
-  while (true) {
+  async function simulateUser(text) {
+    await wait(250);
 
-    chats = { 0: [], 1: [] };
+    input.value = text;
+    await wait(300);
 
-    activeClient = 0;
-    updateTabs();
-    renderChat(0);
+    clickButton(sendBtn);
 
-    const flow0 = [
-      "Client said they are busy this week",
-      "Client asked to follow up later",
-      "Client is now available to start",
-      "Client said let's proceed"
-    ];
-
-    const flow1 = [
-      "Client asked about pricing",
-      "Client asked if flexible",
-      "Client is comparing options",
-      "Client stopped responding"
-    ];
-
-    let msg;
-
-    // CLIENT 1
-    msg = flow0[0];
-    await simulateUser(msg);
-    await wait(readTime(msg));
-    await showOptions(msg);
-
-    msg = flow0[1];
-    await simulateUser(msg);
-    await wait(readTime(msg));
-    await showOptions(msg);
-
-    // SWITCH CLIENT
-    activeClient = 1;
-    updateTabs();
-    renderChat(1);
-
-    msg = flow1[0];
-    await simulateUser(msg);
-    await wait(readTime(msg));
-    await showOptions(msg);
-
-    msg = flow1[1];
-    await simulateUser(msg);
-    await wait(readTime(msg));
-    await showOptions(msg);
-
-    // BACK CLIENT 1
-    activeClient = 0;
-    updateTabs();
-    renderChat(0);
-
-    msg = flow0[2];
-    await simulateUser(msg);
-    await wait(readTime(msg));
-    await showOptions(msg);
-
-    msg = flow0[3];
-    await simulateUser(msg);
-    await wait(readTime(msg));
-    await showOptions(msg);
-
-    addMessage("Outcome achieved.", "system");
-
-    // CLIENT 2 FINAL
-    activeClient = 1;
-    updateTabs();
-    renderChat(1);
-
-    msg = flow1[2];
-    await simulateUser(msg);
-    await wait(readTime(msg));
-    await showOptions(msg);
-
-    msg = flow1[3];
-    await simulateUser(msg);
-    await wait(readTime(msg));
-    await showOptions(msg);
-
-    addMessage("Conversation ended.", "system");
-
-    await wait(3000);
-
-    chatBox.innerHTML = "";
-    optionsPanel.innerHTML = "";
+    input.value = "";
+    addMessage(text, "user");
   }
-}
 
-window.addEventListener("DOMContentLoaded", () => {
-  document.body.classList.add("loaded");
+  /* =========================
+     DEMO FLOW
+     ========================= */
+
+  async function runDemo() {
+    while (true) {
+
+      chats = { 0: [], 1: [] };
+
+      activeClient = 0;
+      updateTabs();
+      renderChat(0);
+
+      let msg;
+
+      msg = "Client said they are busy this week";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      msg = "Client asked to follow up later";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      activeClient = 1;
+      updateTabs();
+      renderChat(1);
+
+      msg = "Client asked about pricing";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      msg = "Client asked for discount";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      activeClient = 0;
+      updateTabs();
+      renderChat(0);
+
+      msg = "Client is unsure and needs clarity";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      msg = "Client said let's proceed";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      addMessage("Outcome achieved.", "system");
+
+      activeClient = 1;
+      updateTabs();
+      renderChat(1);
+
+      msg = "Client is comparing alternatives";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      msg = "Client stopped responding";
+      await simulateUser(msg);
+      await wait(readTime(msg));
+      await showOptions(msg);
+
+      addMessage("Conversation ended.", "system");
+
+      await wait(3000);
+
+      chatBox.innerHTML = "";
+      optionsPanel.innerHTML = "";
+    }
+  }
+
+  runDemo();
+
 });
+
 /* =========================
-   NOTIFY SYSTEM (FINAL FIX)
+   NOTIFY SYSTEM (UNCHANGED)
    ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -419,15 +333,9 @@ document.addEventListener("DOMContentLoaded", () => {
   const notifyEmail = document.getElementById("notifyEmail");
   const notifySuccess = document.getElementById("notifySuccess");
 
-  console.log("notify init");
-
-  if (!notifyBtn || !notifyEmail) {
-    console.log("notify elements missing");
-    return;
-  }
+  if (!notifyBtn || !notifyEmail) return;
 
   notifyBtn.addEventListener("click", async () => {
-    console.log("clicked");
 
     const email = notifyEmail.value.trim();
 
@@ -442,14 +350,9 @@ document.addEventListener("DOMContentLoaded", () => {
     try {
       const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email })
       });
-
-      const data = await res.json();
-      console.log("response:", data);
 
       if (!res.ok) throw new Error();
 
@@ -457,8 +360,7 @@ document.addEventListener("DOMContentLoaded", () => {
       notifyEmail.value = "";
       notifyBtn.innerText = "Added";
 
-    } catch (err) {
-      console.log("error:", err);
+    } catch {
       notifyBtn.innerText = "Retry";
       notifyBtn.disabled = false;
     }
