@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     DEMO SYSTEM
+     CINEMATIC DEMO SYSTEM
      ========================= */
 
   const chatBox = document.getElementById("chatBox");
@@ -86,191 +86,215 @@ document.addEventListener("DOMContentLoaded", () => {
   const optionsPanel = document.getElementById("optionsPanel");
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
+  const demoContainer = document.querySelector(".demo-container");
 
-  if (chatBox && optionsPanel && input && sendBtn) {
+  if (!chatBox || !optionsPanel || !input || !sendBtn) return;
 
-    let activeClient = 0;
-    let chats = { 0: [], 1: [] };
+  let activeClient = 0;
+  let chats = { 0: [], 1: [] };
 
-    const wait = (t) => new Promise(res => setTimeout(res, t));
-    const readTime = (t) => Math.max(1200, t.length * 35);
+  const wait = (t) => new Promise(res => setTimeout(res, t));
 
-    input.addEventListener("focus", e => e.target.blur());
-    sendBtn.addEventListener("click", e => e.preventDefault());
+  input.addEventListener("focus", e => e.target.blur());
+  sendBtn.addEventListener("click", e => e.preventDefault());
 
-    function updateTabs() {
-      clientTabs.forEach((t, i) => t.classList.toggle("active", i === activeClient));
-    }
+  function updateTabs() {
+    clientTabs.forEach((t, i) => t.classList.toggle("active", i === activeClient));
+  }
 
-    function renderChat(i) {
-      chatBox.innerHTML = "";
-      chats[i].forEach(m => {
-        const d = document.createElement("div");
-        d.className = `message ${m.type} fade-in-up`;
-        d.innerText = m.text;
-        chatBox.appendChild(d);
-      });
-    }
-
-    function addMessage(text, type) {
-      chats[activeClient].push({ text, type });
-
+  function renderChat(i) {
+    chatBox.innerHTML = "";
+    chats[i].forEach(m => {
       const d = document.createElement("div");
-      d.className = `message ${type} fade-in-up`;
-      d.innerText = text;
-
+      d.className = `message ${m.type}`;
+      d.innerText = m.text;
       chatBox.appendChild(d);
-      chatBox.scrollTop = chatBox.scrollHeight;
+    });
+  }
+
+  function addMessage(text, type) {
+    chats[activeClient].push({ text, type });
+
+    const d = document.createElement("div");
+    d.className = `message ${type}`;
+    d.innerText = text;
+
+    chatBox.appendChild(d);
+    chatBox.scrollTop = chatBox.scrollHeight;
+  }
+
+  async function switchClient(i) {
+    activeClient = i;
+    await wait(300);
+    updateTabs();
+    await wait(250);
+    renderChat(i);
+    await wait(300);
+  }
+
+  function setFocus(state) {
+    if (!demoContainer) return;
+    demoContainer.classList.toggle("focus-mode", state);
+  }
+
+  async function typeMessage(text) {
+    setFocus(true);
+    input.classList.add("typing-active");
+
+    input.value = "";
+
+    for (let i = 0; i < text.length; i++) {
+      input.value += text[i];
+      await wait(28 + Math.random() * 18);
     }
 
-    function clickButton(btn) {
-      btn.classList.add("press");
-      setTimeout(() => btn.classList.remove("press"), 120);
-    }
+    await wait(400);
 
-    /* 🔥 HUMAN RESPONSES */
-    function generateOptions(msg) {
-      const lower = msg.toLowerCase();
+    sendBtn.classList.add("press");
+    await wait(120);
+    sendBtn.classList.remove("press");
 
-      if (lower.includes("busy") || lower.includes("later")) {
-        return [
-          "Got it — I’ll keep this short so it’s easy to pick up later.",
-          "No problem, we can reconnect when you have more time.",
-          "All good, I’ll follow up at a better time.",
-          "Makes sense, we can continue this later."
-        ];
-      }
+    addMessage(text, "user");
 
-      if (lower.includes("pricing")) {
-        return [
-          "I’ll break it down clearly so you know exactly what to expect.",
-          "Let me give you a simple overview of pricing.",
-          "We can adjust based on what you need.",
-          "I can share a quick range for clarity."
-        ];
-      }
+    input.value = "";
+    input.classList.remove("typing-active");
 
-      if (lower.includes("discount") || lower.includes("flex")) {
-        return [
-          "We can definitely adjust this to make it work for you.",
-          "Let’s find something that fits your range.",
-          "There’s flexibility depending on scope.",
-          "We can tweak this as needed."
-        ];
-      }
+    await wait(600);
+  }
 
-      if (lower.includes("unsure")) {
-        return [
-          "Totally fair — what would you like me to clarify?",
-          "Happy to walk you through anything unclear.",
-          "Let me simplify it for you.",
-          "Take your time — no pressure."
-        ];
-      }
+  function generateOptions(msg) {
+    const lower = msg.toLowerCase();
 
-      if (lower.includes("proceed")) {
-        return [
-          "Great — I’ll get everything set up.",
-          "Perfect, I’ll move this forward.",
-          "Sounds good — let’s get started.",
-          "Alright, I’ll begin the process."
-        ];
-      }
-
-      if (lower.includes("silent")) {
-        return [
-          "Just checking in — does this still make sense?",
-          "Wanted to follow up in case this is still relevant.",
-          "Happy to revisit whenever you're ready.",
-          "No rush — just checking."
-        ];
-      }
-
+    if (lower.includes("pricing")) {
       return [
-        "Got it — I’ll take this forward.",
-        "Makes sense, let’s move ahead.",
-        "Alright, we’ll continue from here.",
-        "Okay, I’ll handle the next step."
+        "Here’s a clear breakdown so you know exactly what to expect.",
+        "Let me outline pricing so we can move forward quickly.",
+        "I can share pricing details if that helps.",
+        "Yeah, I’ll explain pricing simply."
       ];
     }
 
-    async function showOptions(msg) {
-      const list = generateOptions(msg);
-
-      optionsPanel.innerHTML = "";
-      const buttons = [];
-
-      list.forEach(t => {
-        const b = document.createElement("div");
-        b.className = "option-btn";
-        b.innerText = t;
-        optionsPanel.appendChild(b);
-        buttons.push(b);
-      });
-
-      await wait(400);
-
-      const selected = buttons[Math.floor(Math.random() * buttons.length)];
-      selected.classList.add("selected");
-
-      await wait(250);
-
-      optionsPanel.innerHTML = "";
-      addMessage(selected.innerText, "system");
+    if (lower.includes("silent")) {
+      return [
+        "Just checking in — does this still make sense for you?",
+        "Following up to keep things moving.",
+        "Happy to revisit whenever you're ready.",
+        "Hey, just checking in."
+      ];
     }
 
-    async function simulateUser(text) {
-      await wait(200);
-
-      input.value = text;
-      await wait(250);
-
-      clickButton(sendBtn);
-
-      input.value = "";
-      addMessage(text, "user");
-    }
-
-    async function runDemo() {
-      while (true) {
-
-        chats = { 0: [], 1: [] };
-
-        activeClient = 0;
-        updateTabs();
-        renderChat(0);
-
-        const flow = [
-          "Client asked about pricing",
-          "Client asked for flexibility",
-          "Client is evaluating options",
-          "Client went silent"
-        ];
-
-        for (let msg of flow) {
-          await simulateUser(msg);
-          await wait(readTime(msg));
-          await showOptions(msg);
-        }
-
-        addMessage("Outcome achieved.", "system");
-
-        await wait(3000);
-
-        chatBox.innerHTML = "";
-        optionsPanel.innerHTML = "";
-      }
-    }
-
-    runDemo();
+    return [
+      "Got it — I’ll take this forward clearly.",
+      "Let’s move ahead from here.",
+      "We can continue step by step.",
+      "Alright, let’s go ahead."
+    ];
   }
+
+  async function showOptions(msg) {
+
+    setFocus(true);
+
+    optionsPanel.innerHTML = '<div class="thinking"></div>';
+    await wait(900);
+
+    optionsPanel.innerHTML = "";
+
+    const options = generateOptions(msg);
+    const elements = [];
+
+    for (let i = 0; i < options.length; i++) {
+      const div = document.createElement("div");
+      div.className = "option-btn";
+      div.innerHTML = `<strong class="tag">${["Best","Strong","Safe","Casual"][i]}</strong><br>${options[i]}`;
+      optionsPanel.appendChild(div);
+      elements.push(div);
+      await wait(260);
+    }
+
+    await wait(1200);
+
+    elements[0].classList.add("best-glow");
+
+    await wait(400);
+
+    elements[0].classList.add("selected");
+
+    await wait(400);
+
+    optionsPanel.innerHTML = "";
+    addMessage(options[0], "system");
+
+    await wait(800);
+
+    setFocus(false);
+  }
+
+  async function runDemo() {
+
+    const flows = {
+      0: [
+        { msg: "Client asked about pricing" },
+        { msg: "Client wants clarity on scope" },
+        { msg: "Client is evaluating options" },
+        { msg: "Client requested final confirmation" },
+        { msg: "Client is ready to proceed", outcome: "win" }
+      ],
+      1: [
+        { msg: "Client asked if flexible" },
+        { msg: "Client said maybe next week" },
+        { msg: "Client stopped replying" },
+        { msg: "Follow-up attempt", outcome: "lose" }
+      ]
+    };
+
+    const progress = { 0: 0, 1: 0 };
+    let active = 0;
+
+    chatBox.innerHTML = "";
+    optionsPanel.innerHTML = "";
+
+    while (progress[0] < 5 || progress[1] < 4) {
+
+      active = active === 0 ? 1 : 0;
+
+      if (progress[active] >= flows[active].length) {
+        active = active === 0 ? 1 : 0;
+      }
+
+      await switchClient(active);
+
+      const step = flows[active][progress[active]];
+
+      await typeMessage(step.msg);
+      await wait(800);
+      await showOptions(step.msg);
+
+      progress[active]++;
+
+      if (step.outcome === "win") {
+        addMessage("Deal closed successfully.", "system");
+        await wait(1200);
+      }
+
+      if (step.outcome === "lose") {
+        addMessage("Conversation lost due to inactivity.", "system");
+        await wait(1200);
+      }
+
+      await wait(1400);
+    }
+
+    await wait(5000);
+  }
+
+  runDemo();
 
 });
 
 /* =========================
-   NOTIFY SYSTEM (FIXED)
+   NOTIFY SYSTEM (UNCHANGED)
    ========================= */
-
 document.addEventListener("DOMContentLoaded", () => {
 
   const notifyBtn = document.getElementById("notifyBtn");
