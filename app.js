@@ -1,6 +1,6 @@
 /* =========================
-   ELAYRO FULL APP.JS
-   (ALL PAGES + DEMO + NOTIFY)
+   ELAYRO FINAL APP.JS
+   (FULL PROJECT - STABLE)
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,13 +8,11 @@ document.addEventListener("DOMContentLoaded", () => {
   const wait = (t) => new Promise(res => setTimeout(res, t));
 
   /* =========================
-     NAV (ALL PAGES)
+     NAV
   ========================= */
 
   const navLinks = document.querySelectorAll(".nav-minimal a");
-
-  let currentPage = window.location.pathname.split("/").pop();
-  if (!currentPage) currentPage = "index.html";
+  let currentPage = window.location.pathname.split("/").pop() || "index.html";
 
   navLinks.forEach(link => {
     const href = link.getAttribute("href");
@@ -23,13 +21,9 @@ document.addEventListener("DOMContentLoaded", () => {
 
     link.addEventListener("click", (e) => {
       if (!href || href.startsWith("#")) return;
-
       e.preventDefault();
       document.body.classList.add("fade-out");
-
-      setTimeout(() => {
-        window.location.href = href;
-      }, 300);
+      setTimeout(() => window.location.href = href, 300);
     });
   });
 
@@ -42,12 +36,11 @@ document.addEventListener("DOMContentLoaded", () => {
   window.addEventListener("scroll", () => {
     const total = document.body.scrollHeight - window.innerHeight;
     const progress = (window.scrollY / total) * 100;
-
     if (progressBar) progressBar.style.width = progress + "%";
   });
 
   /* =========================
-     SECTION FADE-IN
+     SECTION FADE
   ========================= */
 
   const sections = document.querySelectorAll("section");
@@ -83,7 +76,6 @@ document.addEventListener("DOMContentLoaded", () => {
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
   const clientTabs = document.querySelectorAll(".clients .client");
-  const demoContainer = document.querySelector(".demo-container");
 
   const demoEnabled = chatBox && optionsPanel && input && sendBtn;
 
@@ -132,7 +124,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let i = 0; i < text.length; i++) {
         input.value += text[i];
-        await wait(20 + Math.random() * 20);
+        await wait(18 + Math.random() * 20);
       }
 
       sendBtn.classList.add("press");
@@ -144,7 +136,7 @@ document.addEventListener("DOMContentLoaded", () => {
       input.value = "";
       input.classList.remove("typing-active");
 
-      await wait(600);
+      await wait(500);
     }
 
     function getRandomStart() {
@@ -184,70 +176,69 @@ document.addEventListener("DOMContentLoaded", () => {
       return {
         pricing:[
           "Here’s a simple breakdown so you know exactly what to expect.",
-          "Let me walk you through the pricing clearly.",
-          "I can share the details so it’s easier to decide.",
-          "I’ll explain it in a simple way."
+          "Let me walk you through pricing clearly.",
+          "I can share details to help you decide.",
+          "I’ll explain it simply."
         ],
         scope:[
           "Let me define the scope clearly so everything is aligned.",
-          "I’ll break down exactly what’s included.",
-          "We can go step by step so nothing is unclear.",
-          "I’ll simplify it for you."
+          "I’ll break down what’s included.",
+          "We can go step by step.",
+          "I’ll simplify it."
         ],
         evaluating:[
-          "Take your time — I can help you compare what fits best.",
-          "Happy to guide you through the options.",
-          "Let me simplify the decision for you.",
-          "We can narrow this down quickly."
+          "Take your time — I can help you compare.",
+          "Happy to guide you through options.",
+          "Let me simplify this.",
+          "We can narrow it down."
         ],
         engaged:[
-          "Great — let’s keep this moving forward.",
-          "We’re aligned, I’ll take this ahead.",
-          "Let’s build on this momentum.",
-          "We’re progressing well here."
+          "Great — let’s keep this moving.",
+          "We’re aligned, I’ll take it ahead.",
+          "Let’s build momentum.",
+          "We’re progressing well."
         ],
         delayed:[
-          "No problem — we can pick this up when you’re ready.",
-          "All good, I’ll follow up at a better time.",
-          "We’ll continue whenever it works for you.",
-          "I’ll check back in shortly."
+          "No problem — we’ll pick this up later.",
+          "All good, I’ll follow up.",
+          "We’ll continue when ready.",
+          "I’ll check back in."
         ],
         ghosting:[
-          "Just checking in — does this still make sense for you?",
+          "Just checking in — still relevant?",
           "Following up to keep things moving.",
-          "Happy to revisit this whenever you're ready.",
-          "Hey — just wanted to check in."
+          "Happy to revisit anytime.",
+          "Hey — checking in."
         ],
         followup:[
-          "Circling back to keep this moving.",
-          "Following up again here.",
-          "Let’s reconnect on this.",
+          "Circling back here.",
+          "Following up again.",
+          "Let’s reconnect.",
           "Checking in once more."
         ],
         closing:[
-          "Perfect — I’ll lock this in and proceed.",
-          "Great, I’ll finalize everything now.",
-          "We’re good to go from here.",
-          "Let’s get this started."
+          "Perfect — I’ll finalize this.",
+          "Great, proceeding now.",
+          "We’re good to go.",
+          "Let’s get started."
         ]
       }[s];
     }
 
     function getReason(result) {
       return result === "win"
-        ? "Closed smoothly with clear alignment."
-        : "Lost due to drop in momentum.";
+        ? "Closed with strong alignment."
+        : "Lost due to drop in engagement.";
     }
 
     async function showOptions(state) {
 
       optionsPanel.innerHTML = '<div class="thinking"></div>';
-      await wait(900);
+      await wait(800);
 
       optionsPanel.innerHTML = "";
 
       const options = getOptions(state);
-      const elements = [];
 
       for (let i = 0; i < 4; i++) {
         const d = document.createElement("div");
@@ -259,81 +250,74 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         optionsPanel.appendChild(d);
-        elements.push(d);
-
-        await wait(200);
+        await wait(180);
       }
 
-      await wait(1000);
-
-      elements[0].classList.add("best-glow");
-      await wait(400);
-
-      elements[0].classList.add("selected");
-      await wait(400);
+      await wait(900);
 
       optionsPanel.innerHTML = "";
 
       addMessage(options[0], "system");
+      await wait(600);
+    }
 
-      await wait(800);
+    async function handleClient(client, index) {
+
+      if (client.done) return;
+
+      await switchClient(index);
+
+      const stepsToRun = 2 + Math.floor(Math.random() * 2);
+
+      for (let i = 0; i < stepsToRun; i++) {
+
+        if (client.done) return;
+
+        const state = client.state;
+
+        await typeMessage(getMsg(state));
+        await showOptions(state);
+
+        client.steps++;
+
+        if (client.steps >= client.max) {
+          const win = state === "closing" || state === "engaged";
+
+          addMessage(win ? "✅ Deal closed successfully" : "❌ Conversation lost", "system");
+          await wait(400);
+          addMessage(getReason(win ? "win" : "lost"), "system");
+
+          client.done = true;
+          return;
+        }
+
+        client.state = getNextState(state);
+      }
     }
 
     async function runDemo() {
 
       while (true) {
 
-        const clients = {
-          0:{state:getRandomStart(),done:false,steps:0,max:5},
-          1:{state:getRandomStart(),done:false,steps:0,max:4}
-        };
+        const clients = [
+          { state: getRandomStart(), done: false, steps: 0, max: 5 },
+          { state: getRandomStart(), done: false, steps: 0, max: 4 }
+        ];
 
-        chats = {0:[],1:[]};
+        chats = { 0: [], 1: [] };
         chatBox.innerHTML = "";
         optionsPanel.innerHTML = "";
 
         while (!clients[0].done || !clients[1].done) {
 
-          for (let i = 0; i < 2; i++) {
-
-            if (clients[i].done) continue;
-
-            await switchClient(i);
-
-            const batch = 2 + Math.floor(Math.random()*2);
-
-            for (let b = 0; b < batch; b++) {
-
-              if (clients[i].done) break;
-
-              const state = clients[i].state;
-
-              await typeMessage(getMsg(state));
-              await showOptions(state);
-
-              clients[i].steps++;
-
-              if (clients[i].steps >= clients[i].max) {
-                const win = state === "closing" || state === "engaged";
-
-                addMessage(win ? "Deal closed." : "Conversation lost.", "system");
-                addMessage(getReason(win ? "win":"lost"), "system");
-
-                clients[i].done = true;
-                break;
-              }
-
-              clients[i].state = getNextState(state);
-            }
-          }
+          if (!clients[0].done) await handleClient(clients[0], 0);
+          if (!clients[1].done) await handleClient(clients[1], 1);
         }
 
         await wait(2000);
 
         chatBox.innerHTML = "";
         optionsPanel.innerHTML = "";
-
-        await wait(800);
       }
     }
 
