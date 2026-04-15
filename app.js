@@ -1,6 +1,6 @@
 /* =========================
-   ELAYRO FINAL APP.JS
-   (FULL PROJECT - STABLE)
+   ELAYRO FULL APP.JS
+   COMPLETE PROJECT FILE
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const wait = (t) => new Promise(res => setTimeout(res, t));
 
   /* =========================
-     NAV
+     NAVIGATION
   ========================= */
 
   const navLinks = document.querySelectorAll(".nav-minimal a");
@@ -40,32 +40,19 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =========================
-     SECTION FADE
+     SECTION + FOOTER FADE
   ========================= */
 
-  const sections = document.querySelectorAll("section");
-
-  const observer = new IntersectionObserver((entries) => {
+  const observer = new IntersectionObserver(entries => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add("visible");
     });
   }, { threshold: 0.2 });
 
-  sections.forEach(s => observer.observe(s));
-
-  /* =========================
-     FOOTER FADE
-  ========================= */
+  document.querySelectorAll("section").forEach(s => observer.observe(s));
 
   const footer = document.querySelector(".footer-global");
-
-  if (footer) {
-    new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) entry.target.classList.add("visible");
-      });
-    }, { threshold: 0.2 }).observe(footer);
-  }
+  if (footer) observer.observe(footer);
 
   /* =========================
      DEMO SYSTEM
@@ -77,9 +64,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const sendBtn = document.getElementById("sendBtn");
   const clientTabs = document.querySelectorAll(".clients .client");
 
-  const demoEnabled = chatBox && optionsPanel && input && sendBtn;
-
-  if (demoEnabled) {
+  if (chatBox && optionsPanel && input && sendBtn) {
 
     let activeClient = 0;
     let chats = { 0: [], 1: [] };
@@ -120,11 +105,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
     async function typeMessage(text) {
       input.value = "";
-      input.classList.add("typing-active");
 
       for (let i = 0; i < text.length; i++) {
         input.value += text[i];
-        await wait(18 + Math.random() * 20);
+        await wait(15 + Math.random() * 25);
       }
 
       sendBtn.classList.add("press");
@@ -132,115 +116,106 @@ document.addEventListener("DOMContentLoaded", () => {
       sendBtn.classList.remove("press");
 
       addMessage(text, "user");
-
       input.value = "";
-      input.classList.remove("typing-active");
 
       await wait(500);
     }
 
-    function getRandomStart() {
-      const pool = ["pricing","scope","evaluating","engaged","delayed","ghosting"];
-      return pool[Math.floor(Math.random() * pool.length)];
+    /* =========================
+       REAL CONVERSATION FLOWS
+    ========================= */
+
+    const flows = [
+      [
+        "Hey, can you share pricing?",
+        "Is there flexibility based on scope?",
+        "Let me think about it",
+        null,
+        "Sorry missed this — still available?",
+        "Okay let’s move ahead"
+      ],
+      [
+        "What exactly is included?",
+        "Can we reduce this slightly?",
+        "I’ll get back to you",
+        null,
+        null,
+        "Let’s pause this for now"
+      ]
+    ];
+
+    function getOptions(msg) {
+
+      if (!msg) {
+        return [
+          "Just checking in — does this still make sense for you?",
+          "Following up here — happy to pick this up anytime.",
+          "Wanted to check if this is still relevant for you.",
+          "Hey — just circling back on this."
+        ];
+      }
+
+      if (msg.includes("pricing")) return [
+        "Here’s a clear breakdown so you know exactly what to expect.",
+        "Let me walk you through pricing clearly.",
+        "I can share details to help you decide.",
+        "I’ll explain it simply."
+      ];
+
+      if (msg.includes("flex")) return [
+        "Yes — we can adjust this based on your needs.",
+        "We can make this flexible depending on scope.",
+        "There’s room to adapt this.",
+        "We can tweak this easily."
+      ];
+
+      if (msg.includes("think")) return [
+        "Makes sense — take your time.",
+        "All good — I’m here when ready.",
+        "No rush — we can continue later.",
+        "Happy to reconnect anytime."
+      ];
+
+      if (msg.includes("included")) return [
+        "Let me break down everything clearly.",
+        "I’ll walk you through it step by step.",
+        "Here’s the full scope explained.",
+        "Let me simplify this for you."
+      ];
+
+      if (msg.includes("reduce")) return [
+        "We can definitely optimize this.",
+        "Let’s adjust to fit your budget.",
+        "We can refine this easily.",
+        "There’s room to reduce here."
+      ];
+
+      if (msg.includes("pause")) return [
+        "Understood — we can revisit anytime.",
+        "No problem, we’ll reconnect later.",
+        "All good — I’ll be here.",
+        "We can pick this up later."
+      ];
+
+      return [
+        "Got it — I’ll take this forward.",
+        "Understood — let’s proceed.",
+        "Makes sense — moving ahead.",
+        "Alright — continuing from here."
+      ];
     }
 
-    function getNextState(s) {
-      const map = {
-        pricing:["scope","evaluating"],
-        scope:["evaluating","engaged"],
-        evaluating:["engaged","delayed"],
-        engaged:["closing","ghosting"],
-        delayed:["followup","ghosting"],
-        followup:["engaged","ghosting"],
-        ghosting:["followup","lost"],
-        closing:["won"]
-      };
-      const next = map[s] || ["evaluating"];
-      return next[Math.floor(Math.random() * next.length)];
-    }
-
-    function getMsg(s) {
-      return {
-        pricing:"Client asked about pricing",
-        scope:"Client wants clarity on scope",
-        evaluating:"Client is comparing options",
-        engaged:"Client is actively engaging",
-        delayed:"Client said maybe later",
-        ghosting:"Client hasn’t responded",
-        followup:"Following up again",
-        closing:"Client is ready to proceed"
-      }[s];
-    }
-
-    function getOptions(s) {
-      return {
-        pricing:[
-          "Here’s a simple breakdown so you know exactly what to expect.",
-          "Let me walk you through pricing clearly.",
-          "I can share details to help you decide.",
-          "I’ll explain it simply."
-        ],
-        scope:[
-          "Let me define the scope clearly so everything is aligned.",
-          "I’ll break down what’s included.",
-          "We can go step by step.",
-          "I’ll simplify it."
-        ],
-        evaluating:[
-          "Take your time — I can help you compare.",
-          "Happy to guide you through options.",
-          "Let me simplify this.",
-          "We can narrow it down."
-        ],
-        engaged:[
-          "Great — let’s keep this moving.",
-          "We’re aligned, I’ll take it ahead.",
-          "Let’s build momentum.",
-          "We’re progressing well."
-        ],
-        delayed:[
-          "No problem — we’ll pick this up later.",
-          "All good, I’ll follow up.",
-          "We’ll continue when ready.",
-          "I’ll check back in."
-        ],
-        ghosting:[
-          "Just checking in — still relevant?",
-          "Following up to keep things moving.",
-          "Happy to revisit anytime.",
-          "Hey — checking in."
-        ],
-        followup:[
-          "Circling back here.",
-          "Following up again.",
-          "Let’s reconnect.",
-          "Checking in once more."
-        ],
-        closing:[
-          "Perfect — I’ll finalize this.",
-          "Great, proceeding now.",
-          "We’re good to go.",
-          "Let’s get started."
-        ]
-      }[s];
-    }
-
-    function getReason(result) {
-      return result === "win"
-        ? "Closed with strong alignment."
-        : "Lost due to drop in engagement.";
-    }
-
-    async function showOptions(state) {
+    async function showOptions(msg) {
 
       optionsPanel.innerHTML = '<div class="thinking"></div>';
-      await wait(800);
+      await wait(700);
 
       optionsPanel.innerHTML = "";
 
-      const options = getOptions(state);
+      const options = getOptions(msg);
 
       for (let i = 0; i < 4; i++) {
+
         const d = document.createElement("div");
         d.className = "option-bubble";
 
@@ -261,58 +236,46 @@ document.addEventListener("DOMContentLoaded", () => {
       await wait(600);
     }
 
-    async function handleClient(client, index) {
-
-      if (client.done) return;
+    async function runClient(flow, index, steps) {
 
       await switchClient(index);
 
-      const stepsToRun = 2 + Math.floor(Math.random() * 2);
+      for (let i = 0; i < steps; i++) {
 
-      for (let i = 0; i < stepsToRun; i++) {
+        const msg = flow[i];
 
-        if (client.done) return;
-
-        const state = client.state;
-
-        await typeMessage(getMsg(state));
-        await showOptions(state);
-
-        client.steps++;
-
-        if (client.steps >= client.max) {
-          const win = state === "closing" || state === "engaged";
-
-          addMessage(win ? "✅ Deal closed successfully" : "❌ Conversation lost", "system");
-          await wait(400);
-          addMessage(getReason(win ? "win" : "lost"), "system");
-
-          client.done = true;
-          return;
+        if (msg === null) {
+          await wait(1200);
+        } else {
+          await typeMessage(msg);
         }
 
-        client.state = getNextState(state);
+        await showOptions(msg);
       }
+
+      const last = flow[steps - 1];
+      const win = last && last.includes("move ahead");
+
+      addMessage(win ? "✅ Deal closed successfully" : "❌ Conversation lost", "system");
+      await wait(400);
+
+      addMessage(
+        win ? "Closed with clear intent and alignment." :
+              "Conversation dropped due to low engagement.",
+        "system"
+      );
     }
 
     async function runDemo() {
 
       while (true) {
 
-        const clients = [
-          { state: getRandomStart(), done: false, steps: 0, max: 5 },
-          { state: getRandomStart(), done: false, steps: 0, max: 4 }
-        ];
-
         chats = { 0: [], 1: [] };
         chatBox.innerHTML = "";
         optionsPanel.innerHTML = "";
 
-        while (!clients[0].done || !clients[1].done) {
-
-          if (!clients[0].done) await handleClient(clients[0], 0);
-          if (!clients[1].done) await handleClient(clients[1], 1);
-        }
+        await runClient(flows[0], 0, 5);
+        await runClient(flows[1], 1, 4);
 
         await wait(2000);
 
