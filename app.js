@@ -1,6 +1,6 @@
 /* =========================
    ELAYRO FINAL APP.JS
-   (FULL PROJECT + PRESERVED INTELLIGENCE)
+   (FULL PROJECT + CINEMATIC CLOSE)
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navLinks.forEach(link => {
     const href = link.getAttribute("href");
-
     if (href === currentPage) link.style.opacity = "0.4";
 
     link.addEventListener("click", (e) => {
@@ -85,11 +84,11 @@ document.addEventListener("DOMContentLoaded", () => {
     chatBox.scrollTop = chatBox.scrollHeight;
   }
 
-  function addMessage(text, type) {
+  function addMessage(text, type, extraClass = "") {
     chats[activeClient].push({ text, type });
 
     const d = document.createElement("div");
-    d.className = `message ${type}`;
+    d.className = `message ${type} ${extraClass}`;
     d.innerText = text;
 
     chatBox.appendChild(d);
@@ -126,7 +125,7 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   /* =========================
-     ✅ YOUR ORIGINAL ADVANCED FLOWS (RESTORED)
+     FLOWS
   ========================= */
 
   const flows = [
@@ -153,7 +152,7 @@ document.addEventListener("DOMContentLoaded", () => {
   ];
 
   /* =========================
-     ✅ YOUR FULL RESPONSE ENGINE (UNCHANGED)
+     RESPONSES (UNCHANGED)
   ========================= */
 
   function getOptions(msg) {
@@ -252,9 +251,38 @@ document.addEventListener("DOMContentLoaded", () => {
 
     optionsPanel.innerHTML = "";
 
-    addMessage(options[0], "system");
+    const selected = options[0];
+    addMessage(selected, "system");
+
     await wait(900);
   }
+
+  /* =========================
+     🎬 CINEMATIC CLOSE
+  ========================= */
+
+  async function cinematicClose(result) {
+
+    await wait(800);
+
+    addMessage("Processing...", "system");
+
+    await wait(1200);
+
+    if (result === "win") {
+      addMessage("🟢 Deal closed successfully", "system", "win-glow");
+      await wait(400);
+      addMessage("Closed with strong alignment and clarity.", "system");
+    } else {
+      addMessage("🔴 Conversation lost", "system", "lose-glow");
+      await wait(400);
+      addMessage("Lost due to drop in engagement and momentum.", "system");
+    }
+  }
+
+  /* =========================
+     LOOP
+  ========================= */
 
   async function runDemo() {
 
@@ -280,28 +308,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
           for (let b = 0; b < batch; b++) {
 
-            if (steps[i] >= flow.messages.length) {
-
-              done[i] = true;
-
-              addMessage(
-                flow.result === "win"
-                  ? "✅ Deal closed successfully"
-                  : "❌ Conversation lost",
-                "system"
-              );
-
-              await wait(500);
-
-              addMessage(
-                flow.result === "win"
-                  ? "Closed with clear intent and alignment."
-                  : "Conversation dropped due to low engagement.",
-                "system"
-              );
-
-              break;
-            }
+            if (steps[i] >= flow.messages.length) continue;
 
             const msg = flow.messages[steps[i]];
 
@@ -314,6 +321,12 @@ document.addEventListener("DOMContentLoaded", () => {
             await showOptions(msg);
 
             steps[i]++;
+
+            if (steps[i] === flow.messages.length) {
+              await cinematicClose(flow.result);
+              done[i] = true;
+              break;
+            }
           }
         }
       }
