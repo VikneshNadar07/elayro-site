@@ -557,3 +557,6 @@ a:hover::after,
 .notify-success.show {
   opacity: 1;
 }
+.press {
+  transform: scale(0.92);
+}
