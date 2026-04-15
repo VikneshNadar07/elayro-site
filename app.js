@@ -1,6 +1,6 @@
 /* =========================
-   ELAYRO FULL APP.JS
-   COMPLETE PROJECT FILE
+   ELAYRO FINAL APP.JS
+   FULL PROJECT (STABLE + HUMAN FLOW)
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,7 +8,7 @@ document.addEventListener("DOMContentLoaded", () => {
   const wait = (t) => new Promise(res => setTimeout(res, t));
 
   /* =========================
-     NAVIGATION
+     NAV
   ========================= */
 
   const navLinks = document.querySelectorAll(".nav-minimal a");
@@ -16,7 +16,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   navLinks.forEach(link => {
     const href = link.getAttribute("href");
-
     if (href === currentPage) link.style.opacity = "0.4";
 
     link.addEventListener("click", (e) => {
@@ -40,7 +39,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =========================
-     SECTION + FOOTER FADE
+     FADE
   ========================= */
 
   const observer = new IntersectionObserver(entries => {
@@ -50,7 +49,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { threshold: 0.2 });
 
   document.querySelectorAll("section").forEach(s => observer.observe(s));
-
   const footer = document.querySelector(".footer-global");
   if (footer) observer.observe(footer);
 
@@ -93,14 +91,19 @@ document.addEventListener("DOMContentLoaded", () => {
       d.innerText = text;
 
       chatBox.appendChild(d);
-      chatBox.scrollTop = chatBox.scrollHeight;
+
+      // 🔥 SMOOTH AUTO SCROLL
+      chatBox.scrollTo({
+        top: chatBox.scrollHeight,
+        behavior: "smooth"
+      });
     }
 
     async function switchClient(i) {
       activeClient = i;
       updateTabs();
       renderChat(i);
-      await wait(400);
+      await wait(800); // slower switch
     }
 
     async function typeMessage(text) {
@@ -108,65 +111,75 @@ document.addEventListener("DOMContentLoaded", () => {
 
       for (let i = 0; i < text.length; i++) {
         input.value += text[i];
-        await wait(15 + Math.random() * 25);
+        await wait(30 + Math.random() * 40); // slower typing
       }
 
       sendBtn.classList.add("press");
-      await wait(120);
+      await wait(150);
       sendBtn.classList.remove("press");
 
       addMessage(text, "user");
       input.value = "";
 
-      await wait(500);
+      await wait(900);
     }
 
     /* =========================
-       REAL CONVERSATION FLOWS
+       CONVERSATIONS
     ========================= */
 
     const flows = [
-      [
-        "Hey, can you share pricing?",
-        "Is there flexibility based on scope?",
-        "Let me think about it",
-        null,
-        "Sorry missed this — still available?",
-        "Okay let’s move ahead"
-      ],
-      [
-        "What exactly is included?",
-        "Can we reduce this slightly?",
-        "I’ll get back to you",
-        null,
-        null,
-        "Let’s pause this for now"
-      ]
+      {
+        messages: [
+          "Hey, can you share pricing?",
+          "Is there flexibility here?",
+          "That sounds good actually",
+          "Let’s move ahead"
+        ],
+        result: "win"
+      },
+      {
+        messages: [
+          "What’s included exactly?",
+          "Hmm seems a bit high",
+          "I’ll think about it",
+          null,
+          null
+        ],
+        result: "lost"
+      }
     ];
 
     function getOptions(msg) {
 
       if (!msg) {
         return [
-          "Just checking in — does this still make sense for you?",
-          "Following up here — happy to pick this up anytime.",
-          "Wanted to check if this is still relevant for you.",
-          "Hey — just circling back on this."
+          "Just checking in — does this still make sense?",
+          "Following up — happy to continue anytime.",
+          "Wanted to see if this is still relevant.",
+          "Hey — just circling back here."
         ];
       }
 
       if (msg.includes("pricing")) return [
         "Here’s a clear breakdown so you know exactly what to expect.",
         "Let me walk you through pricing clearly.",
-        "I can share details to help you decide.",
+        "I’ll share details so it’s easier to decide.",
         "I’ll explain it simply."
       ];
 
       if (msg.includes("flex")) return [
         "Yes — we can adjust this based on your needs.",
-        "We can make this flexible depending on scope.",
+        "We can definitely make this flexible.",
         "There’s room to adapt this.",
-        "We can tweak this easily."
+        "We can tweak it to fit better."
+      ];
+
+      if (msg.includes("high")) return [
+        "We can optimize this to fit better.",
+        "Let’s refine this slightly.",
+        "We can adjust the scope to reduce cost.",
+        "There’s room to improve this."
       ];
 
       if (msg.includes("think")) return [
@@ -174,27 +187,6 @@ document.addEventListener("DOMContentLoaded", () => {
         "All good — I’m here when ready.",
         "No rush — we can continue later.",
         "Happy to reconnect anytime."
-      ];
-
-      if (msg.includes("included")) return [
-        "Let me break down everything clearly.",
-        "I’ll walk you through it step by step.",
-        "Here’s the full scope explained.",
-        "Let me simplify this for you."
-      ];
-
-      if (msg.includes("reduce")) return [
-        "We can definitely optimize this.",
-        "Let’s adjust to fit your budget.",
-        "We can refine this easily.",
-        "There’s room to reduce here."
-      ];
-
-      if (msg.includes("pause")) return [
-        "Understood — we can revisit anytime.",
-        "No problem, we’ll reconnect later.",
-        "All good — I’ll be here.",
-        "We can pick this up later."
       ];
 
       return [
@@ -208,7 +200,7 @@ document.addEventListener("DOMContentLoaded", () => {
     async function showOptions(msg) {
 
       optionsPanel.innerHTML = '<div class="thinking"></div>';
-      await wait(700);
+      await wait(1200); // slower thinking
 
       optionsPanel.innerHTML = "";
 
@@ -225,45 +217,15 @@ document.addEventListener("DOMContentLoaded", () => {
         `;
 
         optionsPanel.appendChild(d);
-        await wait(180);
+        await wait(250);
       }
 
-      await wait(900);
+      await wait(1200);
 
       optionsPanel.innerHTML = "";
-
       addMessage(options[0], "system");
-      await wait(600);
-    }
 
-    async function runClient(flow, index, steps) {
-
-      await switchClient(index);
-
-      for (let i = 0; i < steps; i++) {
-
-        const msg = flow[i];
-
-        if (msg === null) {
-          await wait(1200);
-        } else {
-          await typeMessage(msg);
-        }
-
-        await showOptions(msg);
-      }
-
-      const last = flow[steps - 1];
-      const win = last && last.includes("move ahead");
-
-      addMessage(win ? "✅ Deal closed successfully" : "❌ Conversation lost", "system");
-      await wait(400);
-
-      addMessage(
-        win ? "Closed with clear intent and alignment." :
-              "Conversation dropped due to low engagement.",
-        "system"
-      );
+      await wait(900);
     }
 
     async function runDemo() {
@@ -274,10 +236,52 @@ document.addEventListener("DOMContentLoaded", () => {
         chatBox.innerHTML = "";
         optionsPanel.innerHTML = "";
 
-        await runClient(flows[0], 0, 5);
-        await runClient(flows[1], 1, 4);
+        let steps = [0, 0];
+        let done = [false, false];
 
-        await wait(2000);
+        while (!done[0] || !done[1]) {
+
+          for (let i = 0; i < 2; i++) {
+
+            if (done[i]) continue;
+
+            await switchClient(i);
+
+            const flow = flows[i];
+
+            const batch = 2 + Math.floor(Math.random() * 2);
+
+            for (let b = 0; b < batch; b++) {
+
+              if (steps[i] >= flow.messages.length) {
+                done[i] = true;
+
+                addMessage(
+                  flow.result === "win"
+                    ? "✅ Deal closed successfully"
+                    : "❌ Conversation lost",
+                  "system"
+                );
+
+                break;
+              }
+
+              const msg = flow.messages[steps[i]];
+
+              if (msg === null) {
+                await wait(2000);
+              } else {
+                await typeMessage(msg);
+              }
+
+              await showOptions(msg);
+
+              steps[i]++;
+            }
+          }
+        }
+
+        await wait(2500);
 
         chatBox.innerHTML = "";
         optionsPanel.innerHTML = "";
