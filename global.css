@@ -18,14 +18,17 @@ min-height: 100vh;
 -webkit-font-smoothing: antialiased;
 
 opacity: 1;
-transform: translateY(0);
+transform: none;
 transition: all 0.4s ease;
 }
 
-body.loaded { opacity: 1; }
+/* ===============================
+SAFE LOAD (NO BLACK SCREEN)
+=============================== */
+
 body:not(.loaded) {
-opacity: 0;
-transform: translateY(6px);
+opacity: 1; /* ✅ NEVER HIDE PAGE */
+transform: none;
 }
 
 /* ===============================
@@ -97,20 +100,27 @@ scroll-snap-type: y proximity;
 }
 
 /* ===============================
-SECTIONS
+SECTIONS (PRODUCTION SAFE)
 =============================== */
 
+/* Default: ALWAYS visible */
 section {
 margin: clamp(70px, 10vh, 110px) 0;
 text-align: center;
 scroll-snap-align: start;
 
+opacity: 1;
+transform: none;
+}
+
+/* Only animate if JS is active */
+.js section {
 opacity: 0;
 transform: translateY(20px);
 transition: all 0.6s cubic-bezier(0.22,1,0.36,1);
 }
 
-section.visible {
+.js section.visible {
 opacity: 1;
 transform: translateY(0);
 }
@@ -181,39 +191,11 @@ transition: all 0.2s ease;
 .nav-minimal a:hover {
 color: #fff;
 background: rgba(255,255,255,0.08);
-transform: translateY(-1px);
 }
 
 .nav-minimal a.active {
 color: #fff;
 font-weight: 500;
-}
-
-/* ===============================
-LINKS
-=============================== */
-
-a { position: relative; }
-
-a::after {
-content: "";
-position: absolute;
-left: 0;
-bottom: -3px;
-width: 0%;
-height: 1px;
-background: #fff;
-opacity: 0.5;
-transition: width 0.3s ease;
-}
-
-a:hover::after,
-.nav-minimal a.active::after {
-width: 100%;
-}
-
-.content a:hover {
-transform: translateY(-1px);
 }
 
 /* ===============================
@@ -228,46 +210,7 @@ opacity: 0.6;
 }
 
 /* ===============================
-OPTIONS
-=============================== */
-
-.option-btn {
-display: block;
-width: 100%;
-padding: 14px 60px;
-border-radius: 12px;
-background: rgba(255,255,255,0.06);
-border: 1px solid rgba(255,255,255,0.1);
-font-size: 13.5px;
-text-align: left;
-position: relative;
-transition: all 0.25s ease;
-
-opacity: 0;
-transform: translateY(6px);
-animation: optionFade 0.3s ease forwards;
-}
-
-@keyframes optionFade {
-to {
-opacity: 1;
-transform: translateY(0);
-}
-}
-
-.option-btn:hover {
-background: rgba(255,255,255,0.12);
-transform: translateY(-1px);
-}
-
-.option-btn.selected {
-background: #fff;
-color: #000;
-transform: scale(0.98);
-}
-
-/* ===============================
-DEMO
+DEMO (UNCHANGED BEHAVIOR)
 =============================== */
 
 .demo-container {
@@ -320,17 +263,6 @@ scroll-behavior: smooth;
 max-width: 70%;
 padding: 10px 14px;
 border-radius: 16px;
-
-opacity: 0;
-transform: translateY(6px);
-animation: msgFade 0.25s ease forwards;
-}
-
-@keyframes msgFade {
-to {
-opacity: 1;
-transform: translateY(0);
-}
 }
 
 .message.user {
@@ -348,73 +280,41 @@ background: rgba(255,255,255,0.06);
 INPUT
 =============================== */
 
-.options-panel { margin-top: 10px; }
-
 .input-area {
 display: flex;
 gap: 10px;
 margin-top: 12px;
-
 padding: 6px;
 border-radius: 14px;
-
 background: rgba(255,255,255,0.04);
 border: 1px solid rgba(255,255,255,0.08);
 
-backdrop-filter: blur(10px);
-
-opacity: 0.5;
-pointer-events: none;
-
-box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
-transition: all 0.3s ease;
+opacity: 0.6;
+cursor: not-allowed;
 }
 
 .input-area input {
 flex: 1;
 padding: 12px 14px;
-
-border-radius: 10px;
 border: none;
-outline: none;
-
 background: transparent;
 color: #fff;
-
-font-size: 13px;
-}
-
-.input-area input::placeholder {
-color: rgba(255,255,255,0.35);
 }
 
 .input-area button {
 padding: 10px 16px;
 border-radius: 10px;
 border: none;
-
-background: rgba(255,255,255,0.9);
-color: #000;
-
-font-size: 13px;
-font-weight: 500;
-
-transition: all 0.2s ease;
-}
-
-.input-area button:hover {
 background: #fff;
-transform: translateY(-1px);
+color: #000;
 }
 
 .input-area button.press {
 transform: scale(0.92);
-background: #fff;
-box-shadow: inset 0 4px 12px rgba(0,0,0,0.2);
 }
 
 /* ===============================
-CLIENT PILLS
+CLIENTS
 =============================== */
 
 .clients {
@@ -425,97 +325,20 @@ margin-bottom: 12px;
 
 .client {
 padding: 6px 12px;
-font-size: 12px;
 border-radius: 999px;
-
 background: rgba(255,255,255,0.06);
-border: 1px solid rgba(255,255,255,0.1);
-
-cursor: default;
-transition: all 0.2s ease;
 }
 
 .client.active {
 background: #fff;
 color: #000;
-transform: scale(1.05);
-}
-
-.client.add {
-opacity: 0.6;
 }
 
 /* ===============================
 NOTIFY
 =============================== */
 
-.notify-section {
-margin: 140px 0 100px;
-display: flex;
-justify-content: center;
-}
-
-.notify-wrapper {
-width: 100%;
-max-width: 520px;
-text-align: center;
-}
-
-.notify-title {
-font-size: 28px;
-font-weight: 500;
-}
-
-.notify-sub {
-opacity: 0.6;
-margin-top: 10px;
-}
-
-.notify-box {
-margin-top: 28px;
-display: flex;
-align-items: center;
-padding: 8px;
-border-radius: 16px;
-
-background: rgba(255,255,255,0.05);
-border: 1px solid rgba(255,255,255,0.1);
-
-backdrop-filter: blur(12px);
-}
-
-.notify-box input {
-flex: 1;
-padding: 14px 16px;
-background: transparent;
-border: none;
-outline: none;
-color: white;
-font-size: 14px;
-}
-
-.notify-box button {
-padding: 12px 18px;
-border-radius: 12px;
-border: none;
-
-background: white;
-color: black;
-
-font-size: 13px;
-font-weight: 500;
-
-transition: all 0.2s ease;
-}
-
-.notify-box button:hover {
-transform: translateY(-1px);
-}
-
 .notify-success {
-margin-top: 14px;
-font-size: 13px;
-color: #4ade80;
 opacity: 0;
 transform: translateY(6px);
 transition: all 0.3s ease;
@@ -527,7 +350,7 @@ transform: translateY(0);
 }
 
 /* ===============================
-THINKING STATE (CRITICAL)
+THINKING
 =============================== */
 
 .thinking {
