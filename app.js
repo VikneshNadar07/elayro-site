@@ -365,85 +365,80 @@ NOTIFY SYSTEM (FINAL SAFE)
 const notifyBtn = document.getElementById("notifyBtn");
 const notifyEmail = document.getElementById("notifyEmail");
 const notifySuccess = document.getElementById("notifySuccess");
+const notifyWrapper = document.querySelector(".notify-wrapper");
 
 if (notifyBtn && notifyEmail && notifySuccess) {
 
-// 🔹 Live validation (no breaking)
+// start disabled
+notifyBtn.classList.add("disabled");
+
+// live validation
 notifyEmail.addEventListener("input", () => {
 const val = notifyEmail.value.trim();
 
 notifyEmail.classList.remove("valid", "invalid");
 notifySuccess.classList.remove("show");
 
-if (!val) return;
+if (!val) {
+  notifyBtn.classList.add("disabled");
+  return;
+}
 
 if (val.includes("@") && val.includes(".")) {
-notifyEmail.classList.add("valid");
+  notifyEmail.classList.add("valid");
+  notifyBtn.classList.remove("disabled");
 } else {
-notifyEmail.classList.add("invalid");
+  notifyEmail.classList.add("invalid");
+  notifyBtn.classList.add("disabled");
 }
+
 });
 
 notifyBtn.addEventListener("click", async () => {
 
+if (notifyBtn.classList.contains("disabled")) return;
+
 const email = notifyEmail.value.trim();
-
-// 🔴 EMPTY
-if (!email) {
-notifySuccess.innerText = "Email is required";
-notifySuccess.classList.add("show");
-notifyEmail.classList.add("invalid");
-return;
-}
-
-// 🔴 INVALID
-if (!email.includes("@") || !email.includes(".")) {
-notifySuccess.innerText = "Enter a valid email";
-notifySuccess.classList.add("show");
-notifyEmail.classList.add("invalid");
-return;
-}
 
 notifyBtn.innerText = "Adding...";
 notifyBtn.disabled = true;
 
 try {
-const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
-method: "POST",
-headers: { "Content-Type": "application/json" },
-body: JSON.stringify({ email })
-});
+  const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email })
+  });
 
-const data = await res.json().catch(() => ({}));
+  const data = await res.json().catch(() => ({}));
 
-// 🟡 DUPLICATE
-if (data.status === "exists") {
-  notifySuccess.innerText = "You're already on the list";
-  notifyEmail.classList.add("valid");
-} 
-// 🟢 SUCCESS
-else {
-  notifySuccess.innerText = "You're in ✨";
-  notifyEmail.value = "";
-}
+  if (data.status === "exists") {
+    notifySuccess.innerText = "You're already on the list";
+    notifyEmail.classList.add("valid");
+  } else {
+    notifySuccess.innerText = "You're in ✨";
+    notifyWrapper.classList.add("success");
+    notifyEmail.value = "";
+  }
 
-notifySuccess.classList.add("show");
+  notifySuccess.classList.add("show");
 
-notifyBtn.innerText = "Added";
+  notifyBtn.innerText = "Added ✓";
+  notifyBtn.classList.remove("disabled");
+  notifyBtn.classList.add("success");
 
 } catch {
 
-notifySuccess.innerText = "Network error — try again";
-notifySuccess.classList.add("show");
+  notifySuccess.innerText = "Network error — try again";
+  notifySuccess.classList.add("show");
 
-notifyBtn.innerText = "Retry";
-notifyBtn.disabled = false;
-
+  notifyBtn.innerText = "Retry";
+  notifyBtn.disabled = false;
+  notifyBtn.classList.remove("disabled");
 }
 
 });
 
-// Enter key support (unchanged)
 notifyEmail.addEventListener("keypress", (e) => {
 if (e.key === "Enter") notifyBtn.click();
 });
