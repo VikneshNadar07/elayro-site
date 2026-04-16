@@ -204,7 +204,6 @@ async function runDemo() {
 
 while (true) {
 
-```
 chatBox.innerHTML = "";
 
 addMessage("Starting conversation...", "system");
