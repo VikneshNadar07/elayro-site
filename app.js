@@ -179,8 +179,9 @@ return [
 
 const m = msg ? msg.toLowerCase() : "";
   
-  if (!msg) {
-  return [ ... ];
+  if (msg === null) {
+  msg = "";
+}
 }
 
 if (m.includes("pricing")) return [
@@ -253,7 +254,6 @@ for (let i = 0; i < 4; i++) {
 const d = document.createElement("div");
 d.className = "option-bubble";
 
-```
 d.innerHTML = `
   <span class="tag">${["Best","Strong","Safe","Casual"][i]}</span>
   ${options[i]}
@@ -261,7 +261,6 @@ d.innerHTML = `
 
 optionsPanel.appendChild(d);
 await wait(280);
-```
 
 }
 
@@ -297,8 +296,6 @@ addMessage("Lost due to drop in engagement and momentum.", "system");
 async function runDemo() {
 
 while (true) {
-
-```
 chats = { 0: [], 1: [] };
 chatBox.innerHTML = "";
 optionsPanel.innerHTML = "";
@@ -346,7 +343,6 @@ await wait(3000);
 
 chatBox.innerHTML = "";
 optionsPanel.innerHTML = "";
-```
 
 }
 }
