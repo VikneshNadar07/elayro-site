@@ -22,14 +22,13 @@ if (href === currentPage) link.classList.add("active");
 link.addEventListener("click", (e) => {
 if (!href || href.startsWith("#")) return;
 
-```
+
 e.preventDefault();
 document.body.classList.remove("loaded");
 
 setTimeout(() => {
   window.location.href = href;
 }, 250);
-```
 
 });
 });
@@ -263,7 +262,6 @@ for (let i = 0; i < 4; i++) {
 const d = document.createElement("div");
 d.className = "option-bubble";
 
-```
 d.innerHTML = `
   <span class="tag">${["Best","Strong","Safe","Casual"][i]}</span>
   ${options[i]}
@@ -271,7 +269,6 @@ d.innerHTML = `
 
 optionsPanel.appendChild(d);
 await wait(200);
-```
 
 }
 
@@ -308,7 +305,6 @@ async function runDemo() {
 
 while (true) {
 
-```
 chats = { 0: [], 1: [] };
 chatBox.innerHTML = "";
 optionsPanel.innerHTML = "";
@@ -355,7 +351,6 @@ await wait(3000);
 
 chatBox.innerHTML = "";
 optionsPanel.innerHTML = "";
-```
 
 }
 }
