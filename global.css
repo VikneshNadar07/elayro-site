@@ -17,6 +17,14 @@ min-height: 100vh;
 
 -webkit-font-smoothing: antialiased;
 }
+/* ===============================
+SAFE LOAD
+=============================== */
+
+body:not(.loaded) {
+opacity: 1;
+transform: none;
+}
 
 /* ===============================
 BACKGROUND
@@ -177,6 +185,29 @@ padding: 30px 16px;
 text-align: center;
 opacity: 0.6;
 }
+/* ===============================
+CLIENTS
+=============================== */
+
+.clients {
+display: flex;
+gap: 10px;
+margin-bottom: 12px;
+}
+
+.client {
+padding: 6px 12px;
+border-radius: 999px;
+background: rgba(255,255,255,0.06);
+transition: all 0.2s ease;
+}
+
+.client.active {
+background: #fff;
+color: #000;
+transform: scale(1.08);
+box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
 
 /* ===============================
 DEMO CONTAINER
@@ -240,22 +271,30 @@ background: rgba(255,255,255,0.05);
 }
 
 /* ===============================
-INPUT
+INPUT (DISABLED PROPERLY)
 =============================== */
 
 .input-area {
 display: flex;
 gap: 10px;
 margin-top: 12px;
+padding: 6px;
+border-radius: 14px;
+background: rgba(255,255,255,0.04);
+border: 1px solid rgba(255,255,255,0.08);
+
 opacity: 0.5;
+cursor: not-allowed;
 }
 
 .input-area input {
 flex: 1;
-padding: 12px;
+padding: 12px 14px;
 border: none;
 background: transparent;
 color: #fff;
+pointer-events: none;
+caret-color: transparent;
 }
 
 .input-area button {
@@ -264,11 +303,20 @@ border-radius: 10px;
 border: none;
 background: #fff;
 color: #000;
+pointer-events: none;
+}
+
+.input-area button.press {
+transform: scale(0.92);
 }
 
 /* ===============================
 OPTIONS
 =============================== */
+
+.options-panel {
+margin-top: 10px;
+}
 
 .option-bubble {
 display: block;
@@ -279,17 +327,63 @@ margin-bottom: 6px;
 
 background: rgba(255,255,255,0.06);
 border: 1px solid rgba(255,255,255,0.1);
+
+font-size: 13px;
+line-height: 1.5;
+
+opacity: 0;
+transform: translateY(6px);
+animation: optionFade 0.25s ease forwards;
+
+transition: all 0.2s ease;
 }
 
+@keyframes optionFade {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.option-bubble:hover {
+transform: translateY(-2px);
+background: rgba(255,255,255,0.14);
+}
+
+.option-bubble .tag {
+display: inline-block;
+font-size: 10px;
+margin-bottom: 4px;
+padding: 2px 6px;
+border-radius: 999px;
+
+background: rgba(255,255,255,0.1);
+color: #fff;
+font-weight: 500;
+}
 /* ===============================
-THINKING
+THINKING (FIXED SMALL)
 =============================== */
 
 .thinking {
 height: 18px;
 border-radius: 999px;
 margin: 6px 0;
-background: rgba(255,255,255,0.08);
+opacity: 0.7;
+
+background: linear-gradient(
+90deg,
+rgba(255,255,255,0.04),
+rgba(255,255,255,0.12),
+rgba(255,255,255,0.04)
+);
+background-size: 200px 100%;
+animation: thinking 1s infinite linear;
+}
+
+@keyframes thinking {
+0% { background-position: -200px; }
+100% { background-position: 200px; }
 }
 
 /* ===============================
