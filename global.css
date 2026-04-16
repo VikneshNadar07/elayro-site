@@ -456,3 +456,35 @@ RESULT STATES
 
 .win-glow { color: #4ade80; }
 .lose-glow { color: #f87171; }
+
+/* ===============================
+NOTIFY VALIDATION STATES (SAFE)
+=============================== */
+
+/* default text */
+.notify-success {
+color: rgba(255,255,255,0.7);
+}
+
+/* error state */
+.notify-success.error {
+color: #f87171;
+}
+
+/* success state */
+.notify-success.success {
+color: #4ade80;
+}
+
+/* input validation */
+
+#notifyEmail.valid {
+border-color: #4ade80 !important;
+box-shadow: 0 0 0 2px rgba(74,222,128,0.2);
+}
+
+#notifyEmail.invalid {
+border-color: #f87171 !important;
+box-shadow: 0 0 0 2px rgba(248,113,113,0.2);
+}
+
