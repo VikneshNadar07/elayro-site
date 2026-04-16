@@ -261,7 +261,7 @@ section.visible {
 .message.system {
   align-self: flex-start;
   background: rgba(255,255,255,0.04);
-  color: #e9e9eb;
+  color: #e9eeb;
 }
 
 /* On very wide screens, keep bubbles even tighter */
