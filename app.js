@@ -379,8 +379,6 @@ method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({ email })
 });
-
-```
 const data = await res.json().catch(() => ({}));
 
 notifySuccess.innerText =
@@ -390,7 +388,6 @@ notifySuccess.classList.add("show");
 
 notifyEmail.value = "";
 notifyBtn.innerText = "Added";
-```
 
 } catch {
 notifySuccess.innerText = "Network error — retry";
