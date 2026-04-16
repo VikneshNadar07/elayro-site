@@ -359,7 +359,7 @@ runDemo();
 }
 
 /* =========================
-NOTIFY SYSTEM
+NOTIFY SYSTEM (FINAL SAFE)
 ========================= */
 
 const notifyBtn = document.getElementById("notifyBtn");
@@ -368,13 +368,39 @@ const notifySuccess = document.getElementById("notifySuccess");
 
 if (notifyBtn && notifyEmail && notifySuccess) {
 
+// 🔹 Live validation (no breaking)
+notifyEmail.addEventListener("input", () => {
+const val = notifyEmail.value.trim();
+
+notifyEmail.classList.remove("valid", "invalid");
+notifySuccess.classList.remove("show");
+
+if (!val) return;
+
+if (val.includes("@") && val.includes(".")) {
+notifyEmail.classList.add("valid");
+} else {
+notifyEmail.classList.add("invalid");
+}
+});
+
 notifyBtn.addEventListener("click", async () => {
 
 const email = notifyEmail.value.trim();
 
-if (!email || !email.includes("@")) {
+// 🔴 EMPTY
+if (!email) {
+notifySuccess.innerText = "Email is required";
+notifySuccess.classList.add("show");
+notifyEmail.classList.add("invalid");
+return;
+}
+
+// 🔴 INVALID
+if (!email.includes("@") || !email.includes(".")) {
 notifySuccess.innerText = "Enter a valid email";
 notifySuccess.classList.add("show");
+notifyEmail.classList.add("invalid");
 return;
 }
 
@@ -387,27 +413,44 @@ method: "POST",
 headers: { "Content-Type": "application/json" },
 body: JSON.stringify({ email })
 });
+
+```
 const data = await res.json().catch(() => ({}));
 
-notifySuccess.innerText =
-data.status === "exists" ? "Already registered" : "You’re in";
+// 🟡 DUPLICATE
+if (data.status === "exists") {
+  notifySuccess.innerText = "You're already on the list";
+  notifyEmail.classList.add("valid");
+} 
+// 🟢 SUCCESS
+else {
+  notifySuccess.innerText = "You're in ✨";
+  notifyEmail.value = "";
+}
 
 notifySuccess.classList.add("show");
 
-notifyEmail.value = "";
 notifyBtn.innerText = "Added";
+```
 
 } catch {
-notifySuccess.innerText = "Network error — retry";
+
+```
+notifySuccess.innerText = "Network error — try again";
 notifySuccess.classList.add("show");
+
 notifyBtn.innerText = "Retry";
 notifyBtn.disabled = false;
+```
+
 }
+
 });
 
+// Enter key support (unchanged)
 notifyEmail.addEventListener("keypress", (e) => {
 if (e.key === "Enter") notifyBtn.click();
 });
+
 }
 
-});
