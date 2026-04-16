@@ -1,5 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
+document.documentElement.classList.add("js"); // ✅ ADD THIS LINE
 document.body.classList.add("loaded");
 
 const wait = (t) => new Promise(res => setTimeout(res, t));
