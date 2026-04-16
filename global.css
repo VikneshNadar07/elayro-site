@@ -3,11 +3,7 @@
    =============================== */
 
 * { box-sizing: border-box; }
-
-html {
-  scroll-behavior: smooth;
-  height: 100%;
-}
+html { scroll-behavior: smooth; height: 100%; }
 
 body {
   margin: 0;
@@ -20,7 +16,16 @@ body {
   min-height: 100vh;
 
   -webkit-font-smoothing: antialiased;
+
+  opacity: 1;
+  transform: translateY(0);
   transition: all 0.4s ease;
+}
+
+body.loaded { opacity: 1; }
+body:not(.loaded) {
+  opacity: 0;
+  transform: translateY(6px);
 }
 
 /* ===============================
@@ -36,28 +41,18 @@ body::before {
 }
 
 /* ===============================
-   FLUID SYSTEM
+   SCROLL PROGRESS
    =============================== */
 
-:root {
-  --space-sm: clamp(10px, 1.5vw, 16px);
-  --space-md: clamp(16px, 2vw, 24px);
-  --space-lg: clamp(24px, 3vw, 40px);
-}
-
-/* ===============================
-   CONTENT
-   =============================== */
-
-.content {
-  width: 100%;
-  max-width: min(1100px, 92vw);
-  margin: 0 auto;
-  padding: 0 var(--space-md);
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 0%;
+  background: #fff;
+  z-index: 9999;
+  opacity: 0.6;
 }
 
 /* ===============================
@@ -66,35 +61,77 @@ body::before {
 
 header {
   text-align: center;
-  margin-top: clamp(80px, 12vh, 120px);
-  padding: 0 20px;
+  margin-top: clamp(70px, 10vh, 110px);
+  padding: 0 16px;
 }
 
 header h1 {
-  font-size: clamp(32px, 6vw, 48px);
+  font-size: clamp(30px, 6vw, 48px);
+  margin-bottom: 10px;
 }
+
+h1, h2 {
+  text-shadow: 0 2px 10px rgba(0,0,0,0.4);
+}
+
+.punch { opacity: 0.9; }
 
 .hook {
   opacity: 0.6;
-  max-width: 600px;
+  max-width: 520px;
   margin: auto;
+  font-size: clamp(14px, 3.5vw, 16px);
 }
 
 /* ===============================
-   SECTION
+   CONTENT
+   =============================== */
+
+.content {
+  width: 100%;
+  max-width: 720px;
+  padding: 0 16px;
+  margin: 0 auto;
+  flex: 1;
+  scroll-snap-type: y proximity;
+}
+
+/* ===============================
+   SECTIONS
    =============================== */
 
 section {
-  margin: clamp(60px, 8vh, 90px) 0;
+  margin: clamp(70px, 10vh, 110px) 0;
   text-align: center;
+  scroll-snap-align: start;
+
   opacity: 0;
   transform: translateY(20px);
-  transition: all 0.6s ease;
+  transition: all 0.6s cubic-bezier(0.22,1,0.36,1);
 }
 
 section.visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+section p {
+  opacity: 0.85;
+  line-height: 1.7;
+  max-width: 560px;
+  margin: 12px auto;
+}
+
+/* ===============================
+   DIVIDER
+   =============================== */
+
+.section-divider {
+  width: 100%;
+  max-width: 520px;
+  height: 1px;
+  margin: clamp(40px, 6vh, 60px) auto;
+  background: linear-gradient(to right, transparent, rgba(255,255,255,0.2), transparent);
 }
 
 /* ===============================
@@ -109,6 +146,7 @@ section.visible {
   display: flex;
   justify-content: center;
   gap: 16px;
+  flex-wrap: wrap;
 
   backdrop-filter: blur(12px);
   background: rgba(20,20,22,0.6);
@@ -116,94 +154,170 @@ section.visible {
   padding: 10px 18px;
   border-radius: 999px;
 
+  width: fit-content;
   margin: 30px auto;
+
   border: 1px solid rgba(255,255,255,0.08);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+
+  transition: all 0.3s ease;
+}
+
+.nav-minimal.scrolled {
+  backdrop-filter: blur(16px);
+  background: rgba(20,20,22,0.8);
+  transform: translateY(-2px);
+}
+
+.nav-minimal a {
+  color: rgba(255,255,255,0.6);
+  text-decoration: none;
+  font-size: 13px;
+  padding: 6px 10px;
+  border-radius: 999px;
+  transition: all 0.2s ease;
+}
+
+.nav-minimal a:hover {
+  color: #fff;
+  background: rgba(255,255,255,0.08);
+  transform: translateY(-1px);
+}
+
+.nav-minimal a.active {
+  color: #fff;
+  font-weight: 500;
+}
+
+/* HOME dominant */
+.nav-minimal a[data-page="home"] {
+  background: rgba(255,255,255,0.12);
+  color: #fff;
+  padding: 6px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.2);
+}
+
+.nav-minimal a[data-page="home"]:hover {
+  background: #fff;
+  color: #000;
+}
+
+.nav-minimal a[data-page="home"].active {
+  background: #fff;
+  color: #000;
+  box-shadow: 0 6px 20px rgba(255,255,255,0.15);
 }
 
 /* ===============================
-   DEMO (UPDATED WIDTH)
+   LINKS
+   =============================== */
+
+a { position: relative; }
+
+a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -3px;
+  width: 0%;
+  height: 1px;
+  background: #fff;
+  opacity: 0.5;
+  transition: width 0.3s ease;
+}
+
+a:hover::after,
+.nav-minimal a.active::after {
+  width: 100%;
+}
+
+.content a:hover {
+  transform: translateY(-1px);
+}
+
+/* ===============================
+   FOOTER
+   =============================== */
+
+.footer-global {
+  margin-top: auto;
+  padding: 30px 16px;
+  text-align: center;
+  opacity: 0.6;
+}
+
+/* ===============================
+   OPTIONS
+   =============================== */
+
+.option-btn {
+  display: block;
+  width: 100%;
+  padding: 14px 60px;
+  border-radius: 12px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  font-size: 13.5px;
+  text-align: left;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+.option-btn:hover {
+  background: rgba(255,255,255,0.12);
+  transform: translateY(-1px);
+}
+
+.option-btn.selected {
+  background: #fff;
+  color: #000;
+}
+
+/* ===============================
+   DEMO
    =============================== */
 
 .demo-container {
-  width: 100%;
-  max-width: 900px;
+  position: relative;
+  max-width: 720px;
   margin: 40px auto;
-  padding: 24px;
-
-  border-radius: 18px;
+  padding: 20px;
+  border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.02);
 
-  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  transition: transform 0.6s cubic-bezier(0.22,1,0.36,1);
 
-  display: flex;
-  justify-content: center;
+  overflow: hidden;
+}
+
+.demo-container.camera-focus {
+  transform: scale(1.06);
 }
 
 /* ===============================
-   CHAT (FINAL RECTANGLE)
+   CHAT
    =============================== */
 
 .chat-area {
   display: flex;
   flex-direction: column;
-
-  width: 100%;
-  max-width: 860px;
-
   height: 420px;
-
-  border-radius: 16px;
+  border-radius: 14px;
   border: 1px solid rgba(255,255,255,0.06);
-
-  padding: 14px;
-
-  background: rgba(0,0,0,0.35);
+  padding: 12px;
+  background: rgba(0,0,0,0.25);
 }
-
-/* ===============================
-   CLIENTS
-   =============================== */
-
-.clients {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 10px;
-}
-
-.client {
-  padding: 6px 12px;
-  font-size: 12px;
-  border-radius: 999px;
-
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-
-.client.active {
-  background: #fff;
-  color: #000;
-}
-
-.client.add {
-  opacity: 0.6;
-}
-
-/* ===============================
-   CHAT BOX
-   =============================== */
 
 .chat-box {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 10px;
   overflow-y: auto;
 }
-
-/* ===============================
-   MESSAGE
-   =============================== */
 
 .message {
   max-width: 70%;
@@ -223,46 +337,99 @@ section.visible {
 }
 
 /* ===============================
-   OPTIONS (FLAT BARS)
+   INPUT
    =============================== */
 
-#optionsPanel {
+.options-panel { margin-top: 10px; }
+
+.input-area {
   display: flex;
-  flex-direction: column;
   gap: 8px;
-  width: 100%;
+  margin-top: 10px;
+
+  opacity: 0.4;
+  pointer-events: none;
 }
 
-.option-btn {
-  width: 100%;
-  padding: 14px 16px;
-  border-radius: 10px;
+/* ===============================
+   CURSOR (FINAL LOCKED)
+   =============================== */
 
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+#fakeCursor {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #fff;
 
-  font-size: 13.5px;
-  text-align: left;
-  transition: 0.2s ease;
+  z-index: 999;
+  pointer-events: none;
+
+  opacity: 0;
+
+  transition: opacity 0.2s ease, transform 0.12s ease;
 }
 
-.option-btn:hover {
-  background: rgba(255,255,255,0.08);
+#fakeCursor.active { opacity: 1; }
+
+#fakeCursor.clicking {
+  transform: scale(0.75);
 }
 
-.option-btn.selected {
+/* ===============================
+   CLIENT PILLS (LOCKED)
+   =============================== */
+
+.clients {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.client {
+  padding: 6px 12px;
+  font-size: 12px;
+  border-radius: 999px;
+
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+
+  cursor: default;
+}
+
+.client.active {
   background: #fff;
   color: #000;
 }
 
+.client.add {
+  opacity: 0.6;
+}
+
 /* ===============================
-   INPUT
+   CINEMATIC (FINAL POLISH)
+   =============================== */
+
+.fade-in-up {
+  opacity: 0;
+  transform: translateY(8px);
+  animation: fadeUp 0.4s ease forwards;
+}
+
+@keyframes fadeUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+/* ===============================
+   INPUT (PREMIUM RESTORE)
    =============================== */
 
 .input-area {
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  margin-top: 12px;
 
   padding: 6px;
   border-radius: 14px;
@@ -272,146 +439,121 @@ section.visible {
 
   backdrop-filter: blur(10px);
 
-  opacity: 0.6;
+  opacity: 0.5;
   pointer-events: none;
 }
 
 .input-area input {
   flex: 1;
   padding: 12px 14px;
+
   border-radius: 10px;
   border: none;
+  outline: none;
+
   background: transparent;
   color: #fff;
+
   font-size: 13px;
+}
+
+.input-area input::placeholder {
+  color: rgba(255,255,255,0.35);
 }
 
 .input-area button {
   padding: 10px 16px;
+
   border-radius: 10px;
   border: none;
-  background: #fff;
+
+  background: rgba(255,255,255,0.9);
   color: #000;
-}
 
-/* ===============================
-   MOBILE
-   =============================== */
+  font-size: 13px;
+  font-weight: 500;
 
-@media (max-width: 768px) {
-  .message { max-width: 90%; font-size: 13px; }
-}
-
-@media (max-width: 420px) {
-  .message { max-width: 92%; font-size: 12.5px; }
-}
-
-/* ===============================
-   UTIL
-   =============================== */
-
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  width: 0%;
-  background: #fff;
-  z-index: 9999;
-}
-/* ===============================
-   PREMIUM UI POLISH (APPEND ONLY)
-   =============================== */
-
-/* 🔥 smoother scroll feel */
-.chat-box {
-  scroll-behavior: smooth;
-}
-
-/* 🔥 subtle message entry animation */
-.message {
-  opacity: 0;
-  transform: translateY(6px);
-  animation: msgFade 0.35s ease forwards;
-}
-
-@keyframes msgFade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* 🔥 slight stagger feel (more natural) */
-.message.user {
-  animation-delay: 0.05s;
-}
-
-.message.system {
-  animation-delay: 0.1s;
-}
-
-/* 🔥 premium hover (very subtle, no jump) */
-.option-btn {
-  transition: background 0.2s ease, border 0.2s ease;
-}
-
-.option-btn:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.15);
-}
-
-/* 🔥 selected option feels “clicked” */
-.option-btn.selected {
-  background: #fff;
-  color: #000;
-  transform: scale(0.98);
-}
-
-/* 🔥 chat container depth refinement */
-.chat-area {
-  box-shadow:
-    0 20px 60px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-}
-
-/* 🔥 input glass refinement */
-.input-area {
-  backdrop-filter: blur(14px);
-}
-
-/* 🔥 send button micro-interaction */
-.input-area button {
-  transition: transform 0.15s ease, background 0.2s ease;
-}
-
-.input-area button:active {
-  transform: scale(0.96);
-}
-
-/* 🔥 client pills feel interactive */
-.client {
   transition: all 0.2s ease;
 }
 
-.client:hover {
-  opacity: 0.8;
+.input-area button:hover {
+  background: #fff;
+  transform: translateY(-1px);
+}
+.input-area {
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+}
+.notify-section {
+  margin: 140px 0 100px;
+  display: flex;
+  justify-content: center;
 }
 
-.client.active {
-  box-shadow: 0 4px 12px rgba(255,255,255,0.15);
+.notify-wrapper {
+  width: 100%;
+  max-width: 520px;
+  text-align: center;
 }
 
-/* 🔥 scrollbar (clean minimal) */
-.chat-box::-webkit-scrollbar {
-  width: 6px;
+.notify-title {
+  font-size: 28px;
+  font-weight: 500;
 }
 
-.chat-box::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.15);
-  border-radius: 10px;
+.notify-sub {
+  opacity: 0.6;
+  margin-top: 10px;
 }
 
-.chat-box::-webkit-scrollbar-track {
+.notify-box {
+  margin-top: 28px;
+  display: flex;
+  align-items: center;
+  padding: 8px;
+  border-radius: 16px;
+
+  background: rgba(255,255,255,0.05);
+  border: 1px solid rgba(255,255,255,0.1);
+
+  backdrop-filter: blur(12px);
+}
+
+.notify-box input {
+  flex: 1;
+  padding: 14px 16px;
   background: transparent;
+  border: none;
+  outline: none;
+  color: white;
+  font-size: 14px;
+}
+
+.notify-box button {
+  padding: 12px 18px;
+  border-radius: 12px;
+  border: none;
+
+  background: white;
+  color: black;
+
+  font-size: 13px;
+  font-weight: 500;
+
+  transition: all 0.2s ease;
+}
+
+.notify-box button:hover {
+  transform: translateY(-1px);
+}
+
+.notify-success {
+  margin-top: 14px;
+  font-size: 13px;
+  color: #4ade80;
+  opacity: 0;
+  transition: 0.3s;
+}
+
+.notify-success.show {
+  opacity: 1;
 }
