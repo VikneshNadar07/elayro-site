@@ -414,7 +414,6 @@ headers: { "Content-Type": "application/json" },
 body: JSON.stringify({ email })
 });
 
-```
 const data = await res.json().catch(() => ({}));
 
 // 🟡 DUPLICATE
@@ -431,17 +430,14 @@ else {
 notifySuccess.classList.add("show");
 
 notifyBtn.innerText = "Added";
-```
 
 } catch {
 
-```
 notifySuccess.innerText = "Network error — try again";
 notifySuccess.classList.add("show");
 
 notifyBtn.innerText = "Retry";
 notifyBtn.disabled = false;
-```
 
 }
 
