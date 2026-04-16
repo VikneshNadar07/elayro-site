@@ -532,3 +532,144 @@ section.visible {
   opacity: 0.5;
   margin-bottom: 4px;
 }
+/* ===============================
+   PREMIUM MOBILE EXPERIENCE
+   =============================== */
+
+@media (max-width: 768px) {
+
+  /* Safe area (iPhone notch support) */
+  body {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+
+  .content {
+    padding: 0 14px;
+  }
+
+  .demo-container {
+    padding: 14px;
+    margin: 20px auto;
+    border-radius: 14px;
+  }
+
+  /* 🔥 Fluid chat height */
+  .chat-area {
+    height: calc(60vh - env(safe-area-inset-bottom));
+    min-height: 320px;
+  }
+
+  /* Smooth scroll */
+  .chat-box {
+    gap: 8px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  /* Messages */
+  .message {
+    max-width: 85%;
+    font-size: 13px;
+    padding: 10px 12px;
+    line-height: 1.5;
+  }
+
+  /* Clients pills wrap cleanly */
+  .clients {
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .client {
+    font-size: 11px;
+    padding: 5px 10px;
+  }
+
+  /* ===============================
+     INPUT (PREMIUM MOBILE)
+     =============================== */
+
+  .input-area {
+    gap: 6px;
+    padding: 6px 8px;
+
+    border-radius: 12px;
+
+    backdrop-filter: blur(12px);
+    background: rgba(255,255,255,0.05);
+
+    /* 🔥 sticky feel */
+    position: sticky;
+    bottom: 0;
+  }
+
+  .input-area input {
+    font-size: 14px;
+    padding: 10px;
+  }
+
+  .input-area button {
+    padding: 10px 12px;
+    font-size: 13px;
+    border-radius: 10px;
+  }
+
+}
+
+
+/* ===============================
+   SMALL DEVICES (ULTRA POLISH)
+   =============================== */
+
+@media (max-width: 420px) {
+
+  .chat-area {
+    height: calc(55vh - env(safe-area-inset-bottom));
+  }
+
+  .message {
+    max-width: 90%;
+    font-size: 12.5px;
+  }
+
+  .input-area {
+    padding: 6px;
+  }
+
+  .input-area button {
+    padding: 8px 10px;
+  }
+
+}
+
+
+/* ===============================
+   TOUCH OPTIMIZATION
+   =============================== */
+
+button,
+.option-btn,
+.client {
+  -webkit-tap-highlight-color: transparent;
+}
+
+
+/* ===============================
+   SCROLLBAR CLEAN (MOBILE)
+   =============================== */
+
+.chat-box::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+
+/* ===============================
+   KEYBOARD SAFETY (ANDROID + iOS)
+   =============================== */
+
+@supports (height: 100dvh) {
+  .chat-area {
+    height: 60dvh;
+  }
+}
