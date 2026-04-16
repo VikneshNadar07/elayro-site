@@ -153,7 +153,7 @@ messages: [
 "That sounds good actually",
 "Let’s move ahead"
 ]
-}
+},
 {
 result: "lost",
 messages: [
@@ -236,9 +236,10 @@ return [
 ];
 }
 
+
 async function showOptions(msg) {
 
-optionsPanel.innerHTML = <div class="thinking"></div>;
+optionsPanel.innerHTML = '<div class="thinking"></div>';
 await wait(1200);
 
 optionsPanel.innerHTML = "";
@@ -249,10 +250,10 @@ for (let i = 0; i < 4; i++) {
 const d = document.createElement("div");
 d.className = "option-bubble";
 
-d.innerHTML = 
+d.innerHTML = `
   <span class="tag">${["Best","Strong","Safe","Casual"][i]}</span>
   ${options[i]}
-;
+`;
 
 optionsPanel.appendChild(d);
 await wait(280);
@@ -261,7 +262,7 @@ await wait(280);
 
 await wait(1400);
 
-optionsPanel.innerHTML = "";
+optionsPanel.innerHTML = '<div class="thinking"></div>';
 
 const selected = options[0];
 addMessage(selected, "system");
@@ -294,7 +295,7 @@ while (true) {
 chats = { 0: [], 1: [] };
 chatBox.innerHTML = "";
 optionsPanel.innerHTML = "";
-
+  
 let steps = [0, 0];
 let done = [false, false];
 
