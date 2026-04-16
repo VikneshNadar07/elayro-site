@@ -1,5 +1,3 @@
-Got it — right now your chat UI is a **tall vertical rectangle**, which feels cramped and breaks layout. To make it **wider and more horizontal**, you need to adjust the container widths and reduce the fixed height emphasis. Here’s the **final full CSS** with the fix applied:
-
 ```css
 /* ===============================
    RESET + BASE
@@ -54,7 +52,7 @@ body::before {
 
 .content {
   width: 100%;
-  max-width: min(1100px, 92vw);
+  max-width: min(1400px, 96vw);
   margin: 0 auto;
   padding: 0 var(--space-md);
 
@@ -69,17 +67,17 @@ body::before {
 
 header {
   text-align: center;
-  margin-top: clamp(80px, 12vh, 120px);
+  margin-top: clamp(40px, 8vh, 80px);
   padding: 0 20px;
 }
 
 header h1 {
-  font-size: clamp(32px, 6vw, 48px);
+  font-size: clamp(28px, 4.5vw, 40px);
 }
 
 .hook {
   opacity: 0.6;
-  max-width: 600px;
+  max-width: 700px;
   margin: auto;
 }
 
@@ -88,7 +86,7 @@ header h1 {
    =============================== */
 
 section {
-  margin: clamp(60px, 8vh, 90px) 0;
+  margin: clamp(40px, 6vh, 70px) 0;
   text-align: center;
   opacity: 0;
   transform: translateY(20px);
@@ -129,9 +127,9 @@ section.visible {
 
 .demo-container {
   width: 100%;
-  max-width: 1100px; /* wider */
-  margin: 40px auto;
-  padding: 24px;
+  max-width: 1400px; /* wider demo wrapper */
+  margin: 30px auto;
+  padding: 28px;
 
   border-radius: 18px;
   border: 1px solid rgba(255,255,255,0.08);
@@ -144,17 +142,26 @@ section.visible {
 }
 
 /* ===============================
-   CHAT (FIXED + RESPONSIVE, WIDER)
+   CHAT (LANDSCAPE / WIDER)
    =============================== */
+
+/*
+  Key goals:
+  - Make the chat feel horizontal (wider than tall)
+  - Prevent the container from stretching vertically with content
+  - Keep options inside and responsive without breaking
+  - Pin input to bottom so it never overlaps messages
+*/
 
 .chat-area {
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 
   width: 100%;
-  max-width: 1000px; /* wider chat box */
-  min-height: 360px;
-  height: 420px; /* desktop default */
+  max-width: 1200px;   /* wider chat box */
+  height: 420px;       /* fixed-ish height for landscape feel */
+  min-height: 320px;
   flex-shrink: 0;
 
   border-radius: 16px;
@@ -165,15 +172,22 @@ section.visible {
   background: rgba(0,0,0,0.35);
 
   overflow: hidden;
+  box-shadow:
+    0 20px 60px rgba(0,0,0,0.5),
+    inset 0 1px 0 rgba(255,255,255,0.04);
 }
 
+/* chat-box is the scrollable area for messages and options */
 .chat-box {
-  flex: 1;
+  flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 12px;
   overflow-y: auto;
+  padding-right: 6px; /* room for scrollbar */
   scroll-behavior: smooth;
+  /* ensure input (sticky) doesn't overlap content */
+  padding-bottom: 84px;
 }
 
 /* ===============================
@@ -183,7 +197,8 @@ section.visible {
 .clients {
   display: flex;
   gap: 10px;
-  margin-bottom: 10px;
+  margin-bottom: 6px;
+  flex-wrap: wrap;
 }
 
 .client {
@@ -193,11 +208,15 @@ section.visible {
 
   background: rgba(255,255,255,0.06);
   border: 1px solid rgba(255,255,255,0.1);
+  transition: all 0.18s ease;
 }
+
+.client:hover { opacity: 0.9; transform: translateY(-1px); }
 
 .client.active {
   background: #fff;
   color: #000;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
 }
 
 .client.add {
@@ -208,75 +227,107 @@ section.visible {
    MESSAGE
    =============================== */
 
+/* keep messages constrained so they don't push layout */
 .message {
-  max-width: 70%;
+  max-width: 60%;
   padding: 10px 14px;
   border-radius: 16px;
+  word-break: break-word;
+  line-height: 1.35;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
 }
 
 .message.user {
   align-self: flex-end;
-  background: #0a84ff;
+  background: linear-gradient(180deg,#0a84ff,#0066d6);
   color: white;
 }
 
 .message.system {
   align-self: flex-start;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.04);
+  color: #e9e9eb;
+}
+
+/* smaller messages on very wide screens to keep horizontal rhythm */
+@media (min-width: 1200px) {
+  .message { max-width: 50%; }
 }
 
 /* ===============================
-   OPTIONS
+   OPTIONS PANEL (GRID, FIT INSIDE)
    =============================== */
 
+/* Use a responsive grid so options never overflow horizontally */
 #optionsPanel {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 12px;
   width: 100%;
+  align-items: stretch;
+  margin-top: 6px;
 }
 
+/* option buttons adapt to grid cells */
 .option-btn {
-  width: 100%;
-  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 14px;
   border-radius: 10px;
 
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
 
-  font-size: 13.5px;
-  text-align: left;
-  transition: 0.2s ease;
+  font-size: 14px;
+  text-align: center;
+  transition: background 0.18s ease, transform 0.12s ease;
+  cursor: pointer;
+  min-height: 48px;
 }
 
 .option-btn:hover {
   background: rgba(255,255,255,0.08);
+  transform: translateY(-2px);
 }
 
 .option-btn.selected {
   background: #fff;
   color: #000;
+  transform: scale(0.99);
 }
 
 /* ===============================
-   INPUT
+   INPUT (PINNED / STICKY)
    =============================== */
 
+/* Keep input visible and pinned to the bottom of the chat-area */
 .input-area {
+  position: sticky;
+  bottom: 10px; /* inside chat-area padding */
+  margin-top: 8px;
   display: flex;
   gap: 10px;
-  margin-top: 10px;
+  align-items: center;
 
-  padding: 6px;
+  padding: 10px;
   border-radius: 14px;
 
   background: rgba(255,255,255,0.04);
   border: 1px solid rgba(255,255,255,0.08);
 
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(12px);
 
-  opacity: 0.6;
-  pointer-events: none;
+  opacity: 1;
+  pointer-events: auto;
+  z-index: 30;
+}
+
+/* ensure chat-box has enough bottom padding so last message isn't hidden */
+.chat-box:after {
+  content: "";
+  display: block;
+  height: 8px;
 }
 
 .input-area input {
@@ -286,7 +337,8 @@ section.visible {
   border: none;
   background: transparent;
   color: #fff;
-  font-size: 13px;
+  font-size: 14px;
+  outline: none;
 }
 
 .input-area button {
@@ -295,44 +347,78 @@ section.visible {
   border: none;
   background: #fff;
   color: #000;
+  cursor: pointer;
+  transition: transform 0.12s ease, background 0.18s ease;
+}
+
+.input-area button:active {
+  transform: scale(0.96);
 }
 
 /* ===============================
    MOBILE RESPONSIVENESS
    =============================== */
 
+@media (max-width: 1024px) {
+  .demo-container { padding: 20px; }
+  .chat-area { max-width: 95vw; height: 420px; }
+  #optionsPanel { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
+  .option-btn { min-height: 46px; font-size: 13.5px; }
+}
+
 @media (max-width: 768px) {
-  .message { max-width: 90%; font-size: 13px; }
-  .chat-area { height: 65vh; min-height: 320px; max-width: 95vw; }
+  /* keep landscape feel but more compact on tablets */
+  .chat-area {
+    height: 60vh;
+    min-height: 360px;
+    max-width: 98vw;
+    padding: 12px;
+  }
+
+  .chat-box { padding-bottom: 96px; }
+
+  #optionsPanel { grid-template-columns: repeat(2, 1fr); gap: 10px; }
+  .option-btn { min-height: 48px; font-size: 13px; }
+  .message { max-width: 90%; }
 }
 
 @media (max-width: 420px) {
-  .message { max-width: 92%; font-size: 12.5px; }
-  .chat-area { height: 75vh; min-height: 300px; max-width: 98vw; }
+  /* mobile: stack options and allow chat to fill most of screen width */
+  .chat-area {
+    height: 78vh;
+    min-height: 300px;
+    max-width: 98vw;
+    padding: 10px;
+  }
+
+  #optionsPanel { grid-template-columns: 1fr; gap: 8px; }
+  .option-btn { width: 100%; min-height: 48px; font-size: 13px; text-align: left; padding-left: 14px; }
+  .message { max-width: 92%; font-size: 13px; }
+  .input-area { bottom: 8px; padding: 8px; }
 }
 
 /* ===============================
-   UTIL
+   SCROLLBAR + POLISH
    =============================== */
 
-.scroll-progress {
-  position: fixed;
-  top: 0;
-  left: 0;
-  height: 2px;
-  width: 0%;
-  background: #fff;
-  z-index: 9999;
+.chat-box::-webkit-scrollbar {
+  width: 8px;
 }
 
-/* ===============================
-   PREMIUM UI POLISH
-   =============================== */
+.chat-box::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.12);
+  border-radius: 10px;
+}
 
+.chat-box::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* subtle message entry animation */
 .message {
   opacity: 0;
   transform: translateY(6px);
-  animation: msgFade 0.35s ease forwards;
+  animation: msgFade 0.32s ease forwards;
 }
 
 @keyframes msgFade {
@@ -342,41 +428,10 @@ section.visible {
   }
 }
 
-.message.user { animation-delay: 0.05s; }
-.message.system { animation-delay: 0.1s; }
+.message.user { animation-delay: 0.04s; }
+.message.system { animation-delay: 0.08s; }
 
-.option-btn {
-  transition: background 0.2s ease, border 0.2s ease;
+/* small hover polish for clients and options */
+.client, .option-btn {
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
 }
-
-.option-btn:hover {
-  background: rgba(255,255,255,0.08);
-  border-color: rgba(255,255,255,0.15);
-}
-
-.option-btn.selected {
-  background: #fff;
-  color: #000;
-  transform: scale(0.98);
-}
-
-.chat-area {
-  box-shadow:
-    0 20px 60px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-}
-
-.input-area {
-  backdrop-filter: blur(14px);
-}
-
-.input-area button {
-  transition: transform 0.15s ease, background 0.2s ease;
-}
-
-.input-area button:active {
-  transform: scale(0.96);
-}
-
-.client {
-  transition: all 0.
