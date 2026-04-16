@@ -317,7 +317,6 @@ while (!done[0] || !done[1]) {
 
 for (let i = 0; i < 2; i++) {
 
-```
 if (done[i]) continue;
 
 await switchClient(i);
@@ -341,7 +340,6 @@ if (steps[i] === flow.messages.length) {
   await cinematicClose(flow.result);
   done[i] = true;
 }
-```
 
 }
 }
