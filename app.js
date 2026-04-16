@@ -153,7 +153,7 @@ messages: [
 "That sounds good actually",
 "Let’s move ahead"
 ]
-},
+}
 {
 result: "lost",
 messages: [
@@ -177,12 +177,7 @@ return [
 ];
 }
 
-const m = msg ? msg.toLowerCase() : "";
-  
-  if (msg === null) {
-  msg = "";
-}
-}
+const m = msg.toLowerCase();
 
 if (m.includes("pricing")) return [
 "Here’s a clear breakdown so you know exactly what to expect and how it’s structured.",
@@ -243,7 +238,7 @@ return [
 
 async function showOptions(msg) {
 
-optionsPanel.innerHTML = '<div class="thinking"></div>';
+optionsPanel.innerHTML = <div class="thinking"></div>;
 await wait(1200);
 
 optionsPanel.innerHTML = "";
@@ -254,10 +249,10 @@ for (let i = 0; i < 4; i++) {
 const d = document.createElement("div");
 d.className = "option-bubble";
 
-d.innerHTML = `
+d.innerHTML = 
   <span class="tag">${["Best","Strong","Safe","Casual"][i]}</span>
   ${options[i]}
-`;
+;
 
 optionsPanel.appendChild(d);
 await wait(280);
