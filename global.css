@@ -262,10 +262,6 @@ background: rgba(255,255,255,0.2);
 border-radius: 10px;
 }
 
-.chat-box::-webkit-scrollbar-track {
-background: transparent;
-}
-
 /* ===============================
 MESSAGES
 =============================== */
@@ -275,10 +271,6 @@ margin-bottom: 4px;
 max-width: 70%;
 padding: 10px 14px;
 border-radius: 16px;
-
-opacity: 1;
-transform: none;
-
 animation: popIn 0.2s ease;
 }
 
@@ -300,7 +292,7 @@ border: 1px solid rgba(255,255,255,0.06);
 }
 
 /* ===============================
-INPUT
+INPUT (DISABLED PROPERLY)
 =============================== */
 
 .input-area {
@@ -313,7 +305,7 @@ background: rgba(255,255,255,0.04);
 border: 1px solid rgba(255,255,255,0.08);
 
 opacity: 0.5;
-cursor: default;
+cursor: not-allowed;
 }
 
 .input-area input {
@@ -322,6 +314,7 @@ padding: 12px 14px;
 border: none;
 background: transparent;
 color: #fff;
+pointer-events: none;
 }
 
 .input-area button {
@@ -330,6 +323,7 @@ border-radius: 10px;
 border: none;
 background: #fff;
 color: #000;
+pointer-events: none;
 }
 
 .input-area button.press {
@@ -371,19 +365,19 @@ margin-top: 10px;
 .option-bubble {
 display: block;
 width: 100%;
-padding: 14px 16px;
+padding: 12px 14px;
 border-radius: 12px;
-margin-bottom: 8px;
+margin-bottom: 6px;
 
 background: rgba(255,255,255,0.06);
 border: 1px solid rgba(255,255,255,0.1);
 
-font-size: 13.5px;
+font-size: 13px;
 line-height: 1.5;
 
 opacity: 0;
 transform: translateY(6px);
-animation: optionFade 0.3s ease forwards;
+animation: optionFade 0.25s ease forwards;
 
 transition: all 0.2s ease;
 }
@@ -398,39 +392,35 @@ transform: translateY(0);
 .option-bubble:hover {
 transform: translateY(-2px);
 background: rgba(255,255,255,0.14);
-border-color: rgba(255,255,255,0.2);
 }
 
 .option-bubble .tag {
 display: inline-block;
-font-size: 11px;
-margin-bottom: 6px;
-padding: 2px 8px;
+font-size: 10px;
+margin-bottom: 4px;
+padding: 2px 6px;
 border-radius: 999px;
 
 background: rgba(255,255,255,0.1);
 color: #fff;
-
 font-weight: 500;
-letter-spacing: 0.3px;
-opacity: 0.9;
 }
 
 /* ===============================
-THINKING
+THINKING (FIXED SMALL)
 =============================== */
 
 .thinking {
-height: 36px;
-border-radius: 10px;
-margin: 10px 0;
-opacity: 0.8;
+height: 18px;
+border-radius: 999px;
+margin: 6px 0;
+opacity: 0.7;
 
 background: linear-gradient(
 90deg,
-rgba(255,255,255,0.05),
-rgba(255,255,255,0.15),
-rgba(255,255,255,0.05)
+rgba(255,255,255,0.04),
+rgba(255,255,255,0.12),
+rgba(255,255,255,0.04)
 );
 background-size: 200px 100%;
 animation: thinking 1s infinite linear;
@@ -460,10 +450,5 @@ transform: translateY(0);
 RESULT STATES
 =============================== */
 
-.win-glow {
-color: #4ade80;
-}
-
-.lose-glow {
-color: #f87171;
-}
+.win-glow { color: #4ade80; }
+.lose-glow { color: #f87171; }
