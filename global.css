@@ -142,25 +142,26 @@ section.visible {
 }
 
 /* ===============================
-   CHAT (LANDSCAPE / WIDER)
+   CHAT (LANDSCAPE / FIXED)
    =============================== */
 
 /*
-  Key goals:
-  - Make the chat feel horizontal (wider than tall)
-  - Prevent the container from stretching vertically with content
-  - Keep options inside and responsive without breaking
-  - Pin input to bottom so it never overlaps messages
+  Changes:
+  - Chat container is fixed in height (does not grow with messages)
+  - Messages scroll inside .chat-box
+  - Options are a vertical list (one after another)
+  - Input is pinned to bottom and never overlaps messages
 */
 
 .chat-area {
   display: flex;
   flex-direction: column;
   align-items: stretch;
+  box-sizing: border-box;
 
   width: 100%;
   max-width: 1200px;   /* wider chat box */
-  height: 420px;       /* fixed-ish height for landscape feel */
+  height: 420px;       /* fixed height for landscape feel */
   min-height: 320px;
   flex-shrink: 0;
 
@@ -184,10 +185,9 @@ section.visible {
   flex-direction: column;
   gap: 12px;
   overflow-y: auto;
-  padding-right: 6px; /* room for scrollbar */
+  padding-right: 8px; /* room for scrollbar */
   scroll-behavior: smooth;
-  /* ensure input (sticky) doesn't overlap content */
-  padding-bottom: 84px;
+  padding-bottom: 110px; /* ensure input doesn't cover last items */
 }
 
 /* ===============================
@@ -236,8 +236,22 @@ section.visible {
   line-height: 1.35;
   box-shadow: 0 2px 8px rgba(0,0,0,0.35);
   background-clip: padding-box;
+  overflow-wrap: anywhere;
 }
 
+/* ensure very long single-line content wraps and doesn't expand container */
+.message pre, .message code {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+/* limit message height visually and allow internal scroll if needed */
+.message {
+  max-height: calc(100vh - 220px);
+  overflow: visible;
+}
+
+/* bubble styles */
 .message.user {
   align-self: flex-end;
   background: linear-gradient(180deg,#0a84ff,#0066d6);
@@ -266,24 +280,23 @@ section.visible {
 }
 
 /* ===============================
-   OPTIONS PANEL (GRID, FIT INSIDE)
+   OPTIONS PANEL (VERTICAL LIST)
    =============================== */
 
-/* Use a responsive grid so options never overflow horizontally */
+/* Make options a vertical list (one after another) */
 #optionsPanel {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  gap: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
   width: 100%;
-  align-items: stretch;
   margin-top: 6px;
+  align-items: stretch;
 }
 
-/* option buttons adapt to grid cells */
+/* option buttons fill width and behave like list items */
 .option-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: block;
+  width: 100%;
   padding: 12px 14px;
   border-radius: 10px;
 
@@ -291,21 +304,29 @@ section.visible {
   border: 1px solid rgba(255,255,255,0.08);
 
   font-size: 14px;
-  text-align: center;
-  transition: background 0.18s ease, transform 0.12s ease;
+  text-align: left;
+  transition: background 0.18s ease, transform 0.08s ease;
   cursor: pointer;
   min-height: 48px;
 }
 
+/* visual focus/hover states */
 .option-btn:hover {
   background: rgba(255,255,255,0.08);
-  transform: translateY(-2px);
+  transform: translateY(-1px);
 }
 
 .option-btn.selected {
   background: #fff;
   color: #000;
-  transform: scale(0.99);
+  transform: scale(0.995);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+}
+
+/* ensure keyboard focus is visible */
+.option-btn:focus {
+  outline: 2px solid rgba(10,132,255,0.25);
+  outline-offset: 2px;
 }
 
 /* ===============================
@@ -373,7 +394,6 @@ section.visible {
 @media (max-width: 1024px) {
   .demo-container { padding: 20px; }
   .chat-area { max-width: 95vw; height: 420px; }
-  #optionsPanel { grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); }
   .option-btn { min-height: 46px; font-size: 13.5px; }
 }
 
@@ -386,10 +406,10 @@ section.visible {
     padding: 12px;
   }
 
-  .chat-box { padding-bottom: 96px; }
+  .chat-box { padding-bottom: 120px; }
 
-  #optionsPanel { grid-template-columns: repeat(2, 1fr); gap: 10px; }
-  .option-btn { min-height: 48px; font-size: 13px; }
+  #optionsPanel { gap: 10px; }
+  .option-btn { min-height: 48px; font-size: 13px; text-align: left; }
   .message { max-width: 90%; }
 }
 
@@ -402,7 +422,7 @@ section.visible {
     padding: 10px;
   }
 
-  #optionsPanel { grid-template-columns: 1fr; gap: 8px; }
+  #optionsPanel { gap: 8px; }
   .option-btn { width: 100%; min-height: 48px; font-size: 13px; text-align: left; padding-left: 14px; }
   .message { max-width: 92%; font-size: 13px; }
   .input-area { bottom: 8px; padding: 8px; }
