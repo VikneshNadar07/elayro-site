@@ -373,3 +373,75 @@ section.visible {
   max-height: 35%;
   overflow-y: auto;
 }
+/* ===============================
+   FINAL TRUE MATCH (VISUAL FIX)
+   =============================== */
+
+/* 🔥 CENTER WHOLE BLOCK CLEANLY */
+.demo-container {
+  display: flex;
+  justify-content: center;
+}
+
+/* 🔥 FIX CLIENT TABS (NO VERTICAL STRETCH LOOK) */
+.clients {
+  width: 100%;
+  justify-content: flex-start;
+  margin-bottom: 16px;
+}
+
+/* 🔥 KEY FIX: BALANCE INNER SPACING */
+.chat-area {
+
+  /* keep your ratio but improve visual balance */
+  padding: 20px;
+
+  /* 🔥 THIS is what makes it feel like screenshot 2 */
+  gap: 12px;
+
+}
+
+/* 🔥 CHAT BOX BREATHING SPACE */
+.chat-box {
+  padding-right: 8px;
+}
+
+/* 🔥 OPTIONS — MAKE THEM LOOK LIKE BARS (NOT STACKED CARDS) */
+#optionsPanel {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* 🔥 CRITICAL: REMOVE “CARD FEEL” */
+.option-btn {
+
+  width: 100%;
+  max-width: 100%;
+
+  /* 🔥 THIS FIXES YOUR FIRST SCREENSHOT LOOK */
+  border-radius: 10px;
+
+  padding: 12px 14px;
+
+  /* subtle flatter look */
+  background: rgba(255,255,255,0.04);
+
+}
+
+/* 🔥 REMOVE HEAVY DEPTH (causes vertical feel) */
+.option-btn:hover {
+  transform: none;
+}
+
+/* 🔥 INPUT — MATCH SECOND SCREENSHOT WIDTH */
+.input-area {
+  width: 100%;
+  margin-top: 10px;
+}
+
+/* 🔥 ALIGN SEND BUTTON BETTER */
+.input-area button {
+  min-width: 70px;
+}
