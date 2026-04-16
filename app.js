@@ -22,12 +22,15 @@ if (href === currentPage) link.classList.add("active");
 link.addEventListener("click", (e) => {
 if (!href || href.startsWith("#")) return;
 
+```
 e.preventDefault();
 document.body.classList.remove("loaded");
 
 setTimeout(() => {
-window.location.href = href;
+  window.location.href = href;
 }, 250);
+```
+
 });
 });
 
@@ -72,7 +75,7 @@ const footer = document.querySelector(".footer-global");
 if (footer) observer.observe(footer);
 
 /* =========================
-DEMO SYSTEM (YOUR CODE FIXED)
+DEMO SYSTEM
 ========================= */
 
 const chatBox = document.getElementById("chatBox");
@@ -236,13 +239,12 @@ return [
 ];
 }
 
-
 async function showOptions(msg) {
 
-// small natural delay after user message
+if (!msg) return;
+
 await wait(300);
 
-// thinking ONLY here (correct timing)
 optionsPanel.innerHTML = '<div class="thinking"></div>';
 
 await wait(900);
@@ -251,7 +253,6 @@ optionsPanel.innerHTML = "";
 
 const options = getOptions(msg);
 
-// show options
 for (let i = 0; i < 4; i++) {
 const d = document.createElement("div");
 d.className = "option-bubble";
@@ -268,19 +269,15 @@ await wait(200);
 
 }
 
-// slight pause before selecting
 await wait(1200);
 
 optionsPanel.innerHTML = "";
-
-// NO extra thinking here anymore ❌ removed
 
 const selected = options[0];
 addMessage(selected, "system");
 
 await wait(700);
 }
-
 
 async function cinematicClose(result) {
 
@@ -304,10 +301,12 @@ addMessage("Lost due to drop in engagement and momentum.", "system");
 async function runDemo() {
 
 while (true) {
+
+```
 chats = { 0: [], 1: [] };
 chatBox.innerHTML = "";
 optionsPanel.innerHTML = "";
-  
+
 let steps = [0, 0];
 let done = [false, false];
 
@@ -332,9 +331,8 @@ while (!done[0] || !done[1]) {
         await wait(2500);
       } else {
         await typeMessage(msg);
+        await showOptions(msg);
       }
-
-      await showOptions(msg);
 
       steps[i]++;
 
@@ -351,6 +349,7 @@ await wait(3000);
 
 chatBox.innerHTML = "";
 optionsPanel.innerHTML = "";
+```
 
 }
 }
@@ -390,7 +389,7 @@ body: JSON.stringify({ email })
 const data = await res.json().catch(() => ({}));
 
 notifySuccess.innerText =
-  data.status === "exists" ? "Already registered" : "You’re in";
+data.status === "exists" ? "Already registered" : "You’re in";
 
 notifySuccess.classList.add("show");
 
