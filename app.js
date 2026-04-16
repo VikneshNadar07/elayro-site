@@ -177,7 +177,11 @@ return [
 ];
 }
 
-const m = msg.toLowerCase();
+const m = msg ? msg.toLowerCase() : "";
+  
+  if (!msg) {
+  return [ ... ];
+}
 
 if (m.includes("pricing")) return [
 "Here’s a clear breakdown so you know exactly what to expect and how it’s structured.",
