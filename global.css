@@ -162,7 +162,7 @@ section.visible {
 }
 
 /* ===============================
-   CHAT AREA (FINAL FIXED SYSTEM)
+   CHAT AREA (FINAL FIXED)
    =============================== */
 
 .chat-area {
@@ -171,6 +171,7 @@ section.visible {
 
   height: clamp(320px, 55vh, 520px);
 
+  width: 100%;
   border-radius: 16px;
   padding: 16px;
 
@@ -192,6 +193,8 @@ section.visible {
 
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+
+  padding-bottom: 8px;
 }
 
 /* ===============================
@@ -214,7 +217,7 @@ section.visible {
 
 .message.system {
   align-self: flex-start;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255,255,255,0.08);
 }
 
 /* ===============================
@@ -258,10 +261,37 @@ section.visible {
    OPTIONS
    =============================== */
 
+#optionsPanel {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+}
+
 .option-btn {
-  padding: 12px;
-  border-radius: 12px;
+  display: block;
+  max-width: 80%;
+  width: fit-content;
+
+  padding: 12px 14px;
+  border-radius: 14px;
+
   background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+
+  text-align: left;
+  line-height: 1.4;
+
+  transition: all 0.25s ease;
+}
+
+.option-btn:hover {
+  transform: translateY(-2px);
+}
+
+.option-btn.selected {
+  background: #0a84ff;
+  color: #fff;
 }
 
 /* ===============================
@@ -269,10 +299,6 @@ section.visible {
    =============================== */
 
 @media (max-width: 768px) {
-
-  .chat-area {
-    height: calc(var(--vh, 1vh) * 60);
-  }
 
   .message {
     max-width: 90%;
