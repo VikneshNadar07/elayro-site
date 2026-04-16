@@ -126,26 +126,30 @@
 
   <div class="notify-wrapper">
 
-    <h2 class="notify-title">Early Access</h2>
-    <p class="notify-sub">You’re seeing this before most people will.</p>
+```
+<h2 class="notify-title">Early Access</h2>
+<p class="notify-sub">You’re seeing this before most people will.</p>
 
-    <div class="notify-box">
-      <input 
-        type="email" 
-        id="notifyEmail" 
-        placeholder="Enter your email"
-      >
-      <button id="notifyBtn">
-        <span>Notify Me</span>
-      </button>
-    </div>
+<div class="notify-box">
+  <input 
+    type="email" 
+    id="notifyEmail" 
+    placeholder="Enter your email"
+    autocomplete="off"
+  >
+  <button id="notifyBtn" type="button">
+    <span>Notify Me</span>
+  </button>
+</div>
 
-    <!-- 🔥 EMPTY (JS WILL FILL STATES) -->
-    <p id="notifySuccess" class="notify-success"></p>
+<!-- JS controls state -->
+<p id="notifySuccess" class="notify-success"></p>
+```
 
   </div>
 
 </section>
+
 
 <!-- WHO -->
 <section>
