@@ -1,6 +1,6 @@
 document.addEventListener("DOMContentLoaded", () => {
 
-document.documentElement.classList.add("js"); // ✅ ADD THIS LINE
+document.documentElement.classList.add("js");
 document.body.classList.add("loaded");
 
 const wait = (t) => new Promise(res => setTimeout(res, t));
@@ -17,21 +17,18 @@ if (!currentPage) currentPage = "index.html";
 navLinks.forEach(link => {
 const href = link.getAttribute("href");
 
-```
 if (href === currentPage) link.classList.add("active");
 
 link.addEventListener("click", (e) => {
-  if (!href || href.startsWith("#")) return;
+if (!href || href.startsWith("#")) return;
 
-  e.preventDefault();
-  document.body.classList.remove("loaded");
+e.preventDefault();
+document.body.classList.remove("loaded");
 
-  setTimeout(() => {
-    window.location.href = href;
-  }, 250);
+setTimeout(() => {
+window.location.href = href;
+}, 250);
 });
-```
-
 });
 
 /* =========================
@@ -72,8 +69,7 @@ const footer = document.querySelector(".footer-global");
 if (footer) observer.observe(footer);
 
 /* =========================
-/* =========================
-DEMO SYSTEM (FIXED)
+DEMO SYSTEM (FIXED ONLY)
 ========================= */
 
 const chatBox = document.getElementById("chatBox");
@@ -83,177 +79,178 @@ const sendBtn = document.getElementById("sendBtn");
 const clientTabs = document.querySelectorAll(".clients .client");
 const demoContainer = document.querySelector(".demo-container");
 
-if (chatBox && optionsPanel && input && sendBtn) {
+const demoEnabled = chatBox && optionsPanel && input && sendBtn;
+
+if (demoEnabled) {
 
 let activeClient = 0;
-let chats = { 0: [], 1: [] };
 
 function updateTabs() {
-  clientTabs.forEach((t, i) =>
-    t.classList.toggle("active", i === activeClient)
-  );
+clientTabs.forEach((t, i) =>
+t.classList.toggle("active", i === activeClient)
+);
 }
 
 function addMessage(text, type) {
-  const d = document.createElement("div");
-  d.className = `message ${type}`;
-  d.innerText = text;
-
-  chatBox.appendChild(d);
-  chatBox.scrollTop = chatBox.scrollHeight;
+const d = document.createElement("div");
+d.className = `message ${type}`;
+d.innerText = text;
+chatBox.appendChild(d);
+chatBox.scrollTop = chatBox.scrollHeight;
 }
 
 async function switchClient(i) {
-  activeClient = i;
-  updateTabs();
-  await wait(300);
+activeClient = i;
+updateTabs();
+await wait(300);
 }
 
 function setFocus(state) {
-  if (demoContainer) {
-    demoContainer.classList.toggle("focus-mode", state);
-  }
+if (demoContainer) {
+demoContainer.classList.toggle("focus-mode", state);
+}
 }
 
 async function typeMessage(text) {
-  setFocus(true);
+setFocus(true);
 
-  input.value = "";
+input.value = "";
 
-  for (let i = 0; i < text.length; i++) {
-    input.value += text[i];
-    await wait(18);
-  }
+for (let i = 0; i < text.length; i++) {
+input.value += text[i];
+await wait(18);
+}
 
-  sendBtn.classList.add("press");
-  await wait(120);
-  sendBtn.classList.remove("press");
+sendBtn.classList.add("press");
+await wait(120);
+sendBtn.classList.remove("press");
 
-  addMessage(text, "user");
-  input.value = "";
+addMessage(text, "user");
+input.value = "";
 
-  await wait(300);
-  setFocus(false);
+await wait(300);
+setFocus(false);
 }
 
 function getRandomStart() {
-  const pool = ["pricing","scope","evaluating","engaged","delayed","ghosting"];
-  return pool[Math.floor(Math.random() * pool.length)];
+const pool = ["pricing","scope","evaluating","engaged","delayed","ghosting"];
+return pool[Math.floor(Math.random() * pool.length)];
 }
 
 function getNextState(s) {
-  const map = {
-    pricing:["scope","evaluating"],
-    scope:["evaluating","engaged"],
-    evaluating:["engaged","delayed"],
-    engaged:["closing","ghosting"],
-    delayed:["followup","ghosting"],
-    followup:["engaged","ghosting"],
-    ghosting:["followup","lost"],
-    closing:["won"]
-  };
-  const next = map[s] || ["evaluating"];
-  return next[Math.floor(Math.random() * next.length)];
+const map = {
+pricing:["scope","evaluating"],
+scope:["evaluating","engaged"],
+evaluating:["engaged","delayed"],
+engaged:["closing","ghosting"],
+delayed:["followup","ghosting"],
+followup:["engaged","ghosting"],
+ghosting:["followup","lost"],
+closing:["won"]
+};
+const next = map[s] || ["evaluating"];
+return next[Math.floor(Math.random() * next.length)];
 }
 
 function getMsg(s) {
-  return {
-    pricing:"Client asked about pricing",
-    scope:"Client wants clarity on scope",
-    evaluating:"Client is evaluating options",
-    engaged:"Client is actively engaging",
-    delayed:"Client said maybe later",
-    ghosting:"Client stopped replying",
-    followup:"Following up again",
-    closing:"Client is ready to proceed"
-  }[s];
+return {
+pricing:"Client asked about pricing",
+scope:"Client wants clarity on scope",
+evaluating:"Client is evaluating options",
+engaged:"Client is actively engaging",
+delayed:"Client said maybe later",
+ghosting:"Client stopped replying",
+followup:"Following up again",
+closing:"Client is ready to proceed"
+}[s];
 }
 
 function getOptions(s) {
-  return {
-    pricing:["Here’s a clear breakdown so you know exactly what to expect.","Let me outline pricing clearly.","I can share pricing.","I’ll explain it simply."],
-    scope:["Let me define scope clearly.","I’ll break it down.","We’ll go step by step.","I’ll simplify it."],
-    evaluating:["Take your time.","I’ll help compare.","Let’s simplify decision.","We’ll narrow it."],
-    engaged:["Great — let’s move forward.","We’re aligned.","Let’s continue.","Good progress."],
-    delayed:["No problem.","We’ll continue later.","I’ll follow up.","We’ll pick this up."],
-    ghosting:["Checking in.","Following up.","Happy to revisit.","Just checking."],
-    followup:["Circling back.","Following up again.","Reconnect here.","Checking again."],
-    closing:["Perfect — proceeding.","Finalizing.","We’re good.","Let’s start."]
-  }[s];
+return {
+pricing:["Here’s a clear breakdown so you know exactly what to expect.","Let me outline pricing clearly.","I can share pricing.","I’ll explain it simply."],
+scope:["Let me define scope clearly.","I’ll break it down.","We’ll go step by step.","I’ll simplify it."],
+evaluating:["Take your time.","I’ll help compare.","Let’s simplify decision.","We’ll narrow it."],
+engaged:["Great — let’s move forward.","We’re aligned.","Let’s continue.","Good progress."],
+delayed:["No problem.","We’ll continue later.","I’ll follow up.","We’ll pick this up."],
+ghosting:["Checking in.","Following up.","Happy to revisit.","Just checking."],
+followup:["Circling back.","Following up again.","Reconnect here.","Checking again."],
+closing:["Perfect — proceeding.","Finalizing.","We’re good.","Let’s start."]
+}[s];
 }
 
 async function showOptions(state) {
-  optionsPanel.innerHTML = '<div class="thinking"></div>';
-  await wait(600);
+optionsPanel.innerHTML = '<div class="thinking"></div>';
+await wait(600);
 
-  const options = getOptions(state);
-  optionsPanel.innerHTML = "";
+const options = getOptions(state);
+optionsPanel.innerHTML = "";
 
-  options.forEach((opt, i) => {
-    const d = document.createElement("div");
-    d.className = "option-btn";
-    d.innerHTML = `<strong>${["Best","Strong","Safe","Casual"][i]}</strong><br>${opt}`;
-    optionsPanel.appendChild(d);
-  });
+options.forEach((opt, i) => {
+const d = document.createElement("div");
+d.className = "option-btn";
+d.innerHTML = `<strong>${["Best","Strong","Safe","Casual"][i]}</strong><br>${opt}`;
+optionsPanel.appendChild(d);
+});
 
-  await wait(500);
-
-  addMessage(options[0], "system");
-  optionsPanel.innerHTML = "";
+await wait(500);
+addMessage(options[0], "system");
+optionsPanel.innerHTML = "";
 }
 
 async function runDemo() {
 
-  while (true) {
+while (true) {
 
-    chatBox.innerHTML = "";
+```
+chatBox.innerHTML = "";
 
-    addMessage("Starting conversation...", "system");
-    await wait(1000);
+addMessage("Starting conversation...", "system");
+await wait(1000);
 
-    let clients = {
-      0:{state:getRandomStart(),done:false,steps:0,max:5},
-      1:{state:getRandomStart(),done:false,steps:0,max:4}
-    };
+let clients = {
+  0:{state:getRandomStart(),done:false,steps:0,max:5},
+  1:{state:getRandomStart(),done:false,steps:0,max:4}
+};
 
-    let active = 0;
+let active = 0;
 
-    while (!clients[0].done || !clients[1].done) {
+while (!clients[0].done || !clients[1].done) {
 
-      active = active === 0 ? 1 : 0;
-      if (clients[active].done) continue;
+  active = active === 0 ? 1 : 0;
+  if (clients[active].done) continue;
 
-      await switchClient(active);
+  await switchClient(active);
 
-      const state = clients[active].state;
+  const state = clients[active].state;
 
-      await typeMessage(getMsg(state));
-      await showOptions(state);
+  await typeMessage(getMsg(state));
+  await showOptions(state);
 
-      clients[active].steps++;
+  clients[active].steps++;
 
-      const next = getNextState(state);
+  const next = getNextState(state);
 
-      if (next === "won" || next === "lost" || clients[active].steps >= clients[active].max) {
+  if (next === "won" || next === "lost" || clients[active].steps >= clients[active].max) {
 
-        const win = next === "won" || state === "engaged";
-        addMessage(win ? "Deal closed." : "Conversation lost.", "system");
+    const win = next === "won" || state === "engaged";
+    addMessage(win ? "Deal closed." : "Conversation lost.", "system");
 
-        clients[active].done = true;
+    clients[active].done = true;
 
-      } else {
-        clients[active].state = next;
-      }
-    }
-
-    await wait(2000);
-    addMessage("Restarting...", "system");
-    await wait(1500);
+  } else {
+    clients[active].state = next;
   }
 }
 
-runDemo();
+await wait(2000);
+addMessage("Restarting...", "system");
+await wait(1500);
+```
 
+}
+}
+
+runDemo();
 }
 
 /* =========================
@@ -266,50 +263,49 @@ const notifySuccess = document.getElementById("notifySuccess");
 
 if (notifyBtn && notifyEmail && notifySuccess) {
 
-```
 notifyBtn.addEventListener("click", async () => {
 
-  const email = notifyEmail.value.trim();
+const email = notifyEmail.value.trim();
 
-  if (!email || !email.includes("@")) {
-    notifySuccess.innerText = "Enter a valid email";
-    notifySuccess.classList.add("show");
-    return;
-  }
+if (!email || !email.includes("@")) {
+notifySuccess.innerText = "Enter a valid email";
+notifySuccess.classList.add("show");
+return;
+}
 
-  notifyBtn.innerText = "Adding...";
-  notifyBtn.disabled = true;
+notifyBtn.innerText = "Adding...";
+notifyBtn.disabled = true;
 
-  try {
-    const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email })
-    });
+try {
+const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ email })
+});
 
-    const data = await res.json().catch(() => ({}));
+```
+const data = await res.json().catch(() => ({}));
 
-    notifySuccess.innerText =
-      data.status === "exists" ? "Already registered" : "You’re in";
+notifySuccess.innerText =
+  data.status === "exists" ? "Already registered" : "You’re in";
 
-    notifySuccess.classList.add("show");
+notifySuccess.classList.add("show");
 
-    notifyEmail.value = "";
-    notifyBtn.innerText = "Added";
+notifyEmail.value = "";
+notifyBtn.innerText = "Added";
+```
 
-  } catch {
-    notifySuccess.innerText = "Network error — retry";
-    notifySuccess.classList.add("show");
-    notifyBtn.innerText = "Retry";
-    notifyBtn.disabled = false;
-  }
+} catch {
+notifySuccess.innerText = "Network error — retry";
+notifySuccess.classList.add("show");
+notifyBtn.innerText = "Retry";
+notifyBtn.disabled = false;
+}
 });
 
 notifyEmail.addEventListener("keypress", (e) => {
-  if (e.key === "Enter") notifyBtn.click();
+if (e.key === "Enter") notifyBtn.click();
 });
-```
-
 }
 
 });
