@@ -105,7 +105,6 @@ d.innerText = m.text;
 chatBox.appendChild(d);
 });
 
-// ✅ FIXED: scroll after render
 chatBox.scrollTop = chatBox.scrollHeight;
 }
 
@@ -132,8 +131,7 @@ await wait(800);
 }
 
 async function typeMessage(text) {
-
-if (!input) return; // ✅ safety
+if (!input) return;
 
 input.value = "";
 
@@ -259,7 +257,7 @@ optionsPanel.innerHTML = "";
 
 const options = getOptions(msg);
 
-if (!options || !options.length) return; // ✅ safety
+if (!options || !options.length) return;
 
 for (let i = 0; i < 4; i++) {
 const d = document.createElement("div");
