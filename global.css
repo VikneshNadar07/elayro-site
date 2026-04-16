@@ -470,3 +470,68 @@ border-color: #4ade80 !important;
 #notifyEmail.invalid {
 border-color: #f87171 !important;
 }
+/* ===============================
+INDEX PREMIUM CARDS
+=============================== */
+
+.index-card {
+margin: 80px auto;
+padding: 32px 24px;
+
+max-width: 620px;
+
+border-radius: 16px;
+
+background: rgba(255,255,255,0.03);
+border: 1px solid rgba(255,255,255,0.06);
+
+backdrop-filter: blur(16px);
+
+box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+
+transition: all 0.3s ease;
+}
+
+/* subtle hover lift */
+.index-card:hover {
+transform: translateY(-4px);
+box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+
+/* ===============================
+PREMIUM BUTTON
+=============================== */
+
+.btn-premium {
+display: inline-block;
+margin-top: 10px;
+
+padding: 12px 18px;
+border-radius: 10px;
+
+background: #fff;
+color: #000;
+
+font-size: 14px;
+font-weight: 500;
+
+text-decoration: none;
+
+transition: all 0.2s ease;
+}
+
+/* hover */
+.btn-premium:hover {
+transform: translateY(-1px);
+box-shadow: 0 6px 20px rgba(255,255,255,0.15);
+}
+
+/* click feel */
+.btn-premium:active {
+transform: scale(0.95);
+}
+
+/* remove old purple link look */
+.index-links a {
+color: inherit;
+}
