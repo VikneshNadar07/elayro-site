@@ -224,17 +224,18 @@ section.visible {
 }
 
 /* ===============================
-   MESSAGE
+   MESSAGE (REFINED FOR LANDSCAPE)
    =============================== */
 
 /* keep messages constrained so they don't push layout */
 .message {
-  max-width: 60%;
+  max-width: 55%;        /* narrower bubbles for horizontal rhythm */
   padding: 10px 14px;
   border-radius: 16px;
   word-break: break-word;
   line-height: 1.35;
   box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  background-clip: padding-box;
 }
 
 .message.user {
@@ -249,9 +250,19 @@ section.visible {
   color: #e9e9eb;
 }
 
-/* smaller messages on very wide screens to keep horizontal rhythm */
+/* On very wide screens, keep bubbles even tighter */
 @media (min-width: 1200px) {
-  .message { max-width: 50%; }
+  .message { max-width: 45%; }
+}
+
+/* On tablets, allow a bit more width */
+@media (max-width: 768px) {
+  .message { max-width: 70%; font-size: 13px; }
+}
+
+/* On mobile, bubbles can expand for readability */
+@media (max-width: 420px) {
+  .message { max-width: 85%; font-size: 13px; }
 }
 
 /* ===============================
@@ -435,3 +446,4 @@ section.visible {
 .client, .option-btn {
   transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
 }
+```
