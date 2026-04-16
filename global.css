@@ -1,4 +1,4 @@
-Here’s the **full updated CSS code** with the fixes applied — you can copy‑paste this directly to replace your current stylesheet. It keeps the chat area stable, prevents resizing based on message length, and adapts properly to mobile screens so the chat box always fills the viewport.
+Got it — right now your chat UI is a **tall vertical rectangle**, which feels cramped and breaks layout. To make it **wider and more horizontal**, you need to adjust the container widths and reduce the fixed height emphasis. Here’s the **final full CSS** with the fix applied:
 
 ```css
 /* ===============================
@@ -124,12 +124,12 @@ section.visible {
 }
 
 /* ===============================
-   DEMO (UPDATED WIDTH)
+   DEMO (WIDER)
    =============================== */
 
 .demo-container {
   width: 100%;
-  max-width: 900px;
+  max-width: 1100px; /* wider */
   margin: 40px auto;
   padding: 24px;
 
@@ -144,7 +144,7 @@ section.visible {
 }
 
 /* ===============================
-   CHAT (FIXED + RESPONSIVE)
+   CHAT (FIXED + RESPONSIVE, WIDER)
    =============================== */
 
 .chat-area {
@@ -152,12 +152,10 @@ section.visible {
   flex-direction: column;
 
   width: 100%;
-  max-width: 860px;
-
-  /* ✅ Stable height */
-  min-height: 420px;
+  max-width: 1000px; /* wider chat box */
+  min-height: 360px;
   height: 420px; /* desktop default */
-  flex-shrink: 0; /* prevent collapsing */
+  flex-shrink: 0;
 
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.06);
@@ -166,11 +164,9 @@ section.visible {
 
   background: rgba(0,0,0,0.35);
 
-  /* ✅ Stability */
   overflow: hidden;
 }
 
-/* ✅ Chat box fills available space */
 .chat-box {
   flex: 1;
   display: flex;
@@ -230,7 +226,7 @@ section.visible {
 }
 
 /* ===============================
-   OPTIONS (FLAT BARS)
+   OPTIONS
    =============================== */
 
 #optionsPanel {
@@ -307,12 +303,12 @@ section.visible {
 
 @media (max-width: 768px) {
   .message { max-width: 90%; font-size: 13px; }
-  .chat-area { height: 70vh; min-height: 360px; }
+  .chat-area { height: 65vh; min-height: 320px; max-width: 95vw; }
 }
 
 @media (max-width: 420px) {
   .message { max-width: 92%; font-size: 12.5px; }
-  .chat-area { height: 80vh; min-height: 320px; }
+  .chat-area { height: 75vh; min-height: 300px; max-width: 98vw; }
 }
 
 /* ===============================
@@ -330,15 +326,9 @@ section.visible {
 }
 
 /* ===============================
-   PREMIUM UI POLISH (APPEND ONLY)
+   PREMIUM UI POLISH
    =============================== */
 
-/* 🔥 smoother scroll feel */
-.chat-box {
-  scroll-behavior: smooth;
-}
-
-/* 🔥 subtle message entry animation */
 .message {
   opacity: 0;
   transform: translateY(6px);
@@ -352,16 +342,9 @@ section.visible {
   }
 }
 
-/* 🔥 slight stagger feel (more natural) */
-.message.user {
-  animation-delay: 0.05s;
-}
+.message.user { animation-delay: 0.05s; }
+.message.system { animation-delay: 0.1s; }
 
-.message.system {
-  animation-delay: 0.1s;
-}
-
-/* 🔥 premium hover (very subtle, no jump) */
 .option-btn {
   transition: background 0.2s ease, border 0.2s ease;
 }
@@ -371,15 +354,29 @@ section.visible {
   border-color: rgba(255,255,255,0.15);
 }
 
-/* 🔥 selected option feels “clicked” */
 .option-btn.selected {
   background: #fff;
   color: #000;
   transform: scale(0.98);
 }
 
-/* 🔥 chat container depth refinement */
 .chat-area {
   box-shadow:
     0 20px 60px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(
+    inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.input-area {
+  backdrop-filter: blur(14px);
+}
+
+.input-area button {
+  transition: transform 0.15s ease, background 0.2s ease;
+}
+
+.input-area button:active {
+  transform: scale(0.96);
+}
+
+.client {
+  transition: all 0.
