@@ -487,4 +487,11 @@ box-shadow: 0 0 0 2px rgba(74,222,128,0.2);
 border-color: #f87171 !important;
 box-shadow: 0 0 0 2px rgba(248,113,113,0.2);
 }
-
+.notify-box {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.notify-box button {
+  backdrop-filter: blur(6px);
+}
