@@ -446,6 +446,9 @@ opacity: 1;
 transform: translateY(0);
 }
 
+.demo-inner {
+  width: 100%;
+}
 /* ===============================
 RESULT STATES
 =============================== */
