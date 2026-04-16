@@ -23,11 +23,11 @@ transition: all 0.4s ease;
 }
 
 /* ===============================
-SAFE LOAD (NO BLACK SCREEN)
+SAFE LOAD
 =============================== */
 
 body:not(.loaded) {
-opacity: 1; /* ✅ NEVER HIDE PAGE */
+opacity: 1;
 transform: none;
 }
 
@@ -100,36 +100,23 @@ scroll-snap-type: y proximity;
 }
 
 /* ===============================
-SECTIONS (PRODUCTION SAFE)
+SECTIONS
 =============================== */
 
-/* Default: ALWAYS visible */
 section {
 margin: clamp(70px, 10vh, 110px) 0;
 text-align: center;
 scroll-snap-align: start;
-
 opacity: 1;
 transform: none;
 }
 
-/* Only animate if JS is active */
-.js section {
-  opacity: 1;
-  transform: none;
-}
-
 .js section.animate {
-  opacity: 0;
-  transform: translateY(20px);
+opacity: 0;
+transform: translateY(20px);
 }
 
 .js section.animate.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-
-.js section.visible {
 opacity: 1;
 transform: translateY(0);
 }
@@ -219,7 +206,7 @@ opacity: 0.6;
 }
 
 /* ===============================
-DEMO (UNCHANGED BEHAVIOR)
+DEMO CONTAINER
 =============================== */
 
 .demo-container {
@@ -228,21 +215,17 @@ max-width: 720px;
 margin: 40px auto;
 padding: 20px;
 border-radius: 16px;
-border: 1px solid rgba(255,255,255,0.08);
+border: 1px solid rgba(255,255,255,0.06);
 background: rgba(255,255,255,0.02);
+backdrop-filter: blur(20px);
 
 box-shadow: 0 20px 60px rgba(0,0,0,0.4);
 transition: transform 0.5s cubic-bezier(0.22,1,0.36,1);
-
 overflow: hidden;
 }
 
 .demo-container.focus-mode {
 transform: scale(1.06);
-}
-
-.demo-inner {
-width: 100%;
 }
 
 /* ===============================
@@ -260,6 +243,7 @@ background: rgba(0,0,0,0.25);
 }
 
 .chat-box {
+padding-right: 6px;
 flex: 1;
 display: flex;
 flex-direction: column;
@@ -268,10 +252,39 @@ overflow-y: auto;
 scroll-behavior: smooth;
 }
 
+/* Scrollbar */
+.chat-box::-webkit-scrollbar {
+width: 4px;
+}
+
+.chat-box::-webkit-scrollbar-thumb {
+background: rgba(255,255,255,0.2);
+border-radius: 10px;
+}
+
+.chat-box::-webkit-scrollbar-track {
+background: transparent;
+}
+
+/* ===============================
+MESSAGES
+=============================== */
+
 .message {
+margin-bottom: 4px;
 max-width: 70%;
 padding: 10px 14px;
 border-radius: 16px;
+
+opacity: 1;
+transform: none;
+
+animation: popIn 0.2s ease;
+}
+
+@keyframes popIn {
+0% { transform: scale(0.95); opacity: 0; }
+100% { transform: scale(1); opacity: 1; }
 }
 
 .message.user {
@@ -282,7 +295,8 @@ color: white;
 
 .message.system {
 align-self: flex-start;
-background: rgba(255,255,255,0.06);
+background: rgba(255,255,255,0.05);
+border: 1px solid rgba(255,255,255,0.06);
 }
 
 /* ===============================
@@ -298,8 +312,8 @@ border-radius: 14px;
 background: rgba(255,255,255,0.04);
 border: 1px solid rgba(255,255,255,0.08);
 
-opacity: 0.6;
-cursor: not-allowed;
+opacity: 0.5;
+cursor: default;
 }
 
 .input-area input {
@@ -336,11 +350,95 @@ margin-bottom: 12px;
 padding: 6px 12px;
 border-radius: 999px;
 background: rgba(255,255,255,0.06);
+transition: all 0.2s ease;
 }
 
 .client.active {
 background: #fff;
 color: #000;
+transform: scale(1.08);
+box-shadow: 0 4px 14px rgba(0,0,0,0.3);
+}
+
+/* ===============================
+OPTIONS
+=============================== */
+
+.options-panel {
+margin-top: 10px;
+}
+
+.option-bubble {
+display: block;
+width: 100%;
+padding: 14px 16px;
+border-radius: 12px;
+margin-bottom: 8px;
+
+background: rgba(255,255,255,0.06);
+border: 1px solid rgba(255,255,255,0.1);
+
+font-size: 13.5px;
+line-height: 1.5;
+
+opacity: 0;
+transform: translateY(6px);
+animation: optionFade 0.3s ease forwards;
+
+transition: all 0.2s ease;
+}
+
+@keyframes optionFade {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.option-bubble:hover {
+transform: translateY(-2px);
+background: rgba(255,255,255,0.14);
+border-color: rgba(255,255,255,0.2);
+}
+
+.option-bubble .tag {
+display: inline-block;
+font-size: 11px;
+margin-bottom: 6px;
+padding: 2px 8px;
+border-radius: 999px;
+
+background: rgba(255,255,255,0.1);
+color: #fff;
+
+font-weight: 500;
+letter-spacing: 0.3px;
+opacity: 0.9;
+}
+
+/* ===============================
+THINKING
+=============================== */
+
+.thinking {
+height: 36px;
+border-radius: 10px;
+margin: 10px 0;
+opacity: 0.8;
+
+background: linear-gradient(
+90deg,
+rgba(255,255,255,0.05),
+rgba(255,255,255,0.15),
+rgba(255,255,255,0.05)
+);
+background-size: 200px 100%;
+animation: thinking 1s infinite linear;
+}
+
+@keyframes thinking {
+0% { background-position: -200px; }
+100% { background-position: 200px; }
 }
 
 /* ===============================
@@ -359,126 +457,9 @@ transform: translateY(0);
 }
 
 /* ===============================
-THINKING
+RESULT STATES
 =============================== */
 
-.thinking {
-height: 36px;
-border-radius: 10px;
-background: linear-gradient(
-90deg,
-rgba(255,255,255,0.05),
-rgba(255,255,255,0.15),
-rgba(255,255,255,0.05)
-);
-background-size: 200px 100%;
-animation: thinking 1s infinite linear;
-}
-
-@keyframes thinking {
-0% { background-position: -200px; }
-100% { background-position: 200px; }
-}
-/* ===============================
-DEMO FIX (REQUIRED FOR JS)
-=============================== */
-
-.options-panel {
-margin-top: 10px;
-}
-
-/* MESSAGE ANIMATION (RESTORE) */
-.message {
-  opacity: 1;
-  transform: none;
-  animation: msgFade 0.25s ease forwards;
-}
-
-@keyframes msgFade {
-  from {
-    opacity: 0;
-    transform: translateY(6px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* OPTION BUTTONS (RESTORE) */
-.option-btn {
-display: block;
-width: 100%;
-padding: 14px 60px;
-border-radius: 12px;
-background: rgba(255,255,255,0.06);
-border: 1px solid rgba(255,255,255,0.1);
-font-size: 13.5px;
-text-align: left;
-
-opacity: 0;
-transform: translateY(6px);
-animation: optionFade 0.3s ease forwards;
-}
-
-@keyframes optionFade {
-to {
-opacity: 1;
-transform: translateY(0);
-}
-}
-
-.option-btn.selected {
-background: #fff;
-color: #000;
-transform: scale(0.98);
-}
-
-/* THINKING (ENSURE VISIBLE) */
-.thinking {
-height: 36px;
-border-radius: 10px;
-margin: 6px 0;
-}
-/* ===============================
-DEMO FIX FOR NEW SYSTEM
-=============================== */
-
-.option-bubble {
-display: block;
-width: 100%;
-padding: 14px 16px;
-border-radius: 12px;
-margin-bottom: 8px;
-
-background: rgba(255,255,255,0.06);
-border: 1px solid rgba(255,255,255,0.1);
-
-font-size: 13.5px;
-line-height: 1.5;
-
-opacity: 0;
-transform: translateY(6px);
-animation: optionFade 0.3s ease forwards;
-}
-
-.option-bubble:hover {
-background: rgba(255,255,255,0.12);
-}
-
-/* TAG INSIDE OPTION */
-.option-bubble .tag {
-display: inline-block;
-font-size: 11px;
-margin-bottom: 6px;
-padding: 2px 8px;
-border-radius: 999px;
-
-background: rgba(255,255,255,0.1);
-color: #fff;
-}
-
-/* WIN / LOSS EFFECT */
 .win-glow {
 color: #4ade80;
 }
