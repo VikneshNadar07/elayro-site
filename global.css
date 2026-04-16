@@ -315,6 +315,7 @@ border: none;
 background: transparent;
 color: #fff;
 pointer-events: none;
+caret-color: transparent;
 }
 
 .input-area button {
