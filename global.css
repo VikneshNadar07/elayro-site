@@ -487,11 +487,71 @@ box-shadow: 0 0 0 2px rgba(74,222,128,0.2);
 border-color: #f87171 !important;
 box-shadow: 0 0 0 2px rgba(248,113,113,0.2);
 }
+/* ===============================
+FIXED NOTIFY INPUT + BUTTON
+=============================== */
+
 .notify-box {
-  display: flex;
-  gap: 10px;
-  align-items: center;
+display: flex;
+justify-content: center;
+align-items: center;
+gap: 10px;
 }
+
+/* INPUT (FORCE STYLE) */
+.notify-box input {
+all: unset;
+
+width: 260px;
+padding: 14px 16px;
+
+border-radius: 10px;
+border: 1px solid rgba(255,255,255,0.15);
+
+background: rgba(255,255,255,0.05);
+color: #fff;
+
+font-size: 14px;
+
+transition: all 0.25s ease;
+}
+
+.notify-box input::placeholder {
+color: rgba(255,255,255,0.4);
+}
+
+/* focus */
+.notify-box input:focus {
+border-color: rgba(255,255,255,0.35);
+box-shadow: 0 0 0 3px rgba(255,255,255,0.08);
+}
+
+/* BUTTON (FORCE STYLE) */
 .notify-box button {
-  backdrop-filter: blur(6px);
+all: unset;
+
+padding: 14px 18px;
+border-radius: 10px;
+
+background: #ffffff;
+color: #000;
+
+font-size: 14px;
+font-weight: 500;
+
+cursor: pointer;
+
+transition: all 0.2s ease;
 }
+
+/* hover */
+.notify-box button:hover {
+transform: translateY(-1px);
+box-shadow: 0 6px 20px rgba(255,255,255,0.15);
+}
+
+/* click */
+.notify-box button:active {
+transform: scale(0.95);
+}
+
