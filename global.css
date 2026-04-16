@@ -370,3 +370,60 @@ animation: thinking 1s infinite linear;
 0% { background-position: -200px; }
 100% { background-position: 200px; }
 }
+/* ===============================
+DEMO FIX (REQUIRED FOR JS)
+=============================== */
+
+.options-panel {
+margin-top: 10px;
+}
+
+/* MESSAGE ANIMATION (RESTORE) */
+.message {
+opacity: 0;
+transform: translateY(6px);
+animation: msgFade 0.25s ease forwards;
+}
+
+@keyframes msgFade {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* OPTION BUTTONS (RESTORE) */
+.option-btn {
+display: block;
+width: 100%;
+padding: 14px 60px;
+border-radius: 12px;
+background: rgba(255,255,255,0.06);
+border: 1px solid rgba(255,255,255,0.1);
+font-size: 13.5px;
+text-align: left;
+
+opacity: 0;
+transform: translateY(6px);
+animation: optionFade 0.3s ease forwards;
+}
+
+@keyframes optionFade {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+.option-btn.selected {
+background: #fff;
+color: #000;
+transform: scale(0.98);
+}
+
+/* THINKING (ENSURE VISIBLE) */
+.thinking {
+height: 36px;
+border-radius: 10px;
+margin: 6px 0;
+}
