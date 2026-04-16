@@ -3,7 +3,11 @@
    =============================== */
 
 * { box-sizing: border-box; }
-html { scroll-behavior: smooth; height: 100%; }
+
+html {
+  scroll-behavior: smooth;
+  height: 100%;
+}
 
 body {
   margin: 0;
@@ -32,14 +36,24 @@ body::before {
 }
 
 /* ===============================
-   CONTENT (CENTERED + WIDE)
+   FLUID SYSTEM
+   =============================== */
+
+:root {
+  --space-sm: clamp(10px, 1.5vw, 16px);
+  --space-md: clamp(16px, 2vw, 24px);
+  --space-lg: clamp(24px, 3vw, 40px);
+}
+
+/* ===============================
+   CONTENT
    =============================== */
 
 .content {
   width: 100%;
-  max-width: 1100px;
+  max-width: min(1100px, 92vw);
   margin: 0 auto;
-  padding: 0 24px;
+  padding: 0 var(--space-md);
 
   display: flex;
   flex-direction: column;
@@ -54,10 +68,6 @@ header {
   text-align: center;
   margin-top: clamp(80px, 12vh, 120px);
   padding: 0 20px;
-
-  max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
 }
 
 header h1 {
@@ -71,27 +81,20 @@ header h1 {
 }
 
 /* ===============================
-   SECTION REVEAL
+   SECTION
    =============================== */
 
 section {
   margin: clamp(60px, 8vh, 90px) 0;
   text-align: center;
-
   opacity: 0;
-  transform: translateY(30px) scale(0.98);
-  filter: blur(6px);
-
-  transition:
-    opacity 0.8s cubic-bezier(0.22,1,0.36,1),
-    transform 0.8s cubic-bezier(0.22,1,0.36,1),
-    filter 0.8s ease;
+  transform: translateY(20px);
+  transition: all 0.6s ease;
 }
 
 section.visible {
   opacity: 1;
-  transform: translateY(0) scale(1);
-  filter: blur(0);
+  transform: translateY(0);
 }
 
 /* ===============================
@@ -118,113 +121,68 @@ section.visible {
 }
 
 /* ===============================
-   DEMO CONTAINER
+   DEMO
    =============================== */
 
 .demo-container {
   width: 100%;
-  max-width: 1100px;
-  margin: 60px auto;
+  max-width: 1000px;
+  margin: 50px auto;
+  padding: clamp(16px, 2vw, 30px);
 
-  display: flex;
-  justify-content: center;
-
-  padding: 30px;
-  border-radius: 24px;
-
+  border-radius: 20px;
   border: 1px solid rgba(255,255,255,0.08);
   background: rgba(255,255,255,0.02);
 
-  box-shadow:
-    0 40px 100px rgba(0,0,0,0.7),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-
-  transition: transform 0.4s ease;
-}
-
-.demo-container.focus-mode {
-  transform: scale(1.015);
-}
-
-.demo-inner {
-  width: 100%;
-  max-width: 720px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.6);
 }
 
 /* ===============================
-   CLIENT PILLS
+   CLIENTS
    =============================== */
 
 .clients {
   display: flex;
-  align-items: center;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 12px;
 }
 
 .client {
-  position: relative;
-
   padding: 6px 14px;
   border-radius: 999px;
-  font-size: 14px;
-
+  font-size: 13px;
   background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.08);
-
   opacity: 0.5;
-  transform: scale(0.96);
-  filter: blur(0.5px);
-
-  transition: all 0.3s ease;
 }
 
 .client.active {
-  opacity: 1;
-  transform: scale(1);
-  filter: blur(0);
-
   background: #fff;
   color: #000;
-}
-
-.client.active::after {
-  content: "";
-  position: absolute;
-  inset: -2px;
-  border-radius: 999px;
-
-  border: 1px solid rgba(255,255,255,0.2);
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% { opacity: 0; transform: scale(0.98); }
-  50% { opacity: 0.4; transform: scale(1.02); }
-  100% { opacity: 0; transform: scale(0.98); }
+  opacity: 1;
 }
 
 /* ===============================
-   CHAT (FIXED + RECTANGLE)
+   CHAT AREA (FINAL FIXED SYSTEM)
    =============================== */
 
 .chat-area {
   display: flex;
   flex-direction: column;
 
-  height: 360px;
-  aspect-ratio: 5 / 4;
+  height: clamp(320px, 55vh, 520px);
 
-  border-radius: 18px;
-  padding: 18px;
+  border-radius: 16px;
+  padding: 16px;
 
   background: rgba(0,0,0,0.35);
   border: 1px solid rgba(255,255,255,0.06);
 
-  backdrop-filter: blur(20px);
-
   overflow: hidden;
 }
+
+/* ===============================
+   CHAT BOX
+   =============================== */
 
 .chat-box {
   flex: 1;
@@ -233,18 +191,19 @@ section.visible {
   gap: 10px;
 
   overflow-y: auto;
-  padding-right: 6px;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* ===============================
-   MESSAGES
+   MESSAGE
    =============================== */
 
 .message {
-  max-width: 70%;
+  max-width: 80%;
   padding: 10px 14px;
   border-radius: 16px;
-  transition: all 0.25s ease;
+  line-height: 1.4;
+  word-break: break-word;
 }
 
 .message.user {
@@ -259,56 +218,40 @@ section.visible {
 }
 
 /* ===============================
-   INPUT (PREMIUM)
+   INPUT
    =============================== */
 
 .input-area {
   display: flex;
-  gap: 10px;
-  margin-top: 14px;
+  gap: 8px;
+  margin-top: 10px;
 
   padding: 6px;
-  border-radius: 16px;
+  border-radius: 14px;
 
-  background: rgba(255,255,255,0.05);
-  border: 1px solid rgba(255,255,255,0.1);
+  background: rgba(15,15,18,0.9);
+  border-top: 1px solid rgba(255,255,255,0.06);
 
-  backdrop-filter: blur(14px);
+  position: sticky;
+  bottom: 0;
 
-  pointer-events: none;
+  backdrop-filter: blur(12px);
 }
 
 .input-area input {
   flex: 1;
-  padding: 12px;
+  padding: 10px;
   background: transparent;
   border: none;
   color: #fff;
-  font-size: 14px;
 }
 
 .input-area button {
-  padding: 10px 16px;
+  padding: 10px 14px;
   border-radius: 10px;
   border: none;
-
-  background: linear-gradient(#fff, #dcdcdc);
+  background: #fff;
   color: #000;
-
-  box-shadow:
-    0 2px 8px rgba(255,255,255,0.15),
-    inset 0 1px 0 rgba(255,255,255,0.6);
-
-  transition: all 0.2s ease;
-}
-
-.input-area button:active {
-  transform: scale(0.94);
-}
-
-.input-area.typing-active {
-  border-color: rgba(255,255,255,0.3);
-  box-shadow: 0 0 20px rgba(255,255,255,0.08);
 }
 
 /* ===============================
@@ -316,138 +259,39 @@ section.visible {
    =============================== */
 
 .option-btn {
-  padding: 14px;
-  border-radius: 14px;
-
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-
-  opacity: 0;
-  transform: translateY(10px);
-  animation: fadeUp 0.4s ease forwards;
-
-  transition: all 0.25s ease;
-}
-
-.option-btn:hover {
-  transform: translateY(-2px);
-}
-
-@keyframes fadeUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.best-glow {
-  box-shadow:
-    0 0 0 1px rgba(255,255,255,0.2),
-    0 0 20px rgba(255,255,255,0.15);
-}
-
-.tag {
-  font-size: 12px;
-  opacity: 0.5;
-  letter-spacing: 0.5px;
-}
-
-/* ===============================
-   THINKING
-   =============================== */
-
-.thinking {
-  height: 10px;
-  border-radius: 6px;
-
-  background: linear-gradient(
-    90deg,
-    rgba(255,255,255,0.05),
-    rgba(255,255,255,0.2),
-    rgba(255,255,255,0.05)
-  );
-
-  background-size: 200px 100%;
-  animation: shimmer 1.2s infinite linear;
-}
-
-@keyframes shimmer {
-  from { background-position: -200px; }
-  to { background-position: 200px; }
-}
-
-/* ===============================
-   DIVIDERS
-   =============================== */
-
-.section-divider {
-  width: 100%;
-  height: 1px;
-  margin: 60px 0;
-
-  background: linear-gradient(
-    to right,
-    transparent,
-    rgba(255,255,255,0.15),
-    transparent
-  );
-}
-
-/* ===============================
-   EMAIL
-   =============================== */
-
-.notify-box {
-  margin-top: 24px;
-
-  display: flex;
-  align-items: center;
-
-  padding: 10px;
-  border-radius: 20px;
-
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-
-  backdrop-filter: blur(16px);
-}
-
-.notify-box input {
-  flex: 1;
-  padding: 14px;
-  background: transparent;
-  border: none;
-  color: #fff;
-}
-
-.notify-box button {
-  padding: 12px 20px;
+  padding: 12px;
   border-radius: 12px;
-  border: none;
-
-  background: #fff;
-  color: #000;
+  background: rgba(255,255,255,0.06);
 }
 
 /* ===============================
-   FOOTER
+   MOBILE
    =============================== */
 
-.footer-global {
-  margin-top: auto;
-  padding: 50px 20px;
+@media (max-width: 768px) {
 
-  text-align: center;
+  .chat-area {
+    height: calc(var(--vh, 1vh) * 60);
+  }
 
-  max-width: 1100px;
-  margin-left: auto;
-  margin-right: auto;
+  .message {
+    max-width: 90%;
+    font-size: 13px;
+  }
 
-  opacity: 0.7;
+}
+
+@media (max-width: 420px) {
+
+  .message {
+    max-width: 92%;
+    font-size: 12.5px;
+  }
+
 }
 
 /* ===============================
-   SCROLL BAR
+   UTIL
    =============================== */
 
 .scroll-progress {
@@ -456,305 +300,6 @@ section.visible {
   left: 0;
   height: 2px;
   width: 0%;
-  z-index: 9999;
   background: #fff;
-}
-/* ===============================
-   FINAL FIXES (LAYOUT + OPTIONS)
-   =============================== */
-
-/* 🔥 WIDER + BETTER CHAT BOX */
-.chat-area {
-  height: 440px !important;
-  max-width: 820px !important;
-  margin: 0 auto;
-}
-
-/* 🔥 MAKE DEMO WIDER */
-.demo-inner {
-  max-width: 820px !important;
-}
-
-/* 🔥 OPTIONS PANEL (CHATGPT STYLE) */
-#optionsPanel {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-
-  margin-top: 10px;
-
-  align-items: flex-start; /* critical */
-}
-
-/* 🔥 OPTIONS DON'T FILL SCREEN */
-.option-btn {
-  max-width: 85%;
-  width: auto;
-}
-
-/* 🔥 BETTER SPACING INSIDE CHAT */
-.chat-box {
-  gap: 12px;
-}
-
-/* 🔥 SMOOTH VISUAL BALANCE */
-.message {
-  line-height: 1.4;
-}
-
-/* 🔥 FADE SUPPORT FOR LOOP RESET */
-.chat-box,
-#optionsPanel {
-  transition: opacity 0.6s ease;
-}
-.option-bubble {
-  padding: 12px 14px;
-  border-radius: 14px;
-  background: rgba(255,255,255,0.08);
-  border: 1px solid rgba(255,255,255,0.12);
-  max-width: 80%;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.option-bubble:hover {
-  transform: translateY(-2px);
-}
-
-.option-bubble.selected {
-  background: #0a84ff;
-  color: white;
-}
-
-.option-bubble .tag {
-  display: block;
-  font-size: 11px;
-  opacity: 0.5;
-  margin-bottom: 4px;
-}
-/* ===============================
-   PREMIUM MOBILE EXPERIENCE
-   =============================== */
-
-@media (max-width: 768px) {
-
-  /* Safe area (iPhone notch support) */
-  body {
-    padding-bottom: env(safe-area-inset-bottom);
-  }
-
-  .content {
-    padding: 0 14px;
-  }
-
-  .demo-container {
-    padding: 14px;
-    margin: 20px auto;
-    border-radius: 14px;
-  }
-
-  /* 🔥 Fluid chat height */
-  .chat-area {
-    height: calc(60vh - env(safe-area-inset-bottom));
-    min-height: 320px;
-  }
-
-  /* Smooth scroll */
-  .chat-box {
-    gap: 8px;
-    scroll-behavior: smooth;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  /* Messages */
-  .message {
-    max-width: 85%;
-    font-size: 13px;
-    padding: 10px 12px;
-    line-height: 1.5;
-  }
-
-  /* Clients pills wrap cleanly */
-  .clients {
-    flex-wrap: wrap;
-    gap: 6px;
-  }
-
-  .client {
-    font-size: 11px;
-    padding: 5px 10px;
-  }
-
-  /* ===============================
-     INPUT (PREMIUM MOBILE)
-     =============================== */
-
-  .input-area {
-    gap: 6px;
-    padding: 6px 8px;
-
-    border-radius: 12px;
-
-    backdrop-filter: blur(12px);
-    background: rgba(255,255,255,0.05);
-
-    /* 🔥 sticky feel */
-    position: sticky;
-    bottom: 0;
-  }
-
-  .input-area input {
-    font-size: 14px;
-    padding: 10px;
-  }
-
-  .input-area button {
-    padding: 10px 12px;
-    font-size: 13px;
-    border-radius: 10px;
-  }
-
-}
-
-
-/* ===============================
-   SMALL DEVICES (ULTRA POLISH)
-   =============================== */
-
-@media (max-width: 420px) {
-
-  .chat-area {
-    height: calc(55vh - env(safe-area-inset-bottom));
-  }
-
-  .message {
-    max-width: 90%;
-    font-size: 12.5px;
-  }
-
-  .input-area {
-    padding: 6px;
-  }
-
-  .input-area button {
-    padding: 8px 10px;
-  }
-
-}
-
-
-/* ===============================
-   TOUCH OPTIMIZATION
-   =============================== */
-
-button,
-.option-btn,
-.client {
-  -webkit-tap-highlight-color: transparent;
-}
-
-
-/* ===============================
-   SCROLLBAR CLEAN (MOBILE)
-   =============================== */
-
-.chat-box::-webkit-scrollbar {
-  width: 0;
-  height: 0;
-}
-
-
-/* ===============================
-   KEYBOARD SAFETY (ANDROID + iOS)
-   =============================== */
-
-@supports (height: 100dvh) {
-  .chat-area {
-    height: 60dvh;
-  }
-}
-/* ===============================
-   FINAL MOBILE + APP FEEL FIX
-   (APPENDED — NO REMOVALS)
-   =============================== */
-
-/* 🔥 Dynamic viewport fix (REAL mobile height) */
-.chat-area {
-  height: calc(var(--vh, 1vh) * 60) !important;
-}
-
-/* fallback if dvh supported */
-@supports (height: 100dvh) {
-  .chat-area {
-    height: 60dvh !important;
-  }
-}
-
-/* 🔥 prevent bottom cut */
-.demo-container {
-  margin-bottom: 60px;
-}
-
-/* 🔥 better scroll feel */
-.chat-box {
-  -webkit-overflow-scrolling: touch;
-  scroll-behavior: smooth;
-  padding-bottom: 12px;
-}
-
-/* 🔥 input stays stable (no floating glitch) */
-.input-area {
-  position: sticky;
-  bottom: 0;
-
-  background: rgba(15,15,18,0.9);
-  backdrop-filter: blur(14px);
-
-  border-top: 1px solid rgba(255,255,255,0.06);
-}
-
-/* 🔥 keyboard spacing safety */
-body {
-  padding-bottom: env(safe-area-inset-bottom);
-}
-
-/* 🔥 prevent layout jump on resize */
-html, body {
-  height: 100%;
-  overflow-x: hidden;
-}
-
-/* 🔥 smoother message stacking */
-.message {
-  word-break: break-word;
-}
-
-/* 🔥 improve small screen spacing */
-@media (max-width: 768px) {
-
-  .chat-area {
-    min-height: 320px;
-  }
-
-  .chat-box {
-    gap: 8px;
-  }
-
-  .message {
-    max-width: 88%;
-  }
-
-  .demo-container {
-    margin-bottom: 80px;
-  }
-
-}
-
-/* 🔥 ultra small devices */
-@media (max-width: 420px) {
-
-  .message {
-    max-width: 92%;
-  }
-
+  z-index: 9999;
 }
