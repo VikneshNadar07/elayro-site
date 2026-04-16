@@ -72,7 +72,8 @@ const footer = document.querySelector(".footer-global");
 if (footer) observer.observe(footer);
 
 /* =========================
-DEMO SYSTEM
+/* =========================
+DEMO SYSTEM (FIXED)
 ========================= */
 
 const chatBox = document.getElementById("chatBox");
@@ -82,11 +83,8 @@ const sendBtn = document.getElementById("sendBtn");
 const clientTabs = document.querySelectorAll(".clients .client");
 const demoContainer = document.querySelector(".demo-container");
 
-const demoEnabled = chatBox && optionsPanel && input && sendBtn;
+if (chatBox && optionsPanel && input && sendBtn) {
 
-if (demoEnabled) {
-
-```
 let activeClient = 0;
 let chats = { 0: [], 1: [] };
 
@@ -96,21 +94,7 @@ function updateTabs() {
   );
 }
 
-function renderChat(i) {
-  chatBox.innerHTML = "";
-  chats[i].forEach(m => {
-    const d = document.createElement("div");
-    d.className = `message ${m.type}`;
-    d.innerText = m.text;
-    chatBox.appendChild(d);
-  });
-
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
-
 function addMessage(text, type) {
-  chats[activeClient].push({ text, type });
-
   const d = document.createElement("div");
   d.className = `message ${type}`;
   d.innerText = text;
@@ -122,7 +106,6 @@ function addMessage(text, type) {
 async function switchClient(i) {
   activeClient = i;
   updateTabs();
-  renderChat(i);
   await wait(300);
 }
 
@@ -149,7 +132,8 @@ async function typeMessage(text) {
   addMessage(text, "user");
   input.value = "";
 
-  await wait(350);
+  await wait(300);
+  setFocus(false);
 }
 
 function getRandomStart() {
@@ -198,48 +182,34 @@ function getOptions(s) {
   }[s];
 }
 
-async function handleSilence() {
-  addMessage("...", "system");
-  await wait(700);
-  addMessage("Following up.", "system");
-  await wait(300);
-}
-
 async function showOptions(state) {
-
   optionsPanel.innerHTML = '<div class="thinking"></div>';
   await wait(600);
 
   const options = getOptions(state);
   optionsPanel.innerHTML = "";
 
-  const buttons = [];
-
   options.forEach((opt, i) => {
     const d = document.createElement("div");
     d.className = "option-btn";
     d.innerHTML = `<strong>${["Best","Strong","Safe","Casual"][i]}</strong><br>${opt}`;
     optionsPanel.appendChild(d);
-    buttons.push(d);
   });
 
   await wait(500);
 
-  buttons[0].classList.add("selected");
-
-  await wait(300);
-
-  optionsPanel.innerHTML = "";
   addMessage(options[0], "system");
+  optionsPanel.innerHTML = "";
 }
 
 async function runDemo() {
 
   while (true) {
 
-    chats = {0:[],1:[]};
     chatBox.innerHTML = "";
-    optionsPanel.innerHTML = "";
+
+    addMessage("Starting conversation...", "system");
+    await wait(1000);
 
     let clients = {
       0:{state:getRandomStart(),done:false,steps:0,max:5},
@@ -251,19 +221,14 @@ async function runDemo() {
     while (!clients[0].done || !clients[1].done) {
 
       active = active === 0 ? 1 : 0;
-
       if (clients[active].done) continue;
 
       await switchClient(active);
 
       const state = clients[active].state;
 
-      if (state === "ghosting") {
-        await handleSilence();
-      } else {
-        await typeMessage(getMsg(state));
-        await showOptions(state);
-      }
+      await typeMessage(getMsg(state));
+      await showOptions(state);
 
       clients[active].steps++;
 
@@ -272,9 +237,7 @@ async function runDemo() {
       if (next === "won" || next === "lost" || clients[active].steps >= clients[active].max) {
 
         const win = next === "won" || state === "engaged";
-
         addMessage(win ? "Deal closed." : "Conversation lost.", "system");
-        addMessage(win ? "Closed with strong alignment." : "Lost due to drop-off.", "system");
 
         clients[active].done = true;
 
@@ -284,16 +247,12 @@ async function runDemo() {
     }
 
     await wait(2000);
-    addMessage("Starting new conversations...", "system");
+    addMessage("Restarting...", "system");
     await wait(1500);
-
-    chatBox.innerHTML = "";
-    optionsPanel.innerHTML = "";
   }
 }
 
 runDemo();
-```
 
 }
 
