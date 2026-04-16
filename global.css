@@ -132,7 +132,7 @@ section.visible {
   padding: 28px;
 
   border-radius: 18px;
-  border: 1px solid rgba(255,255,255,0.08);
+  border: 0.8px solid rgba(255,255,255,0.06);
   background: rgba(255,255,255,0.02);
 
   box-shadow: 0 30px 80px rgba(0,0,0,0.6);
@@ -146,8 +146,10 @@ section.visible {
    =============================== */
 
 /*
-  Changes:
+  Changes applied:
   - Chat container is fixed in height (does not grow with messages)
+  - Width is significantly larger than height (landscape)
+  - Border thickness reduced
   - Messages scroll inside .chat-box
   - Options are a vertical list (one after another)
   - Input is pinned to bottom and never overlaps messages
@@ -160,22 +162,22 @@ section.visible {
   box-sizing: border-box;
 
   width: 100%;
-  max-width: 1200px;   /* wider chat box */
-  height: 420px;       /* fixed height for landscape feel */
-  min-height: 320px;
+  max-width: 1400px;   /* wider chat box to ensure width > height */
+  height: 320px;       /* shorter height for landscape feel */
+  min-height: 260px;
   flex-shrink: 0;
 
-  border-radius: 16px;
-  border: 1px solid rgba(255,255,255,0.06);
+  border-radius: 12px;
+  border: 0.7px solid rgba(255,255,255,0.06); /* thinner border */
 
-  padding: 14px;
+  padding: 12px;
 
-  background: rgba(0,0,0,0.35);
+  background: rgba(0,0,0,0.34);
 
   overflow: hidden;
   box-shadow:
-    0 20px 60px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.04);
+    0 18px 48px rgba(0,0,0,0.45),
+    inset 0 1px 0 rgba(255,255,255,0.03);
 }
 
 /* chat-box is the scrollable area for messages and options */
@@ -183,11 +185,11 @@ section.visible {
   flex: 1 1 auto;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
   overflow-y: auto;
   padding-right: 8px; /* room for scrollbar */
   scroll-behavior: smooth;
-  padding-bottom: 110px; /* ensure input doesn't cover last items */
+  padding-bottom: 96px; /* room for pinned input */
 }
 
 /* ===============================
@@ -196,31 +198,27 @@ section.visible {
 
 .clients {
   display: flex;
-  gap: 10px;
+  gap: 8px;
   margin-bottom: 6px;
   flex-wrap: wrap;
 }
 
 .client {
-  padding: 6px 12px;
+  padding: 6px 10px;
   font-size: 12px;
   border-radius: 999px;
 
-  background: rgba(255,255,255,0.06);
-  border: 1px solid rgba(255,255,255,0.1);
-  transition: all 0.18s ease;
+  background: rgba(255,255,255,0.05);
+  border: 0.7px solid rgba(255,255,255,0.06);
+  transition: all 0.16s ease;
 }
 
-.client:hover { opacity: 0.9; transform: translateY(-1px); }
+.client:hover { opacity: 0.95; transform: translateY(-1px); }
 
 .client.active {
   background: #fff;
   color: #000;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.35);
-}
-
-.client.add {
-  opacity: 0.6;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.18);
 }
 
 /* ===============================
@@ -229,12 +227,12 @@ section.visible {
 
 /* keep messages constrained so they don't push layout */
 .message {
-  max-width: 55%;        /* narrower bubbles for horizontal rhythm */
+  max-width: 48%;        /* narrower bubbles for horizontal rhythm */
   padding: 10px 14px;
-  border-radius: 16px;
+  border-radius: 14px;
   word-break: break-word;
   line-height: 1.35;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.32);
   background-clip: padding-box;
   overflow-wrap: anywhere;
 }
@@ -245,38 +243,37 @@ section.visible {
   word-break: break-word;
 }
 
-/* limit message height visually and allow internal scroll if needed */
-.message {
-  max-height: calc(100vh - 220px);
-  overflow: visible;
-}
+/* cap message height so it doesn't push layout; internal content will wrap */
+.message { max-height: 220px; overflow: auto; }
 
 /* bubble styles */
 .message.user {
   align-self: flex-end;
   background: linear-gradient(180deg,#0a84ff,#0066d6);
-  color: white;
+  color: #fff;
 }
 
 .message.system {
   align-self: flex-start;
-  background: rgba(255,255,255,0.04);
-  color: #e9e9eb;
+  background: rgba(255,255,255,0.03);
+  color: #eaeaec;
 }
 
-/* On very wide screens, keep bubbles even tighter */
-@media (min-width: 1200px) {
-  .message { max-width: 45%; }
+/* responsive adjustments */
+@media (min-width: 1400px) {
+  .message { max-width: 40%; }
 }
 
-/* On tablets, allow a bit more width */
+@media (max-width: 1024px) {
+  .message { max-width: 60%; }
+}
+
 @media (max-width: 768px) {
-  .message { max-width: 70%; font-size: 13px; }
+  .message { max-width: 72%; font-size: 13px; }
 }
 
-/* On mobile, bubbles can expand for readability */
 @media (max-width: 420px) {
-  .message { max-width: 85%; font-size: 13px; }
+  .message { max-width: 88%; font-size: 13px; }
 }
 
 /* ===============================
@@ -287,7 +284,7 @@ section.visible {
 #optionsPanel {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   margin-top: 6px;
   align-items: stretch;
@@ -297,22 +294,22 @@ section.visible {
 .option-btn {
   display: block;
   width: 100%;
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-radius: 10px;
 
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  border: 0.7px solid rgba(255,255,255,0.05);
 
   font-size: 14px;
   text-align: left;
-  transition: background 0.18s ease, transform 0.08s ease;
+  transition: background 0.14s ease, transform 0.06s ease;
   cursor: pointer;
-  min-height: 48px;
+  min-height: 44px;
 }
 
 /* visual focus/hover states */
 .option-btn:hover {
-  background: rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.07);
   transform: translateY(-1px);
 }
 
@@ -320,12 +317,11 @@ section.visible {
   background: #fff;
   color: #000;
   transform: scale(0.995);
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.12);
 }
 
-/* ensure keyboard focus is visible */
 .option-btn:focus {
-  outline: 2px solid rgba(10,132,255,0.25);
+  outline: 2px solid rgba(10,132,255,0.18);
   outline-offset: 2px;
 }
 
@@ -333,22 +329,21 @@ section.visible {
    INPUT (PINNED / STICKY)
    =============================== */
 
-/* Keep input visible and pinned to the bottom of the chat-area */
 .input-area {
   position: sticky;
-  bottom: 10px; /* inside chat-area padding */
+  bottom: 12px;
   margin-top: 8px;
   display: flex;
   gap: 10px;
   align-items: center;
 
   padding: 10px;
-  border-radius: 14px;
+  border-radius: 12px;
 
-  background: rgba(255,255,255,0.04);
-  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.03);
+  border: 0.7px solid rgba(255,255,255,0.05);
 
-  backdrop-filter: blur(12px);
+  backdrop-filter: blur(10px);
 
   opacity: 1;
   pointer-events: auto;
@@ -364,7 +359,7 @@ section.visible {
 
 .input-area input {
   flex: 1;
-  padding: 12px 14px;
+  padding: 10px 12px;
   border-radius: 10px;
   border: none;
   background: transparent;
@@ -374,56 +369,48 @@ section.visible {
 }
 
 .input-area button {
-  padding: 10px 16px;
+  padding: 9px 14px;
   border-radius: 10px;
   border: none;
   background: #fff;
   color: #000;
   cursor: pointer;
-  transition: transform 0.12s ease, background 0.18s ease;
+  transition: transform 0.12s ease, background 0.14s ease;
 }
 
-.input-area button:active {
-  transform: scale(0.96);
-}
+.input-area button:active { transform: scale(0.96); }
 
 /* ===============================
    MOBILE RESPONSIVENESS
    =============================== */
 
-@media (max-width: 1024px) {
-  .demo-container { padding: 20px; }
-  .chat-area { max-width: 95vw; height: 420px; }
-  .option-btn { min-height: 46px; font-size: 13.5px; }
+@media (max-width: 1200px) {
+  .chat-area { max-width: 96vw; height: 300px; }
+  .chat-box { padding-bottom: 96px; }
+  .option-btn { min-height: 44px; font-size: 13.5px; }
 }
 
 @media (max-width: 768px) {
-  /* keep landscape feel but more compact on tablets */
   .chat-area {
-    height: 60vh;
-    min-height: 360px;
+    height: 56vh;
+    min-height: 300px;
     max-width: 98vw;
-    padding: 12px;
+    padding: 10px;
   }
-
-  .chat-box { padding-bottom: 120px; }
-
-  #optionsPanel { gap: 10px; }
-  .option-btn { min-height: 48px; font-size: 13px; text-align: left; }
-  .message { max-width: 90%; }
+  .chat-box { padding-bottom: 110px; }
+  .option-btn { min-height: 48px; font-size: 13px; }
+  .message { max-width: 78%; }
 }
 
 @media (max-width: 420px) {
-  /* mobile: stack options and allow chat to fill most of screen width */
   .chat-area {
     height: 78vh;
     min-height: 300px;
     max-width: 98vw;
     padding: 10px;
   }
-
   #optionsPanel { gap: 8px; }
-  .option-btn { width: 100%; min-height: 48px; font-size: 13px; text-align: left; padding-left: 14px; }
+  .option-btn { width: 100%; min-height: 48px; font-size: 13px; text-align: left; padding-left: 12px; }
   .message { max-width: 92%; font-size: 13px; }
   .input-area { bottom: 8px; padding: 8px; }
 }
@@ -432,38 +419,24 @@ section.visible {
    SCROLLBAR + POLISH
    =============================== */
 
-.chat-box::-webkit-scrollbar {
-  width: 8px;
-}
-
-.chat-box::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.12);
-  border-radius: 10px;
-}
-
-.chat-box::-webkit-scrollbar-track {
-  background: transparent;
-}
+.chat-box::-webkit-scrollbar { width: 8px; }
+.chat-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.12); border-radius: 10px; }
+.chat-box::-webkit-scrollbar-track { background: transparent; }
 
 /* subtle message entry animation */
 .message {
   opacity: 0;
   transform: translateY(6px);
-  animation: msgFade 0.32s ease forwards;
+  animation: msgFade 0.28s ease forwards;
 }
 
 @keyframes msgFade {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.message.user { animation-delay: 0.04s; }
-.message.system { animation-delay: 0.08s; }
+.message.user { animation-delay: 0.03s; }
+.message.system { animation-delay: 0.06s; }
 
 /* small hover polish for clients and options */
-.client, .option-btn {
-  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
-}
+.client, .option-btn { transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease; }
 ```
