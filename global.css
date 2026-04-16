@@ -329,3 +329,41 @@ section.visible {
   background: #fff;
   z-index: 9999;
 }
+/* ===============================
+   CHAT RECTANGLE FIX (APPENDED)
+   =============================== */
+
+/* Ensure parent allows width expansion */
+.demo-container {
+  width: 100%;
+  max-width: 1100px; /* slightly wider */
+}
+
+/* 🔥 FORCE RECTANGULAR CHAT (WIDER THAN HEIGHT) */
+.chat-area {
+
+  /* maintain ratio: width = 1.2 × height */
+  aspect-ratio: 1.2 / 1;
+
+  /* allow expansion */
+  width: 100%;
+  max-width: 950px;
+
+  /* prevent vertical stretching */
+  height: auto !important;
+  max-height: none !important;
+
+}
+
+/* Ensure chat box fills correctly */
+.chat-box {
+  flex: 1;
+  overflow-y: auto;
+}
+
+/* Prevent inner content from forcing vertical growth */
+.options-panel,
+#optionsPanel {
+  max-height: 40%;
+  overflow-y: auto;
+}
