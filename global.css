@@ -1,3 +1,6 @@
+Here’s the **full updated CSS code** with the fixes applied — you can copy‑paste this directly to replace your current stylesheet. It keeps the chat area stable, prevents resizing based on message length, and adapts properly to mobile screens so the chat box always fills the viewport.
+
+```css
 /* ===============================
    RESET + BASE
    =============================== */
@@ -141,7 +144,7 @@ section.visible {
 }
 
 /* ===============================
-   CHAT (FINAL RECTANGLE)
+   CHAT (FIXED + RESPONSIVE)
    =============================== */
 
 .chat-area {
@@ -151,7 +154,10 @@ section.visible {
   width: 100%;
   max-width: 860px;
 
-  height: 420px;
+  /* ✅ Stable height */
+  min-height: 420px;
+  height: 420px; /* desktop default */
+  flex-shrink: 0; /* prevent collapsing */
 
   border-radius: 16px;
   border: 1px solid rgba(255,255,255,0.06);
@@ -159,6 +165,19 @@ section.visible {
   padding: 14px;
 
   background: rgba(0,0,0,0.35);
+
+  /* ✅ Stability */
+  overflow: hidden;
+}
+
+/* ✅ Chat box fills available space */
+.chat-box {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  overflow-y: auto;
+  scroll-behavior: smooth;
 }
 
 /* ===============================
@@ -187,18 +206,6 @@ section.visible {
 
 .client.add {
   opacity: 0.6;
-}
-
-/* ===============================
-   CHAT BOX
-   =============================== */
-
-.chat-box {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  overflow-y: auto;
 }
 
 /* ===============================
@@ -295,15 +302,17 @@ section.visible {
 }
 
 /* ===============================
-   MOBILE
+   MOBILE RESPONSIVENESS
    =============================== */
 
 @media (max-width: 768px) {
   .message { max-width: 90%; font-size: 13px; }
+  .chat-area { height: 70vh; min-height: 360px; }
 }
 
 @media (max-width: 420px) {
   .message { max-width: 92%; font-size: 12.5px; }
+  .chat-area { height: 80vh; min-height: 320px; }
 }
 
 /* ===============================
@@ -319,6 +328,7 @@ section.visible {
   background: #fff;
   z-index: 9999;
 }
+
 /* ===============================
    PREMIUM UI POLISH (APPEND ONLY)
    =============================== */
@@ -372,46 +382,4 @@ section.visible {
 .chat-area {
   box-shadow:
     0 20px 60px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.04);
-}
-
-/* 🔥 input glass refinement */
-.input-area {
-  backdrop-filter: blur(14px);
-}
-
-/* 🔥 send button micro-interaction */
-.input-area button {
-  transition: transform 0.15s ease, background 0.2s ease;
-}
-
-.input-area button:active {
-  transform: scale(0.96);
-}
-
-/* 🔥 client pills feel interactive */
-.client {
-  transition: all 0.2s ease;
-}
-
-.client:hover {
-  opacity: 0.8;
-}
-
-.client.active {
-  box-shadow: 0 4px 12px rgba(255,255,255,0.15);
-}
-
-/* 🔥 scrollbar (clean minimal) */
-.chat-box::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chat-box::-webkit-scrollbar-thumb {
-  background: rgba(255,255,255,0.15);
-  border-radius: 10px;
-}
-
-.chat-box::-webkit-scrollbar-track {
-  background: transparent;
-}
+    inset 0 1px 0 rgba(
