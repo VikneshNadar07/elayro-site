@@ -22,12 +22,11 @@ if (href === currentPage) link.classList.add("active");
 link.addEventListener("click", (e) => {
 if (!href || href.startsWith("#")) return;
 
-
 e.preventDefault();
 document.body.classList.remove("loaded");
 
 setTimeout(() => {
-  window.location.href = href;
+window.location.href = href;
 }, 250);
 
 });
@@ -83,7 +82,13 @@ const input = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 const clientTabs = document.querySelectorAll(".clients .client");
 
-if (chatBox && optionsPanel && input && sendBtn) {
+if (
+chatBox &&
+optionsPanel &&
+input &&
+sendBtn &&
+document.querySelector(".demo-container")
+) {
 
 let activeClient = 0;
 let chats = { 0: [], 1: [] };
@@ -215,7 +220,7 @@ if (m.includes("high")) return [
 
 if (m.includes("think")) return [
 "Makes sense — take your time, I’m here if anything comes up.",
-"All good — happy to pick this up whenever you’re ready.",
+"All good — happy to pick this up whenever you're ready.",
 "No rush — we can continue whenever it works for you.",
 "Sure — we can reconnect later."
 ];
@@ -262,22 +267,18 @@ for (let i = 0; i < 4; i++) {
 const d = document.createElement("div");
 d.className = "option-bubble";
 
-d.innerHTML = `
-  <span class="tag">${["Best","Strong","Safe","Casual"][i]}</span>
-  ${options[i]}
-`;
+d.innerHTML = `  <span class="tag">${["Best","Strong","Safe","Casual"][i]}</span>
+  ${options[i]}`;
 
 optionsPanel.appendChild(d);
 await wait(200);
-
 }
 
 await wait(1200);
 
 optionsPanel.innerHTML = "";
 
-const selected = options[0];
-addMessage(selected, "system");
+addMessage(options[0], "system");
 
 await wait(700);
 }
@@ -314,48 +315,47 @@ let done = [false, false];
 
 while (!done[0] || !done[1]) {
 
-  for (let i = 0; i < 2; i++) {
+for (let i = 0; i < 2; i++) {
 
-    if (done[i]) continue;
+```
+if (done[i]) continue;
 
-    await switchClient(i);
+await switchClient(i);
 
-    const flow = flows[i];
-    const batch = 2;
+const flow = flows[i];
 
-    for (let b = 0; b < batch; b++) {
+if (steps[i] >= flow.messages.length) continue;
 
-      if (steps[i] >= flow.messages.length) continue;
+const msg = flow.messages[steps[i]];
 
-      const msg = flow.messages[steps[i]];
+if (msg === null) {
+  await wait(2500);
+} else {
+  await typeMessage(msg);
+  await showOptions(msg);
+}
 
-      if (msg === null) {
-        await wait(2500);
-      } else {
-        await typeMessage(msg);
-        await showOptions(msg);
-      }
+steps[i]++;
 
-      steps[i]++;
+if (steps[i] === flow.messages.length) {
+  await cinematicClose(flow.result);
+  done[i] = true;
+}
+```
 
-      if (steps[i] === flow.messages.length) {
-        await cinematicClose(flow.result);
-        done[i] = true;
-        break;
-      }
-    }
-  }
+}
 }
 
 await wait(3000);
 
 chatBox.innerHTML = "";
 optionsPanel.innerHTML = "";
-
 }
 }
 
+setTimeout(() => {
 runDemo();
+}, 300);
 }
 
 /* =========================
@@ -369,10 +369,8 @@ const notifyWrapper = document.querySelector(".notify-wrapper");
 
 if (notifyBtn && notifyEmail && notifySuccess) {
 
-// start disabled
 notifyBtn.classList.add("disabled");
 
-// live validation
 notifyEmail.addEventListener("input", () => {
 const val = notifyEmail.value.trim();
 
@@ -380,18 +378,17 @@ notifyEmail.classList.remove("valid", "invalid");
 notifySuccess.classList.remove("show");
 
 if (!val) {
-  notifyBtn.classList.add("disabled");
-  return;
+notifyBtn.classList.add("disabled");
+return;
 }
 
 if (val.includes("@") && val.includes(".")) {
-  notifyEmail.classList.add("valid");
-  notifyBtn.classList.remove("disabled");
+notifyEmail.classList.add("valid");
+notifyBtn.classList.remove("disabled");
 } else {
-  notifyEmail.classList.add("invalid");
-  notifyBtn.classList.add("disabled");
+notifyEmail.classList.add("invalid");
+notifyBtn.classList.add("disabled");
 }
-
 });
 
 notifyBtn.addEventListener("click", async () => {
@@ -404,39 +401,38 @@ notifyBtn.innerText = "Adding...";
 notifyBtn.disabled = true;
 
 try {
-  const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email })
-  });
+const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
+method: "POST",
+headers: { "Content-Type": "application/json" },
+body: JSON.stringify({ email })
+});
 
-  const data = await res.json().catch(() => ({}));
+const data = await res.json().catch(() => ({}));
 
-  if (data.status === "exists") {
-    notifySuccess.innerText = "You're already on the list";
-    notifyEmail.classList.add("valid");
-  } else {
-    notifySuccess.innerText = "You're in ✨";
-    notifyWrapper.classList.add("success");
-    notifyEmail.value = "";
-  }
+if (data.status === "exists") {
+notifySuccess.innerText = "You're already on the list";
+notifyEmail.classList.add("valid");
+} else {
+notifySuccess.innerText = "You're in ✨";
+notifyWrapper.classList.add("success");
+notifyEmail.value = "";
+}
 
-  notifySuccess.classList.add("show");
+notifySuccess.classList.add("show");
 
-  notifyBtn.innerText = "Added ✓";
-  notifyBtn.classList.remove("disabled");
-  notifyBtn.classList.add("success");
+notifyBtn.innerText = "Added ✓";
+notifyBtn.classList.remove("disabled");
+notifyBtn.classList.add("success");
 
 } catch {
 
-  notifySuccess.innerText = "Network error — try again";
-  notifySuccess.classList.add("show");
+notifySuccess.innerText = "Network error — try again";
+notifySuccess.classList.add("show");
 
-  notifyBtn.innerText = "Retry";
-  notifyBtn.disabled = false;
-  notifyBtn.classList.remove("disabled");
+notifyBtn.innerText = "Retry";
+notifyBtn.disabled = false;
+notifyBtn.classList.remove("disabled");
 }
-
 });
 
 notifyEmail.addEventListener("keypress", (e) => {
@@ -445,3 +441,4 @@ if (e.key === "Enter") notifyBtn.click();
 
 }
 
+});
