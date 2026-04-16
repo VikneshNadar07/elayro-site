@@ -63,7 +63,10 @@ if (entry.isIntersecting) entry.target.classList.add("visible");
 });
 }, { threshold: 0.2 });
 
-document.querySelectorAll("section").forEach(s => observer.observe(s));
+document.querySelectorAll("section").forEach(s => {
+  s.classList.add("animate"); // 👈 add this
+  observer.observe(s);
+});
 
 const footer = document.querySelector(".footer-global");
 if (footer) observer.observe(footer);
