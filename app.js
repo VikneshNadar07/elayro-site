@@ -239,36 +239,48 @@ return [
 
 async function showOptions(msg) {
 
+// small natural delay after user message
+await wait(300);
+
+// thinking ONLY here (correct timing)
 optionsPanel.innerHTML = '<div class="thinking"></div>';
-await wait(1200);
+
+await wait(900);
 
 optionsPanel.innerHTML = "";
 
 const options = getOptions(msg);
 
+// show options
 for (let i = 0; i < 4; i++) {
 const d = document.createElement("div");
 d.className = "option-bubble";
 
+```
 d.innerHTML = `
   <span class="tag">${["Best","Strong","Safe","Casual"][i]}</span>
   ${options[i]}
 `;
 
 optionsPanel.appendChild(d);
-await wait(280);
+await wait(200);
+```
 
 }
 
-await wait(1400);
+// slight pause before selecting
+await wait(1200);
 
-optionsPanel.innerHTML = '<div class="thinking"></div>';
+optionsPanel.innerHTML = "";
+
+// NO extra thinking here anymore ❌ removed
 
 const selected = options[0];
 addMessage(selected, "system");
 
-await wait(900);
+await wait(700);
 }
+
 
 async function cinematicClose(result) {
 
