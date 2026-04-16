@@ -1,6 +1,6 @@
 /* =========================
-   ELAYRO FINAL APP.JS
-   (FULL PROJECT + CINEMATIC CLOSE)
+   ELAYRO GLOBAL APP.JS
+   (FINAL TRUE MERGE — COMPLETE SYSTEM)
 ========================= */
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -8,21 +8,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const wait = (t) => new Promise(res => setTimeout(res, t));
 
   /* =========================
-     NAV
+     GLOBAL NAV
   ========================= */
 
   const navLinks = document.querySelectorAll(".nav-minimal a");
-  let currentPage = window.location.pathname.split("/").pop() || "index.html";
+
+  let currentPage = window.location.pathname.split("/").pop();
+  if (!currentPage) currentPage = "index.html";
 
   navLinks.forEach(link => {
     const href = link.getAttribute("href");
+
     if (href === currentPage) link.style.opacity = "0.4";
 
     link.addEventListener("click", (e) => {
       if (!href || href.startsWith("#")) return;
+
       e.preventDefault();
       document.body.classList.add("fade-out");
-      setTimeout(() => window.location.href = href, 300);
+
+      setTimeout(() => {
+        window.location.href = href;
+      }, 300);
     });
   });
 
@@ -39,16 +46,17 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   /* =========================
-     FADE
+     FADE-IN
   ========================= */
 
-  const observer = new IntersectionObserver(entries => {
+  const observer = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add("visible");
     });
   }, { threshold: 0.2 });
 
   document.querySelectorAll("section").forEach(s => observer.observe(s));
+
   const footer = document.querySelector(".footer-global");
   if (footer) observer.observe(footer);
 
@@ -61,283 +69,298 @@ document.addEventListener("DOMContentLoaded", () => {
   const input = document.getElementById("userInput");
   const sendBtn = document.getElementById("sendBtn");
   const clientTabs = document.querySelectorAll(".clients .client");
+  const demoContainer = document.querySelector(".demo-container");
 
-  if (!chatBox || !optionsPanel || !input || !sendBtn) return;
+  const demoEnabled = chatBox && optionsPanel && input && sendBtn;
 
-  let activeClient = 0;
-  let chats = { 0: [], 1: [] };
+  if (demoEnabled) {
 
-  function updateTabs() {
-    clientTabs.forEach((t, i) =>
-      t.classList.toggle("active", i === activeClient)
-    );
-  }
+    let activeClient = 0;
+    let chats = { 0: [], 1: [] };
 
-  function renderChat(i) {
-    chatBox.innerHTML = "";
-    chats[i].forEach(m => {
-      const d = document.createElement("div");
-      d.className = `message ${m.type}`;
-      d.innerText = m.text;
-      chatBox.appendChild(d);
-    });
-    chatBox.scrollTop = chatBox.scrollHeight;
-  }
-
-  function addMessage(text, type, extraClass = "") {
-    chats[activeClient].push({ text, type });
-
-    const d = document.createElement("div");
-    d.className = `message ${type} ${extraClass}`;
-    d.innerText = text;
-
-    chatBox.appendChild(d);
-
-    chatBox.scrollTo({
-      top: chatBox.scrollHeight,
-      behavior: "smooth"
-    });
-  }
-
-  async function switchClient(i) {
-    activeClient = i;
-    updateTabs();
-    renderChat(i);
-    await wait(800);
-  }
-
-  async function typeMessage(text) {
-    input.value = "";
-
-    for (let i = 0; i < text.length; i++) {
-      input.value += text[i];
-      await wait(35 + Math.random() * 40);
+    function updateTabs() {
+      clientTabs.forEach((t, i) =>
+        t.classList.toggle("active", i === activeClient)
+      );
     }
 
-    sendBtn.classList.add("press");
-    await wait(150);
-    sendBtn.classList.remove("press");
-
-    addMessage(text, "user");
-    input.value = "";
-
-    await wait(900);
-  }
-
-  /* =========================
-     FLOWS
-  ========================= */
-
-  const flows = [
-    {
-      result: "win",
-      messages: [
-        "Hey, can you share pricing?",
-        "What exactly is included in this?",
-        "Is there flexibility depending on what we need?",
-        "That sounds good actually",
-        "Let’s move ahead"
-      ]
-    },
-    {
-      result: "lost",
-      messages: [
-        "What all does this cover?",
-        "Hmm this feels a bit high for us",
-        "Let me think about it",
-        null,
-        null
-      ]
-    }
-  ];
-
-  /* =========================
-     RESPONSES (UNCHANGED)
-  ========================= */
-
-  function getOptions(msg) {
-
-    if (!msg) {
-      return [
-        "Just checking in — does this still make sense for you?",
-        "Following up here — happy to continue whenever you're ready.",
-        "Wanted to check if this is still something you're considering.",
-        "Hey — just circling back on this."
-      ];
-    }
-
-    const m = msg.toLowerCase();
-
-    if (m.includes("pricing")) return [
-      "Here’s a clear breakdown so you know exactly what to expect and how it’s structured.",
-      "Let me walk you through pricing so it’s easy to understand.",
-      "I’ll share the pricing details clearly so you can evaluate properly.",
-      "I can quickly explain how pricing works here."
-    ];
-
-    if (m.includes("included") || m.includes("cover")) return [
-      "Great question — I’ll break down exactly what’s included so everything is clear end-to-end.",
-      "Let me outline what’s included step by step so there’s no confusion.",
-      "I’ll walk you through everything that’s part of this so it’s clear.",
-      "Yeah — I’ll quickly explain what’s included so it’s easy to follow."
-    ];
-
-    if (m.includes("flex")) return [
-      "Yes — we can definitely adjust this based on what works best for you.",
-      "There’s flexibility here — we can tailor it to your needs.",
-      "We can adapt this depending on your priorities.",
-      "Yeah, we can tweak this a bit to fit better."
-    ];
-
-    if (m.includes("high")) return [
-      "I understand — we can adjust the scope slightly to make this more comfortable.",
-      "That’s fair — let’s see where we can optimize without losing value.",
-      "We can definitely refine this to better match your budget.",
-      "Got it — we can tweak things a bit to bring it down."
-    ];
-
-    if (m.includes("think")) return [
-      "Makes sense — take your time, I’m here if anything comes up.",
-      "All good — happy to pick this up whenever you’re ready.",
-      "No rush — we can continue whenever it works for you.",
-      "Sure — we can reconnect later."
-    ];
-
-    if (m.includes("sounds good")) return [
-      "Perfect — I’ll take this forward and get everything aligned.",
-      "Great — I’ll move ahead with the next steps.",
-      "Nice — I’ll start putting this into action.",
-      "Awesome — let’s move forward with this."
-    ];
-
-    if (m.includes("move ahead")) return [
-      "Perfect — I’ll lock this in and get everything started right away.",
-      "Great, I’ll finalize this and move things forward.",
-      "We’re good to go — I’ll take it from here.",
-      "Nice — I’ll get everything set up."
-    ];
-
-    return [
-      "Got it — I’ll take this forward clearly.",
-      "Understood — let’s continue from here.",
-      "Makes sense — I’ll guide this ahead.",
-      "Alright — we’ll move step by step."
-    ];
-  }
-
-  async function showOptions(msg) {
-
-    optionsPanel.innerHTML = '<div class="thinking"></div>';
-    await wait(1200);
-
-    optionsPanel.innerHTML = "";
-
-    const options = getOptions(msg);
-
-    for (let i = 0; i < 4; i++) {
-      const d = document.createElement("div");
-      d.className = "option-bubble";
-
-      d.innerHTML = `
-        <span class="tag">${["Best","Strong","Safe","Casual"][i]}</span>
-        ${options[i]}
-      `;
-
-      optionsPanel.appendChild(d);
-      await wait(280);
-    }
-
-    await wait(1400);
-
-    optionsPanel.innerHTML = "";
-
-    const selected = options[0];
-    addMessage(selected, "system");
-
-    await wait(900);
-  }
-
-  /* =========================
-     🎬 CINEMATIC CLOSE
-  ========================= */
-
-  async function cinematicClose(result) {
-
-    await wait(800);
-
-    addMessage("Processing...", "system");
-
-    await wait(1200);
-
-    if (result === "win") {
-      addMessage("🟢 Deal closed successfully", "system", "win-glow");
-      await wait(400);
-      addMessage("Closed with strong alignment and clarity.", "system");
-    } else {
-      addMessage("🔴 Conversation lost", "system", "lose-glow");
-      await wait(400);
-      addMessage("Lost due to drop in engagement and momentum.", "system");
-    }
-  }
-
-  /* =========================
-     LOOP
-  ========================= */
-
-  async function runDemo() {
-
-    while (true) {
-
-      chats = { 0: [], 1: [] };
+    function renderChat(i) {
       chatBox.innerHTML = "";
+      chats[i].forEach(m => {
+        const d = document.createElement("div");
+        d.className = `message ${m.type}`;
+        d.innerText = m.text;
+        chatBox.appendChild(d);
+      });
+
+      requestAnimationFrame(() => {
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+    }
+
+    function addMessage(text, type) {
+      chats[activeClient].push({ text, type });
+
+      const d = document.createElement("div");
+      d.className = `message ${type}`;
+      d.innerText = text;
+
+      chatBox.appendChild(d);
+
+      requestAnimationFrame(() => {
+        chatBox.scrollTop = chatBox.scrollHeight;
+      });
+    }
+
+    async function switchClient(i) {
+      activeClient = i;
+      updateTabs();
+      renderChat(i);
+      await wait(400);
+    }
+
+    function setFocus(state) {
+      if (demoContainer) {
+        demoContainer.classList.toggle("focus-mode", state);
+      }
+    }
+
+    async function typeMessage(text) {
+      setFocus(true);
+
+      input.value = "";
+
+      for (let i = 0; i < text.length; i++) {
+        input.value += text[i];
+        await wait(20);
+      }
+
+      sendBtn.classList.add("press");
+      await wait(120);
+      sendBtn.classList.remove("press");
+
+      addMessage(text, "user");
+
+      input.value = "";
+
+      await wait(400);
+    }
+
+    /* =========================
+       STATE MACHINE
+    ========================= */
+
+    function getRandomStart() {
+      const pool = ["pricing","scope","evaluating","engaged","delayed","ghosting"];
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function getNextState(s) {
+      const map = {
+        pricing:["scope","evaluating"],
+        scope:["evaluating","engaged"],
+        evaluating:["engaged","delayed"],
+        engaged:["closing","ghosting"],
+        delayed:["followup","ghosting"],
+        followup:["engaged","ghosting"],
+        ghosting:["followup","lost"],
+        closing:["won"]
+      };
+      const next = map[s] || ["evaluating"];
+      return next[Math.floor(Math.random() * next.length)];
+    }
+
+    function getMsg(s) {
+      return {
+        pricing:"Client asked about pricing",
+        scope:"Client wants clarity on scope",
+        evaluating:"Client is evaluating options",
+        engaged:"Client is actively engaging",
+        delayed:"Client said maybe later",
+        ghosting:"Client stopped replying",
+        followup:"Following up again",
+        closing:"Client is ready to proceed"
+      }[s];
+    }
+
+    function getOptions(s) {
+      return {
+        pricing:["Here’s a clear breakdown so you know exactly what to expect.","Let me outline pricing clearly.","I can share pricing.","I’ll explain it simply."],
+        scope:["Let me define scope clearly.","I’ll break it down.","We’ll go step by step.","I’ll simplify it."],
+        evaluating:["Take your time.","I’ll help compare.","Let’s simplify decision.","We’ll narrow it."],
+        engaged:["Great — let’s move forward.","We’re aligned.","Let’s continue.","Good progress."],
+        delayed:["No problem.","We’ll continue later.","I’ll follow up.","We’ll pick this up."],
+        ghosting:["Checking in.","Following up.","Happy to revisit.","Just checking."],
+        followup:["Circling back.","Following up again.","Reconnect here.","Checking again."],
+        closing:["Perfect — proceeding.","Finalizing.","We’re good.","Let’s start."]
+      }[s];
+    }
+
+    /* =========================
+       SILENCE / NOTIFY HANDLER
+    ========================= */
+
+    async function handleSilence(state) {
+
+      addMessage("...", "system");
+      await wait(800);
+
+      const follow = getOptions("followup")[0];
+      addMessage(follow, "system");
+
+      await wait(400);
+    }
+
+    async function showOptions(state) {
+
+      optionsPanel.innerHTML = '<div class="thinking"></div>';
+      await wait(600);
+
+      const options = getOptions(state);
       optionsPanel.innerHTML = "";
 
-      let steps = [0, 0];
-      let done = [false, false];
+      const buttons = [];
 
-      while (!done[0] || !done[1]) {
+      options.forEach((opt, i) => {
+        const d = document.createElement("div");
+        d.className = "option-btn";
+        d.innerHTML = `<strong>${["Best","Strong","Safe","Casual"][i]}</strong><br>${opt}`;
+        optionsPanel.appendChild(d);
+        buttons.push(d);
+      });
 
-        for (let i = 0; i < 2; i++) {
+      await wait(500);
 
-          if (done[i]) continue;
+      const selected = buttons[0];
+      selected.classList.add("selected");
 
-          await switchClient(i);
+      await wait(300);
 
-          const flow = flows[i];
-          const batch = 2;
+      optionsPanel.innerHTML = "";
+      addMessage(options[0], "system");
+    }
+
+    /* =========================
+       DEMO LOOP (FINAL)
+    ========================= */
+
+    async function runDemo() {
+
+      while (true) {
+
+        const clients = {
+          0:{state:getRandomStart(),done:false,steps:0,max:5,history:[]},
+          1:{state:getRandomStart(),done:false,steps:0,max:4,history:[]}
+        };
+
+        chats = {0:[],1:[]};
+        chatBox.innerHTML = "";
+        optionsPanel.innerHTML = "";
+
+        let active = 0;
+
+        while (!clients[0].done || !clients[1].done) {
+
+          active = active === 0 ? 1 : 0;
+
+          if (clients[active].done) continue;
+
+          const batch = 2 + Math.floor(Math.random() * 2);
 
           for (let b = 0; b < batch; b++) {
 
-            if (steps[i] >= flow.messages.length) continue;
+            if (clients[active].done) break;
 
-            const msg = flow.messages[steps[i]];
+            await switchClient(active);
 
-            if (msg === null) {
-              await wait(2500);
+            const state = clients[active].state;
+            clients[active].history.push(state);
+
+            // 🔥 HANDLE SILENCE STATES
+            if (state === "ghosting") {
+              await handleSilence(state);
             } else {
-              await typeMessage(msg);
+              await typeMessage(getMsg(state));
+              await showOptions(state);
             }
 
-            await showOptions(msg);
+            clients[active].steps++;
 
-            steps[i]++;
+            const next = getNextState(state);
 
-            if (steps[i] === flow.messages.length) {
-              await cinematicClose(flow.result);
-              done[i] = true;
+            if (next === "won" || next === "lost" || clients[active].steps >= clients[active].max) {
+
+              const win = next === "won" || state === "closing" || state === "engaged";
+
+              addMessage(win ? "Deal closed." : "Conversation lost.", "system");
+              addMessage(win ? "Closed with strong alignment." : "Lost due to drop-off.", "system");
+
+              clients[active].done = true;
               break;
             }
+
+            clients[active].state = next;
           }
         }
+
+        await wait(2000);
+        addMessage("Starting new conversations...", "system");
+        await wait(2000);
+
+        chatBox.innerHTML = "";
+        optionsPanel.innerHTML = "";
       }
-
-      await wait(3000);
-
-      chatBox.innerHTML = "";
-      optionsPanel.innerHTML = "";
     }
+
+    runDemo();
   }
 
-  runDemo();
+  /* =========================
+     NOTIFY SYSTEM
+  ========================= */
+
+  const notifyBtn = document.getElementById("notifyBtn");
+  const notifyEmail = document.getElementById("notifyEmail");
+  const notifySuccess = document.getElementById("notifySuccess");
+
+  if (notifyBtn && notifyEmail && notifySuccess) {
+
+    notifyBtn.addEventListener("click", async () => {
+
+      const email = notifyEmail.value.trim();
+
+      if (!email || !email.includes("@")) {
+        notifySuccess.innerText = "Invalid email address";
+        notifySuccess.classList.add("show");
+        return;
+      }
+
+      notifyBtn.innerText = "Adding...";
+      notifyBtn.disabled = true;
+
+      try {
+        const res = await fetch("https://elayro-notify.vikneshgaming07.workers.dev", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email })
+        });
+
+        const data = await res.json().catch(() => ({}));
+
+        notifySuccess.innerText =
+          data.status === "exists" ? "Already registered" : "You’re in";
+
+        notifySuccess.classList.add("show");
+        notifyEmail.value = "";
+        notifyBtn.innerText = "Added";
+
+      } catch {
+        notifySuccess.innerText = "Try again";
+        notifySuccess.classList.add("show");
+        notifyBtn.innerText = "Retry";
+        notifyBtn.disabled = false;
+      }
+    });
+  }
 
 });
