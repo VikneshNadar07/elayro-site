@@ -97,12 +97,15 @@ t.classList.toggle("active", i === activeClient)
 
 function renderChat(i) {
 chatBox.innerHTML = "";
+
 chats[i].forEach(m => {
 const d = document.createElement("div");
 d.className = `message ${m.type}`;
 d.innerText = m.text;
 chatBox.appendChild(d);
 });
+
+// ✅ FIXED: scroll after render
 chatBox.scrollTop = chatBox.scrollHeight;
 }
 
@@ -129,6 +132,9 @@ await wait(800);
 }
 
 async function typeMessage(text) {
+
+if (!input) return; // ✅ safety
+
 input.value = "";
 
 for (let i = 0; i < text.length; i++) {
@@ -252,6 +258,8 @@ await wait(900);
 optionsPanel.innerHTML = "";
 
 const options = getOptions(msg);
+
+if (!options || !options.length) return; // ✅ safety
 
 for (let i = 0; i < 4; i++) {
 const d = document.createElement("div");
