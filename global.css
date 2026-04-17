@@ -1510,17 +1510,18 @@ gap: 10px;
 /* ROW */
 .commit-row {
 display: grid;
-grid-template-columns: 220px 1fr;
-gap: 20px;
+grid-template-columns: 180px 1fr;
+gap: 16px;
+
+align-items: start; /* IMPORTANT FIX */
 
 padding: 14px 16px;
 border-radius: 12px;
 
 background: rgba(255,255,255,0.02);
 border: 1px solid rgba(255,255,255,0.06);
-
-transition: all 0.2s ease;
 }
+
 
 .commit-row:hover {
 border-color: rgba(255,255,255,0.15);
@@ -1531,8 +1532,9 @@ transform: translateY(-2px);
 .commit-left {
 font-weight: 600;
 text-align: left;
-white-space: nowrap;
+min-width: 180px; /* flexible instead of fixed */
 }
+
 
 /* RIGHT (DESC) */
 .commit-right {
