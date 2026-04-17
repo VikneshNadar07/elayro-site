@@ -471,32 +471,154 @@ border-color: #4ade80 !important;
 border-color: #f87171 !important;
 }
 /* ===============================
-INDEX PREMIUM CARDS
+INDEX CARD FINAL (MERGED)
 =============================== */
 
 .index-card {
-margin: 80px auto;
-padding: 32px 24px;
+position: relative;
+
+margin: 100px auto;
+padding: 36px 26px;
 
 max-width: 620px;
-
 border-radius: 16px;
 
-background: rgba(255,255,255,0.03);
-border: 1px solid rgba(255,255,255,0.06);
+background: linear-gradient(
+180deg,
+rgba(255,255,255,0.045),
+rgba(255,255,255,0.015)
+);
 
-backdrop-filter: blur(16px);
+border: 1px solid rgba(255,255,255,0.09);
 
-box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+backdrop-filter: blur(18px);
 
-transition: all 0.3s ease;
+box-shadow:
+0 20px 60px rgba(0,0,0,0.45),
+inset 0 1px 0 rgba(255,255,255,0.05);
+
+transition: transform 0.3s ease, box-shadow 0.3s ease;
+
+opacity: 0;
+transform: translateY(20px);
+animation: cardReveal 0.6s ease forwards;
 }
 
-/* subtle hover lift */
 .index-card:hover {
-transform: translateY(-4px);
-box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+transform: translateY(-6px);
+box-shadow:
+0 28px 70px rgba(0,0,0,0.55),
+inset 0 1px 0 rgba(255,255,255,0.06);
 }
+
+/* stagger */
+.index-card:nth-of-type(1) { animation-delay: 0.1s; }
+.index-card:nth-of-type(2) { animation-delay: 0.2s; }
+.index-card:nth-of-type(3) { animation-delay: 0.3s; }
+
+@keyframes cardReveal {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+
+/* ===============================
+TITLE
+=============================== */
+
+.index-card h2 {
+font-size: 26px;
+font-weight: 600;
+letter-spacing: 0.5px;
+margin-bottom: 14px;
+}
+
+.index-card h2::after {
+content: "";
+display: block;
+width: 38px;
+height: 2px;
+margin: 10px auto 0;
+background: rgba(255,255,255,0.8);
+}
+
+/* ===============================
+TEXT
+=============================== */
+
+.index-card p {
+font-size: 15px;
+line-height: 1.75;
+opacity: 0.88;
+margin: 10px auto;
+max-width: 520px;
+}
+
+/* ===============================
+BUTTON FINAL
+=============================== */
+
+.btn-premium {
+display: inline-block;
+margin-top: 16px;
+padding: 12px 22px;
+
+border-radius: 12px;
+background: linear-gradient(#fff, #eaeaea);
+color: #000 !important;
+
+font-weight: 600;
+text-decoration: none;
+
+box-shadow:
+0 3px 10px rgba(255,255,255,0.12),
+0 2px 6px rgba(0,0,0,0.4);
+
+transition: all 0.18s ease;
+
+position: relative;
+overflow: hidden;
+}
+
+.btn-premium:hover {
+transform: translateY(-2px);
+box-shadow:
+0 8px 22px rgba(255,255,255,0.18),
+0 4px 10px rgba(0,0,0,0.5);
+}
+
+.btn-premium:active {
+transform: scale(0.95);
+}
+
+/* ===============================
+RESPONSIVE
+=============================== */
+
+@media (max-width: 640px) {
+
+.index-card {
+margin: 70px 16px;
+padding: 28px 18px;
+}
+
+.index-card h2 {
+font-size: 22px;
+}
+
+.index-card p {
+font-size: 14px;
+line-height: 1.6;
+}
+
+.btn-premium {
+width: 100%;
+text-align: center;
+}
+
+}
+
 
 /* ===============================
 PREMIUM BUTTON (FINAL FIX)
@@ -539,58 +661,6 @@ box-shadow: 0 3px 10px rgba(0,0,0,0.4);
 .btn-premium:focus {
 outline: none;
 box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
-}
-/* ===============================
-INDEX CARD PREMIUM UPGRADE (SAFE)
-=============================== */
-
-.index-card {
-position: relative;
-padding: 36px 26px;
-
-background: linear-gradient(
-180deg,
-rgba(255,255,255,0.04),
-rgba(255,255,255,0.015)
-);
-
-border: 1px solid rgba(255,255,255,0.08);
-
-backdrop-filter: blur(18px);
-
-box-shadow:
-0 20px 60px rgba(0,0,0,0.45),
-inset 0 1px 0 rgba(255,255,255,0.05);
-
-transition: all 0.35s ease;
-}
-
-/* glow aura */
-.index-card::after {
-content: "";
-position: absolute;
-inset: -1px;
-border-radius: inherit;
-
-background: radial-gradient(
-600px circle at var(--x, 50%) var(--y, 50%),
-rgba(255,255,255,0.06),
-transparent 40%
-);
-
-opacity: 0;
-transition: opacity 0.3s ease;
-}
-
-.index-card:hover {
-transform: translateY(-6px);
-box-shadow:
-0 30px 80px rgba(0,0,0,0.6),
-inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
-.index-card:hover::after {
-opacity: 1;
 }
 
 /* ===============================
@@ -635,131 +705,36 @@ opacity: 0.9;
 }
 
 /* ===============================
-BUTTON UPGRADE (VISIBLE FIX + PREMIUM)
+BUTTON FINAL (MERGED CLEAN)
 =============================== */
 
 .btn-premium {
+display: inline-block;
+margin-top: 16px;
+
 padding: 12px 22px;
 border-radius: 12px;
 
-background: linear-gradient(
-180deg,
-#ffffff,
-#eaeaea
-);
-
+background: linear-gradient(180deg, #ffffff, #eaeaea);
 color: #000 !important;
+
+font-size: 14px;
 font-weight: 600;
+text-decoration: none;
 
-box-shadow:
-0 4px 14px rgba(255,255,255,0.15),
-0 2px 6px rgba(0,0,0,0.4);
-}
+cursor: pointer;
+user-select: none;
 
-/* hover stronger */
-.btn-premium:hover {
-transform: translateY(-2px);
-box-shadow:
-0 10px 30px rgba(255,255,255,0.2),
-0 4px 10px rgba(0,0,0,0.5);
-}
-
-/* click feel */
-.btn-premium:active {
-transform: scale(0.94);
-box-shadow: 0 3px 10px rgba(0,0,0,0.5);
-}
-/* ===============================
-INDEX CARD PREMIUM (NO CURSOR GLOW)
-=============================== */
-
-.index-card {
-padding: 36px 26px;
-
-background: linear-gradient(
-180deg,
-rgba(255,255,255,0.045),
-rgba(255,255,255,0.015)
-);
-
-border: 1px solid rgba(255,255,255,0.08);
-
-backdrop-filter: blur(18px);
-
-box-shadow:
-0 20px 60px rgba(0,0,0,0.45),
-inset 0 1px 0 rgba(255,255,255,0.05);
-
-transition: transform 0.35s ease, box-shadow 0.35s ease;
-}
-
-/* hover lift only */
-.index-card:hover {
-transform: translateY(-6px);
-box-shadow:
-0 28px 70px rgba(0,0,0,0.55),
-inset 0 1px 0 rgba(255,255,255,0.06);
-}
-
-/* ===============================
-TITLE REFINEMENT
-=============================== */
-
-.index-card h2 {
 position: relative;
-font-size: 24px;
-font-weight: 600;
-letter-spacing: 0.4px;
-
-margin-bottom: 18px;
-}
-
-/* minimal underline */
-.index-card h2::after {
-content: "";
-display: block;
-width: 38px;
-height: 2px;
-
-margin: 10px auto 0;
-
-border-radius: 2px;
-
-background: rgba(255,255,255,0.8);
-opacity: 0.85;
-}
-
-/* ===============================
-TEXT POLISH
-=============================== */
-
-.index-card p {
-opacity: 0.9;
-line-height: 1.7;
-}
-
-/* ===============================
-BUTTON (CLEAN PREMIUM)
-=============================== */
-
-.btn-premium {
-padding: 12px 22px;
-border-radius: 12px;
-
-background: linear-gradient(
-180deg,
-#ffffff,
-#eaeaea
-);
-
-color: #000 !important;
-font-weight: 600;
+overflow: hidden;
 
 box-shadow:
 0 3px 10px rgba(255,255,255,0.12),
 0 2px 6px rgba(0,0,0,0.4);
 
-transition: transform 0.18s ease, box-shadow 0.18s ease;
+transition:
+transform 0.18s ease,
+box-shadow 0.18s ease;
 }
 
 /* hover */
@@ -773,8 +748,18 @@ box-shadow:
 /* click */
 .btn-premium:active {
 transform: scale(0.95);
-box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+box-shadow:
+0 2px 6px rgba(0,0,0,0.5);
 }
+
+/* focus (accessibility) */
+.btn-premium:focus {
+outline: none;
+box-shadow:
+0 0 0 3px rgba(255,255,255,0.25);
+}
+
+
 /* ===============================
 SPACING RHYTHM REFINEMENT
 =============================== */
@@ -915,25 +900,150 @@ opacity: 0.65;
 }
 
 /* ===============================
-BUTTON MICRO-DETAIL
-=============================== */
-
-.btn-premium {
-position: relative;
-overflow: hidden;
-}
-
-/* subtle press depth */
-.btn-premium:active {
-transform: scale(0.96);
-}
-
-/* ===============================
 CARD EDGE SHARPNESS
 =============================== */
 
 .index-card {
 border: 1px solid rgba(255,255,255,0.09);
+}
+/* ===============================
+FINAL OVERRIDE (DO NOT TOUCH ABOVE)
+=============================== */
+
+/* ===== CARD FINAL ===== */
+.index-card {
+position: relative !important;
+
+margin: 100px auto !important;
+padding: 36px 26px !important;
+
+max-width: 620px !important;
+border-radius: 16px !important;
+
+background: linear-gradient(
+180deg,
+rgba(255,255,255,0.045),
+rgba(255,255,255,0.015)
+) !important;
+
+border: 1px solid rgba(255,255,255,0.09) !important;
+
+backdrop-filter: blur(18px) !important;
+
+box-shadow:
+0 20px 60px rgba(0,0,0,0.45),
+inset 0 1px 0 rgba(255,255,255,0.05) !important;
+
+transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+
+opacity: 0;
+transform: translateY(20px);
+animation: cardReveal 0.6s ease forwards;
+}
+
+.index-card:hover {
+transform: translateY(-6px) !important;
+box-shadow:
+0 28px 70px rgba(0,0,0,0.55),
+inset 0 1px 0 rgba(255,255,255,0.06) !important;
+}
+
+/* ===== TITLE FINAL ===== */
+.index-card h2 {
+font-size: 26px !important;
+font-weight: 600 !important;
+letter-spacing: 0.5px !important;
+margin-bottom: 14px !important;
+}
+
+.index-card h2::after {
+content: "" !important;
+display: block !important;
+width: 38px !important;
+height: 2px !important;
+margin: 10px auto 0 !important;
+background: rgba(255,255,255,0.8) !important;
+}
+
+/* ===== TEXT FINAL ===== */
+.index-card p {
+font-size: 15px !important;
+line-height: 1.75 !important;
+opacity: 0.88 !important;
+margin: 10px auto !important;
+max-width: 520px !important;
+}
+
+/* ===== BUTTON FINAL ===== */
+.btn-premium {
+display: inline-block !important;
+margin-top: 16px !important;
+
+padding: 12px 22px !important;
+border-radius: 12px !important;
+
+background: linear-gradient(180deg, #ffffff, #eaeaea) !important;
+color: #000 !important;
+
+font-size: 14px !important;
+font-weight: 600 !important;
+
+text-decoration: none !important;
+
+cursor: pointer !important;
+user-select: none !important;
+
+position: relative !important;
+overflow: hidden !important;
+
+box-shadow:
+0 3px 10px rgba(255,255,255,0.12),
+0 2px 6px rgba(0,0,0,0.4) !important;
+
+transition:
+transform 0.18s ease,
+box-shadow 0.18s ease !important;
+}
+
+.btn-premium:hover {
+transform: translateY(-2px) !important;
+box-shadow:
+0 8px 22px rgba(255,255,255,0.18),
+0 4px 10px rgba(0,0,0,0.5) !important;
+}
+
+.btn-premium:active {
+transform: scale(0.95) !important;
+box-shadow:
+0 2px 6px rgba(0,0,0,0.5) !important;
+}
+
+.btn-premium:focus {
+outline: none !important;
+box-shadow:
+0 0 0 3px rgba(255,255,255,0.25) !important;
+}
+
+/* ===== RESPONSIVE FINAL ===== */
+@media (max-width: 640px) {
+.index-card {
+margin: 70px 16px !important;
+padding: 28px 18px !important;
+}
+
+.index-card h2 {
+font-size: 22px !important;
+}
+
+.index-card p {
+font-size: 14px !important;
+line-height: 1.6 !important;
+}
+
+.btn-premium {
+width: 100% !important;
+text-align: center !important;
+}
 }
 
 /* ===============================
