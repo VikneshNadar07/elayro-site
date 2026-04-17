@@ -540,3 +540,406 @@ box-shadow: 0 3px 10px rgba(0,0,0,0.4);
 outline: none;
 box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
 }
+/* ===============================
+INDEX CARD PREMIUM UPGRADE (SAFE)
+=============================== */
+
+.index-card {
+position: relative;
+padding: 36px 26px;
+
+background: linear-gradient(
+180deg,
+rgba(255,255,255,0.04),
+rgba(255,255,255,0.015)
+);
+
+border: 1px solid rgba(255,255,255,0.08);
+
+backdrop-filter: blur(18px);
+
+box-shadow:
+0 20px 60px rgba(0,0,0,0.45),
+inset 0 1px 0 rgba(255,255,255,0.05);
+
+transition: all 0.35s ease;
+}
+
+/* glow aura */
+.index-card::after {
+content: "";
+position: absolute;
+inset: -1px;
+border-radius: inherit;
+
+background: radial-gradient(
+600px circle at var(--x, 50%) var(--y, 50%),
+rgba(255,255,255,0.06),
+transparent 40%
+);
+
+opacity: 0;
+transition: opacity 0.3s ease;
+}
+
+.index-card:hover {
+transform: translateY(-6px);
+box-shadow:
+0 30px 80px rgba(0,0,0,0.6),
+inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+.index-card:hover::after {
+opacity: 1;
+}
+
+/* ===============================
+TITLE UPGRADE
+=============================== */
+
+.index-card h2 {
+position: relative;
+font-size: 24px;
+font-weight: 600;
+letter-spacing: 0.3px;
+
+margin-bottom: 18px;
+}
+
+/* small underline */
+.index-card h2::after {
+content: "";
+display: block;
+width: 42px;
+height: 2px;
+
+margin: 10px auto 0;
+
+border-radius: 2px;
+
+background: linear-gradient(
+to right,
+rgba(255,255,255,0.9),
+rgba(255,255,255,0.2)
+);
+
+opacity: 0.85;
+}
+
+/* ===============================
+TEXT POLISH
+=============================== */
+
+.index-card p {
+opacity: 0.9;
+}
+
+/* ===============================
+BUTTON UPGRADE (VISIBLE FIX + PREMIUM)
+=============================== */
+
+.btn-premium {
+padding: 12px 22px;
+border-radius: 12px;
+
+background: linear-gradient(
+180deg,
+#ffffff,
+#eaeaea
+);
+
+color: #000 !important;
+font-weight: 600;
+
+box-shadow:
+0 4px 14px rgba(255,255,255,0.15),
+0 2px 6px rgba(0,0,0,0.4);
+}
+
+/* hover stronger */
+.btn-premium:hover {
+transform: translateY(-2px);
+box-shadow:
+0 10px 30px rgba(255,255,255,0.2),
+0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* click feel */
+.btn-premium:active {
+transform: scale(0.94);
+box-shadow: 0 3px 10px rgba(0,0,0,0.5);
+}
+/* ===============================
+INDEX CARD PREMIUM (NO CURSOR GLOW)
+=============================== */
+
+.index-card {
+padding: 36px 26px;
+
+background: linear-gradient(
+180deg,
+rgba(255,255,255,0.045),
+rgba(255,255,255,0.015)
+);
+
+border: 1px solid rgba(255,255,255,0.08);
+
+backdrop-filter: blur(18px);
+
+box-shadow:
+0 20px 60px rgba(0,0,0,0.45),
+inset 0 1px 0 rgba(255,255,255,0.05);
+
+transition: transform 0.35s ease, box-shadow 0.35s ease;
+}
+
+/* hover lift only */
+.index-card:hover {
+transform: translateY(-6px);
+box-shadow:
+0 28px 70px rgba(0,0,0,0.55),
+inset 0 1px 0 rgba(255,255,255,0.06);
+}
+
+/* ===============================
+TITLE REFINEMENT
+=============================== */
+
+.index-card h2 {
+position: relative;
+font-size: 24px;
+font-weight: 600;
+letter-spacing: 0.4px;
+
+margin-bottom: 18px;
+}
+
+/* minimal underline */
+.index-card h2::after {
+content: "";
+display: block;
+width: 38px;
+height: 2px;
+
+margin: 10px auto 0;
+
+border-radius: 2px;
+
+background: rgba(255,255,255,0.8);
+opacity: 0.85;
+}
+
+/* ===============================
+TEXT POLISH
+=============================== */
+
+.index-card p {
+opacity: 0.9;
+line-height: 1.7;
+}
+
+/* ===============================
+BUTTON (CLEAN PREMIUM)
+=============================== */
+
+.btn-premium {
+padding: 12px 22px;
+border-radius: 12px;
+
+background: linear-gradient(
+180deg,
+#ffffff,
+#eaeaea
+);
+
+color: #000 !important;
+font-weight: 600;
+
+box-shadow:
+0 3px 10px rgba(255,255,255,0.12),
+0 2px 6px rgba(0,0,0,0.4);
+
+transition: transform 0.18s ease, box-shadow 0.18s ease;
+}
+
+/* hover */
+.btn-premium:hover {
+transform: translateY(-2px);
+box-shadow:
+0 8px 22px rgba(255,255,255,0.18),
+0 4px 10px rgba(0,0,0,0.5);
+}
+
+/* click */
+.btn-premium:active {
+transform: scale(0.95);
+box-shadow: 0 2px 6px rgba(0,0,0,0.5);
+}
+/* ===============================
+SPACING RHYTHM REFINEMENT
+=============================== */
+
+.index-card {
+margin: 100px auto; /* more breathing */
+}
+
+/* tighten inner spacing */
+.index-card h2 {
+margin-bottom: 14px;
+}
+
+.index-card p {
+margin: 10px auto;
+max-width: 520px;
+}
+
+/* better spacing before button */
+.index-links {
+margin-top: 18px;
+}
+
+/* ===============================
+TYPOGRAPHY REFINEMENT
+=============================== */
+
+.index-card h2 {
+font-size: 26px;
+font-weight: 600;
+letter-spacing: 0.5px;
+}
+
+.index-card p {
+font-size: 15px;
+line-height: 1.75;
+opacity: 0.88;
+}
+
+/* highlight refinement */
+.highlight {
+opacity: 1;
+font-weight: 500;
+}
+
+/* ===============================
+SUBTLE STAGGER ANIMATION
+=============================== */
+
+.index-card {
+opacity: 0;
+transform: translateY(20px);
+animation: cardReveal 0.6s ease forwards;
+}
+
+/* stagger delay */
+.index-card:nth-of-type(1) { animation-delay: 0.1s; }
+.index-card:nth-of-type(2) { animation-delay: 0.2s; }
+.index-card:nth-of-type(3) { animation-delay: 0.3s; }
+
+@keyframes cardReveal {
+to {
+opacity: 1;
+transform: translateY(0);
+}
+}
+/* ===============================
+RESPONSIVE POLISH
+=============================== */
+
+@media (max-width: 640px) {
+
+.index-card {
+margin: 70px 16px;
+padding: 28px 18px;
+}
+
+.index-card h2 {
+font-size: 22px;
+}
+
+.index-card p {
+font-size: 14px;
+line-height: 1.6;
+}
+
+.btn-premium {
+width: 100%;
+text-align: center;
+}
+
+}
+
+/* ===============================
+NAV MICRO-POLISH
+=============================== */
+
+.nav-minimal {
+transition: all 0.25s ease;
+}
+
+.nav-minimal a {
+position: relative;
+}
+
+/* subtle underline hover */
+.nav-minimal a::after {
+content: "";
+position: absolute;
+left: 50%;
+bottom: -4px;
+
+width: 0;
+height: 2px;
+
+background: rgba(255,255,255,0.8);
+
+transition: all 0.25s ease;
+transform: translateX(-50%);
+}
+
+.nav-minimal a:hover::after {
+width: 60%;
+}
+
+/* ===============================
+HERO REFINEMENT
+=============================== */
+
+header h1 {
+letter-spacing: 0.6px;
+}
+
+.hook {
+margin-top: 8px;
+line-height: 1.6;
+opacity: 0.65;
+}
+
+/* ===============================
+BUTTON MICRO-DETAIL
+=============================== */
+
+.btn-premium {
+position: relative;
+overflow: hidden;
+}
+
+/* subtle press depth */
+.btn-premium:active {
+transform: scale(0.96);
+}
+
+/* ===============================
+CARD EDGE SHARPNESS
+=============================== */
+
+.index-card {
+border: 1px solid rgba(255,255,255,0.09);
+}
+
+/* ===============================
+GLOBAL SMOOTHNESS
+=============================== */
+
+body {
+transition: background 0.3s ease;
+}
