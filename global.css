@@ -1171,10 +1171,7 @@ transition: background 0.3s ease;
 
 /* invisible interaction shield */
 .demo-container::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  z-index: 10;
+  display: none;
 }
 
 /* smooth message fade */
@@ -1192,12 +1189,11 @@ transition: background 0.3s ease;
 }
 
 /* focus mode */
-body.demo-active .content {
-  filter: blur(4px) brightness(0.6);
+body.demo-active main {
+  filter: none;
 }
 
 body.demo-active .demo-container {
-  filter: none;
   transform: scale(1.02);
   z-index: 5;
 }
