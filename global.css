@@ -1056,23 +1056,62 @@ position: relative;
 z-index: 10;
 }
 /* ===============================
-SECTION LABEL (MISSING FIX)
+SECTION LABEL (ANIMATED FINAL)
 =============================== */
 
 .section-label {
-display: block;
-width: 100%;
+display: flex;
+align-items: center;
+justify-content: center;
 
-text-align: center;
+width: 100%;
+margin: 80px auto 30px;
 
 font-size: 12px;
 letter-spacing: 1.4px;
 text-transform: uppercase;
 
-opacity: 0.6;
+opacity: 0;
+transform: translateY(8px);
 
-margin: 60px auto 20px;
+line-height: 1;
+
+animation: labelFade 0.6s ease forwards;
 }
+
+/* lines */
+.section-label::before,
+.section-label::after {
+content: "";
+flex: 1;
+
+height: 1px;
+background: rgba(255,255,255,0.2);
+
+margin: 0 12px;
+
+transform: scaleX(0);
+transform-origin: center;
+
+animation: labelLine 0.6s ease forwards;
+animation-delay: 0.15s;
+}
+
+/* text reveal */
+@keyframes labelFade {
+to {
+opacity: 0.6;
+transform: translateY(0);
+}
+}
+
+/* line expansion */
+@keyframes labelLine {
+to {
+transform: scaleX(1);
+}
+}
+
 
 /* ===============================
 GLOBAL SMOOTHNESS
