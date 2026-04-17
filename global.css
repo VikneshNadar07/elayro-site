@@ -499,39 +499,44 @@ box-shadow: 0 30px 80px rgba(0,0,0,0.5);
 }
 
 /* ===============================
-PREMIUM BUTTON
+PREMIUM BUTTON (FINAL FIX)
 =============================== */
 
 .btn-premium {
 display: inline-block;
-margin-top: 10px;
+margin-top: 14px;
 
-padding: 12px 18px;
+padding: 12px 20px;
 border-radius: 10px;
 
-background: #fff;
-color: #000;
+background: #ffffff;
+color: #000 !important;
 
 font-size: 14px;
 font-weight: 500;
 
 text-decoration: none;
 
-transition: all 0.2s ease;
+cursor: pointer;
+user-select: none;
+
+transition: all 0.18s ease;
 }
 
-/* hover */
+/* HOVER = LIFT */
 .btn-premium:hover {
-transform: translateY(-1px);
-box-shadow: 0 6px 20px rgba(255,255,255,0.15);
+transform: translateY(-2px);
+box-shadow: 0 8px 24px rgba(255,255,255,0.18);
 }
 
-/* click feel */
+/* CLICK FEEL */
 .btn-premium:active {
-transform: scale(0.95);
+transform: scale(0.94);
+box-shadow: 0 3px 10px rgba(0,0,0,0.4);
 }
 
-/* remove old purple link look */
-.index-links a {
-color: inherit;
+/* FOCUS (keyboard + accessibility) */
+.btn-premium:focus {
+outline: none;
+box-shadow: 0 0 0 3px rgba(255,255,255,0.25);
 }
