@@ -175,15 +175,98 @@ color: #fff;
 font-weight: 500;
 }
 
+
 /* ===============================
-FOOTER
+GLOBAL FOOTER — PREMIUM POLISH
 =============================== */
 
 .footer-global {
-margin-top: auto;
-padding: 30px 16px;
-text-align: center;
-opacity: 0.6;
+  text-align: center;
+  padding: 48px 20px 36px;
+  background: #0a0a0a;
+  position: relative;
+  color: rgba(255,255,255,0.75);
+}
+
+/* 🔥 Subtle premium top divider */
+.footer-global::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 55%;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255,255,255,0.18),
+    transparent
+  );
+}
+
+/* Brand */
+.footer-global h3 {
+  font-size: 18px;
+  font-weight: 500;
+  color: #ffffff;
+  letter-spacing: 0.4px;
+  margin-bottom: 6px;
+}
+
+/* TM */
+.footer-global .tm {
+  font-size: 10px;
+  opacity: 0.6;
+  margin-left: 2px;
+}
+
+/* Tagline */
+.footer-global .tagline {
+  font-size: 13px;
+  opacity: 0.6;
+  margin-bottom: 14px;
+  letter-spacing: 0.3px;
+}
+
+/* Links */
+.footer-global a {
+  color: rgba(120,120,255,0.85);
+  text-decoration: none;
+  position: relative;
+  transition: all 0.25s ease;
+}
+
+/* ✨ Smooth underline animation */
+.footer-global a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -2px;
+  width: 0%;
+  height: 1px;
+  background: rgba(140,140,255,0.8);
+  transition: width 0.25s ease;
+}
+
+.footer-global a:hover::after {
+  width: 100%;
+}
+
+.footer-global a:hover {
+  color: #ffffff;
+}
+
+/* Spacing between lines */
+.footer-global p {
+  margin: 6px 0;
+}
+
+/* Copyright */
+.footer-global .copyright {
+  font-size: 12px;
+  opacity: 0.5;
+  margin-top: 10px;
 }
 /* ===============================
 CLIENTS
