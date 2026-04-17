@@ -1152,3 +1152,79 @@ GLOBAL SMOOTHNESS
 body {
 transition: background 0.3s ease;
 }
+/* ===== CINEMATIC ADDITIONS ===== */
+
+/* disable chat scroll */
+.chat-box {
+  overflow: hidden !important;
+}
+
+/* disable client clicking */
+.clients {
+  pointer-events: none;
+}
+
+/* disable selection */
+.demo-container {
+  user-select: none;
+}
+
+/* invisible interaction shield */
+.demo-container::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+}
+
+/* smooth message fade */
+.message {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: msgFade 0.25s ease forwards;
+}
+
+@keyframes msgFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* focus mode */
+body.demo-active main {
+  filter: blur(4px) brightness(0.6);
+  transition: all 0.4s ease;
+}
+
+body.demo-active .demo-container {
+  filter: none;
+  transform: scale(1.02);
+  z-index: 5;
+}
+
+/* zoom effect */
+.demo-container {
+  transition: transform 0.6s ease, box-shadow 0.4s ease;
+}
+
+.demo-container.active-zoom {
+  transform: scale(1.03);
+}
+
+/* pulse glow */
+.chat-area::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  box-shadow: 0 0 0 0 rgba(255,255,255,0.15);
+  animation: pulseGlow 2.5s infinite;
+  pointer-events: none;
+}
+
+@keyframes pulseGlow {
+  0% { box-shadow: 0 0 0 0 rgba(255,255,255,0.08); }
+  70% { box-shadow: 0 0 0 12px rgba(255,255,255,0); }
+  100% { box-shadow: 0 0 0 0 rgba(255,255,255,0); }
+}
