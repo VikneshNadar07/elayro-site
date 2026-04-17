@@ -1045,6 +1045,34 @@ width: 100% !important;
 text-align: center !important;
 }
 }
+/* ===== FIX BUTTON CLICK ===== */
+.btn-premium {
+pointer-events: auto !important;
+z-index: 10;
+}
+
+.index-links {
+position: relative;
+z-index: 10;
+}
+/* ===============================
+SECTION LABEL (MISSING FIX)
+=============================== */
+
+.section-label {
+display: block;
+width: 100%;
+
+text-align: center;
+
+font-size: 12px;
+letter-spacing: 1.4px;
+text-transform: uppercase;
+
+opacity: 0.6;
+
+margin: 60px auto 20px;
+}
 
 /* ===============================
 GLOBAL SMOOTHNESS
