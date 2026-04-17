@@ -1542,4 +1542,79 @@ border-radius: 0 0 10px 10px;
 bottom: 0;
 left: 2px;
 }
+/* ===============================
+COMMITMENT TABLE STYLE (PREMIUM)
+=============================== */
+
+.commitment {
+margin: 90px auto;
+max-width: 720px;
+padding: 0 16px;
+text-align: center;
+}
+
+.commitment-intro {
+max-width: 560px;
+margin: 10px auto 24px;
+opacity: 0.8;
+}
+
+/* GRID TABLE */
+.commitment-grid {
+display: flex;
+flex-direction: column;
+gap: 10px;
+}
+
+/* ROW */
+.commit-row {
+display: grid;
+grid-template-columns: 220px 1fr;
+gap: 20px;
+
+padding: 14px 16px;
+border-radius: 12px;
+
+background: rgba(255,255,255,0.02);
+border: 1px solid rgba(255,255,255,0.06);
+
+transition: all 0.2s ease;
+}
+
+.commit-row:hover {
+border-color: rgba(255,255,255,0.15);
+transform: translateY(-2px);
+}
+
+/* LEFT (TITLE) */
+.commit-left {
+font-weight: 600;
+text-align: left;
+white-space: nowrap;
+}
+
+/* RIGHT (DESC) */
+.commit-right {
+text-align: left;
+opacity: 0.85;
+line-height: 1.6;
+}
+
+/* FOOTER */
+.commitment-footer {
+margin-top: 20px;
+opacity: 0.6;
+}
+
+/* MOBILE FIX */
+@media (max-width: 600px) {
+.commit-row {
+grid-template-columns: 1fr;
+gap: 6px;
+}
+
+.commit-left {
+font-size: 14px;
+}
+}
 
