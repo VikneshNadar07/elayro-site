@@ -268,6 +268,30 @@ GLOBAL FOOTER — PREMIUM POLISH
   opacity: 0.5;
   margin-top: 10px;
 }
+.footer-global {
+  margin-top: 80px;
+  padding: 60px 20px 40px;
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    #0a0a0a 40%
+  );
+}
+.footer-global a {
+  color: rgba(140,140,255,0.7); /* softer */
+}
+.footer-global h3 {
+  font-size: 17px;
+  font-weight: 500;
+}
+
+.footer-global .tagline {
+  font-size: 12px;
+  opacity: 0.55;
+}
+.footer-global {
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
+}
 /* ===============================
 CLIENTS
 =============================== */
