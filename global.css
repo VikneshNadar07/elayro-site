@@ -175,20 +175,35 @@ color: #fff;
 font-weight: 500;
 }
 
-
 /* ===============================
-GLOBAL FOOTER — PREMIUM POLISH
+GLOBAL FOOTER — FINAL PREMIUM
 =============================== */
 
 .footer-global {
   text-align: center;
-  padding: 48px 20px 36px;
-  background: #0a0a0a;
+  margin-top: 100px;
+  padding: 70px 20px 40px;
+
+  background: linear-gradient(
+    to bottom,
+    transparent,
+    #0a0a0a 40%
+  );
+
   position: relative;
   color: rgba(255,255,255,0.75);
+
+  /* subtle depth */
+  box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
+
+  /* smooth entrance */
+  opacity: 0;
+  transform: translateY(10px);
+  animation: footerFade 0.8s ease forwards;
+  animation-delay: 0.2s;
 }
 
-/* 🔥 Subtle premium top divider */
+/* 🔥 Top divider glow */
 .footer-global::before {
   content: "";
   position: absolute;
@@ -210,7 +225,7 @@ GLOBAL FOOTER — PREMIUM POLISH
   font-size: 18px;
   font-weight: 500;
   color: #ffffff;
-  letter-spacing: 0.4px;
+  letter-spacing: 0.5px;
   margin-bottom: 6px;
 }
 
@@ -223,21 +238,21 @@ GLOBAL FOOTER — PREMIUM POLISH
 
 /* Tagline */
 .footer-global .tagline {
-  font-size: 13px;
-  opacity: 0.6;
+  font-size: 12px;
+  opacity: 0.55;
   margin-bottom: 14px;
   letter-spacing: 0.3px;
 }
 
 /* Links */
 .footer-global a {
-  color: rgba(120,120,255,0.85);
+  color: rgba(140,140,255,0.65);
   text-decoration: none;
   position: relative;
   transition: all 0.25s ease;
 }
 
-/* ✨ Smooth underline animation */
+/* ✨ Underline animation */
 .footer-global a::after {
   content: "";
   position: absolute;
@@ -257,7 +272,7 @@ GLOBAL FOOTER — PREMIUM POLISH
   color: #ffffff;
 }
 
-/* Spacing between lines */
+/* Text spacing */
 .footer-global p {
   margin: 6px 0;
 }
@@ -268,30 +283,15 @@ GLOBAL FOOTER — PREMIUM POLISH
   opacity: 0.5;
   margin-top: 10px;
 }
-.footer-global {
-  margin-top: 80px;
-  padding: 60px 20px 40px;
-  background: linear-gradient(
-    to bottom,
-    transparent,
-    #0a0a0a 40%
-  );
-}
-.footer-global a {
-  color: rgba(140,140,255,0.7); /* softer */
-}
-.footer-global h3 {
-  font-size: 17px;
-  font-weight: 500;
+
+/* Animation */
+@keyframes footerFade {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
-.footer-global .tagline {
-  font-size: 12px;
-  opacity: 0.55;
-}
-.footer-global {
-  box-shadow: 0 -10px 40px rgba(0,0,0,0.6);
-}
 /* ===============================
 CLIENTS
 =============================== */
