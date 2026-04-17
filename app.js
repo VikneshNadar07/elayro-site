@@ -4,6 +4,21 @@ document.documentElement.classList.add("js");
 document.body.classList.add("loaded");
 
 const wait = (t) => new Promise(res => setTimeout(res, t));
+  // 🔥 ADD THIS RIGHT AFTER const wait = ...
+async function smoothScroll(chatBox) {
+  const start = chatBox.scrollTop;
+  const end = chatBox.scrollHeight;
+  const duration = 400;
+  const startTime = performance.now();
+
+  function animate(time) {
+    const progress = Math.min((time - startTime) / duration, 1);
+    chatBox.scrollTop = start + (end - start) * progress;
+    if (progress < 1) requestAnimationFrame(animate);
+  }
+
+  requestAnimationFrame(animate);
+}
 
 /* =========================
 GLOBAL NAV
@@ -82,6 +97,15 @@ const input = document.getElementById("userInput");
 const sendBtn = document.getElementById("sendBtn");
 const clientTabs = document.querySelectorAll(".clients .client");
 
+const demo = document.querySelector(".demo-container");
+
+if (demo) {
+  demo.addEventListener("wheel", e => e.preventDefault(), { passive: false });
+  demo.addEventListener("touchmove", e => e.preventDefault(), { passive: false });
+  demo.addEventListener("mousedown", e => e.preventDefault());
+  demo.addEventListener("click", e => e.preventDefault());
+}
+
 if (
 chatBox &&
 optionsPanel &&
@@ -121,10 +145,7 @@ d.innerText = text;
 
 chatBox.appendChild(d);
 
-chatBox.scrollTo({
-top: chatBox.scrollHeight,
-behavior: "smooth"
-});
+smoothScroll(chatBox);
 }
 
 async function switchClient(i) {
@@ -135,13 +156,14 @@ await wait(800);
 }
 
 async function typeMessage(text) {
+  document.querySelector(".demo-container")?.classList.add("active-zoom");
 if (!input) return;
 
 input.value = "";
 
 for (let i = 0; i < text.length; i++) {
 input.value += text[i];
-await wait(35 + Math.random() * 40);
+await wait(25 + Math.random() * 90);
 }
 
 sendBtn.classList.add("press");
@@ -151,7 +173,10 @@ sendBtn.classList.remove("press");
 addMessage(text, "user");
 input.value = "";
 
-await wait(900);
+await wait(700 + Math.random() * 500);
+  setTimeout(() => {
+  document.querySelector(".demo-container")?.classList.remove("active-zoom");
+}, 300);
 }
 
 const flows = [
@@ -352,7 +377,8 @@ optionsPanel.innerHTML = "";
 }
 
 setTimeout(() => {
-runDemo();
+  document.body.classList.add("demo-active");
+  runDemo();
 }, 300);
 }
 
@@ -440,3 +466,4 @@ if (e.key === "Enter") notifyBtn.click();
 }
 
 });
+
